@@ -14,7 +14,7 @@ const companiesSchema = new mongoose.Schema({
     inn: Number,
     ogrn: Number,
     kpp: Number,
-    okved: Number,
+    okved: String,
     registrationInformation: String,
     bankInformation: String,
     isApproved: Boolean

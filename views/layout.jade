@@ -4,4 +4,11 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    header
+      menu
+        .menu-item
+          a(href="/") Главная
+        .menu-item
+          a(href="/form") Форма регистрации
+    .container
+      block content

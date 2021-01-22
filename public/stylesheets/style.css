@@ -1,8 +1,35 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.register-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.input-block {
+  justify-content: start;
+  display: flex;
+  flex-direction: column;
+}
+.container {
+  padding: 50px;
+}
+menu {
+  display: flex;
+  flex-direction: row;
+}
+.menu-item {
+  margin-right: 20px;
+}
+.error {
+  border-color: red;
+  color: red;
+}
+.success {
+  color: green;
 }

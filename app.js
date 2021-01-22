@@ -3,17 +3,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const {tr, slugify} = require('transliteration')
 
 var indexRouter = require('./routes/index');
+var formRouter = require('./routes/form');
 var usersRouter = require('./routes/users');
 
 var mongoose = require('mongoose')
 
-mongoose.connect('mongodb://mongodb:27017/test', {useNewUrlParser: true})
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true, user: 'moder', pass: '123456789'})
 
 var db = mongoose.connection
 
 db.on('error', console.error.bind(console, 'CONNECTION ERROR'))
+
 db.once('open', function() {
   console.log('Connected');
 })
@@ -31,6 +34,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/form', formRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
