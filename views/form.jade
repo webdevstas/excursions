@@ -1,17 +1,17 @@
 extends layout
 
 block content
-    h1 Форма регистрации компании
+    h1= title
     h2(class={success: success.isSuccess} class={error: !success.isSuccess})= success.msg
     ul
         - var errPoints = []
         each err in Object.values(errors)
             - errPoints.push(err.param)
                 li= err.msg
-    form(method="post" action="/form").register-form
+    form(method="post" action="#{action}").register-form
         div.input-block
             label(for="fullName") Полное наименование компании
-            textarea(type="text" name="fullName" rows="1" value="#{data.fullName ? data.fullName : ''}")
+            textarea(type="text" name="fullName" rows="1") #{data.fullName ? data.fullName : ''}
         div.input-block
             label(for="shortName") Краткое наименование компании
             input(type="text" name="shortName" value="#{data.shortName ? data.shortName : ''}")
@@ -57,13 +57,13 @@ block content
         div.input-block
             label(for="bankInformation") Банковские реквизиты
             input(type="text" name="bankInformation" value="#{data.bankInformation ? data.bankInformation : ''}")
-        div.input-block
+        div.input-block.approve
             label(for="isApproved") Одобрено
-            input(type="checkbox" name="isApproved")
+            input(type="checkbox" name="isApproved" checked=data.isApproved)
         div.input-block
             button(type="submit") Сохранить
-        div.input-block
-            button(type="reset") Очистить
+            button(type="reset" title="Работает для вновь введённых данных") Очистить
+            
     script.
         const form = document.querySelector('.register-form')
         const inputs = document.querySelectorAll('input')

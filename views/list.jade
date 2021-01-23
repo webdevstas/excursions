@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1= title
+    ul.companies__list
+        for company in companies
+            li.companies__list-item
+                span(class={success: company.isApproved} class={error: !company.isApproved})= company.shortName
+                .companies__btn-block
+                    a(href="/list/#{company.slug}")
+                        button Редактировать
+                    button.delete Удалить

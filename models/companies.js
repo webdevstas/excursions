@@ -17,7 +17,8 @@ const companiesSchema = new mongoose.Schema({
     okved: String,
     registrationInformation: String,
     bankInformation: String,
-    isApproved: Boolean
+    isApproved: Boolean, 
+    slug: String
 })
 
 module.exports.Companies = mongoose.model('Companies', companiesSchema)
