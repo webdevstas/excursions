@@ -73,3 +73,9 @@ menu {
   align-items: center;
   justify-content: center;
 }
+.companies__btn-block {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+}

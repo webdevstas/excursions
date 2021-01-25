@@ -1,15 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const { Companies } = require('../models/companies')
 const { body, validationResult, check } = require('express-validator');
-const { tr, slugify } = require('transliteration')
+const {addCompany} = require('../controllers/companies')
 
 
 router.get('/', function (req, res) {
 
-    res.render('form', {
-        action: '/form',
-        title: 'Форма добавления компании',
+    res.render('companiesForm', {
+        action: '/register-company',
+        title: 'Форма добавления оператора',
         data: {},
         errors: {},
         success: {
@@ -43,9 +42,9 @@ router.post('/',
         const errors = validationResult(req)
 
         if (!errors.isEmpty()) {
-            res.render('form', {
-                action: '/form',
-                title: 'Форма добавления компании',
+            res.render('companiesForm', {
+                action: '/register-company',
+                title: 'Форма добавления опреатора',
                 data: req.body,
                 errors: errors.array(),
                 success: {
@@ -56,35 +55,9 @@ router.post('/',
             return
         }
         else {
-
-            addData(req, res)
+            addCompany(req, res)
         }
         return
     })
-async function addData(req, res) {
-    let company = req.body
-    await Companies.countDocuments({ shortName: company.shortName }, (err, count) => {
-        if (err) console.log(err)
 
-        if (count > 0) {
-            company.slug = slugify(company.shortName + '-' + count)
-        }
-        else {
-            company.slug = slugify(company.shortName)
-        }
-    })
-
-    await Companies.create(company, function (err) {
-        if (err) return console.error(err)
-        res.render('form', {
-            action: '/form',
-            data: {},
-            errors: {},
-            success: {
-                isSuccess: true,
-                msg: 'Компания успешно добавлена'
-            }
-        })
-    })
-}
 module.exports = router

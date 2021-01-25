@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    h1= title
+    ul.companies__list
+        for company in companies
+            li.companies__list-item
+                span(class={success: company.isApproved} class={error: !company.isApproved})= company.shortName
+                .companies__btn-block
+                    a(href="/companies-list/#{company.slug}")
+                        button Редактировать
+                    form(action="/companies-list/#{company.slug}/delete" method="post")
+                        button.deleteBtn Удалить
+                        input(type="hidden" name="delete")
+    script. 
+        const deleteBtn = document.querySelectorAll('.deleteBtn')
+
+        deleteBtn.forEach( (btn)=> {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault()
+                let result = confirm('Подтвердите удаление')
+                if(result) {
+                    e.target.nextSibling.value = true
+                    e.target.form.submit()
+                }
+            })
+        })

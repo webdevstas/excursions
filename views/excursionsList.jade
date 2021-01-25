@@ -1,0 +1,7 @@
+extends layout
+
+block content
+    h1= title
+    ul.excursions__list
+        each excursion in excursions
+            li.excursions__list-item= excursion.title

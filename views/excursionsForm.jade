@@ -1,0 +1,49 @@
+extends layout
+
+block content
+    h1= title
+    h2(class={success: success.isSuccess} class={error: !success.isSuccess})= success.msg
+    ul
+        - var errPoints = []
+        each err in Object.values(errors)
+            - errPoints.push(err.param)
+                li= err.msg
+    form(method="post" action="#{action}").register-form
+        div.input-block
+            label(for="company") Оператор
+            select(type="text" name="company" rows="1")
+                each company in data.companies
+                    option(value="#{company.shortName}")= company.shortName
+        div.input-block
+            label(for="title") Название экскурсии
+            input(type="text" name="title" value="#{data.title ? data.title : ''}")
+        div.input-block
+            label(for="description") Описание экскурсии
+            textarea(type="text" name="description" rows="3") #{data.description ? data.description : ''}
+        div.input-block
+            label(for="price") Стоимость экскурсии
+            input(type="text" name="price" value="#{data.price ? data.price : ''}")
+        div.input-block
+            label(for="picturesURLs") Стоимость экскурсии
+            input(type="file" name="picturesURLs" value="#{data.picturesURLs ? data.picturesURLs : ''}")
+        div.input-block
+            button(type="submit") Сохранить
+            button(type="reset" title="Работает для вновь введённых данных") Очистить
+            button(type="button").cancelBtn Отмена
+
+    script.
+        const inputs = document.querySelectorAll('input')
+        let points = '#{errPoints}'
+        const cancelBtn = document.querySelectorAll('.cancelBtn')
+
+        inputs.forEach((input) => {
+            if (points.includes(input.name)) {
+                input.classList.add('error')
+            }
+        })
+
+        cancelBtn.forEach( (btn) => {
+            btn.addEventListener('click', () => {
+                window.location.replace('/excursions-list')
+            })
+        })

@@ -1,14 +1,18 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    header
-      menu
-        .menu-item
-          a(href="/list") Список
-        .menu-item
-          a(href="/form") Форма регистрации
-    .container
-      block content
+    head
+        title= title
+        link(rel='stylesheet' href='/stylesheets/style.css')
+    body
+        header
+            menu
+                .menu-item
+                    a(href="/companies-list") Список операторов
+                .menu-item
+                    a(href="/register-company") Регистрация оператора
+                .menu-item
+                    a(href="/excursions-list") Список экскурсий
+                .menu-item
+                    a(href="/new-excursion") Добавить экскурсию
+        .container
+            block content
