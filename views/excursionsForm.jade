@@ -8,28 +8,33 @@ block content
         each err in Object.values(errors)
             - errPoints.push(err.param)
                 li= err.msg
-    form(method="post" action="#{action}").register-form
+    form(method="post" action="#{action}" enctype="multipart/form-data").register-form
         div.input-block
             label(for="company") Оператор
             select(type="text" name="company" rows="1")
                 each company in data.companies
-                    option(value="#{company.shortName}")= company.shortName
+                    - var isSelected = data.selected === company.shortName
+                    option(value="#{company.shortName}" selected=isSelected)= company.shortName
         div.input-block
             label(for="title") Название экскурсии
-            input(type="text" name="title" value="#{data.title ? data.title : ''}")
+            input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}")
         div.input-block
             label(for="description") Описание экскурсии
-            textarea(type="text" name="description" rows="3") #{data.description ? data.description : ''}
+            textarea(type="text" name="description" rows="1") #{data.body.description ? data.body.description : ''}
         div.input-block
             label(for="price") Стоимость экскурсии
-            input(type="text" name="price" value="#{data.price ? data.price : ''}")
+            input(type="text" name="price" value="#{data.body.price ? data.body.price : ''}")
         div.input-block
-            label(for="picturesURLs") Стоимость экскурсии
-            input(type="file" name="picturesURLs" value="#{data.picturesURLs ? data.picturesURLs : ''}")
+            label(for="pictures") Изображения
+            input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png")
         div.input-block
             button(type="submit") Сохранить
             button(type="reset" title="Работает для вновь введённых данных") Очистить
             button(type="button").cancelBtn Отмена
+    .pictures-block
+        each picture in data.pictures
+            .pictures-block__item
+                img(src="/images/upload/#{picture}", alt="").pictures-block__img
 
     script.
         const inputs = document.querySelectorAll('input')

@@ -16,17 +16,9 @@ async function addCompany(req, res) {
     })
 
     await Companies.create(company, function (err) {
+
         if (err) return console.error(err)
-        res.render('companiesForm', {
-            title: 'Форма добавления компании', 
-            action: '/register-company',
-            data: {},
-            errors: {},
-            success: {
-                isSuccess: true,
-                msg: 'Компания успешно добавлена'
-            }
-        })
+
     })
 }
 
@@ -44,26 +36,7 @@ async function updateCompany(req, res) {
         }
     })
 
-    await Companies.updateOne({ slug: req.company.slug }, {
-        fullName: company.fullName,
-        shortName: company.shortName,
-        formOfOwnership: company.formOfOwnership,
-        kindOfActivity: company.kindOfActivity,
-        legalAddress: company.legalAddress,
-        actualAddress: company.actualAddress,
-        head: company.head,
-        phoneNumber: company.phoneNumber,
-        faxNumber: company.faxNumber,
-        email: company.email,
-        inn: company.inn,
-        ogrn: company.ogrn,
-        kpp: company.kpp,
-        okved: company.okved,
-        registrationInformation: company.registrationInformation,
-        bankInformation: company.bankInformation,
-        isApproved: company.isApproved,
-        slug: company.slug
-    }, {}, function (err) {
+    await Companies.updateOne({ slug: req.company.slug }, company, {}, function (err) {
 
         if (err) return console.error(err)
 
@@ -84,7 +57,7 @@ async function updateCompany(req, res) {
 
 async function deleteCompany(req, res) {
     if (req.body.delete) {
-        Companies.deleteOne({ slug: req.company.slug }, function (error, result) {
+        await Companies.deleteOne({ slug: req.company.slug }, function (error, result) {
             if (error) console.log(error)
             if (result.ok) {
                 res.redirect('/companies-list')

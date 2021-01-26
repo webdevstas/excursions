@@ -56,6 +56,17 @@ router.post('/',
         }
         else {
             addCompany(req, res)
+            
+            res.render('companiesForm', {
+                title: 'Форма добавления компании', 
+                action: '/register-company',
+                data: {},
+                errors: {},
+                success: {
+                    isSuccess: true,
+                    msg: 'Компания успешно добавлена'
+                }
+            })
         }
         return
     })

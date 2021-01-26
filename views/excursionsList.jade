@@ -2,6 +2,46 @@ extends layout
 
 block content
     h1= title
-    ul.excursions__list
-        each excursion in excursions
-            li.excursions__list-item= excursion.title
+    form(action="/excursions-list" method="get")
+        label(for="company-filter") Фильтр по операторам
+        select(name="companyFilter")
+            option(value="") Все
+            each company in data.companies
+                option(value="#{company.shortName}")= company.shortName
+        button(type="submit") Фильтровать
+        button(type="reset" onclick="window.location.replace('/excursions-list')") Сбросить
+    .excursions
+        .excursions__col
+            h2.excursions__col-title Название
+        .excursions__col
+            h2.excursions__col-title Оператор
+        .excursions__col
+            h2.excursions__col-title Стоимость
+        .excursions__col
+            h2.excursions__col-title Редактирование
+        each excursion in data.excursions
+            .excursions__col
+                span.excursions__title= excursion.title
+            .excursions__col
+                span.excursions__company= excursion.company
+            .excursions__col
+                span.excursions__price= excursion.price + ' р.'
+            .excursions__col
+                a(href="/excursions-list/#{excursion.slug}") 
+                    button Редактировать
+                form(action="/excursions-list/#{excursion.slug}/delete" method="post")
+                    button.deleteBtn Удалить
+                    input(type="hidden" name="delete")
+    script. 
+        const deleteBtn = document.querySelectorAll('.deleteBtn')
+
+        deleteBtn.forEach( (btn)=> {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault()
+                let result = confirm('Подтвердите удаление')
+                if(result) {
+                    e.target.nextSibling.value = true
+                    e.target.form.submit()
+                }
+            })
+        })
