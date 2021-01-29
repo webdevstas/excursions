@@ -1,9 +1,10 @@
 extends layout
-
 block content
     h1= title
-    form(action="/excursions-list" method="get")
-        label(for="company-filter") Фильтр по операторам
+    a(href="/new-excursion")
+        button Добавить
+    form(action="/excursions-list" method="get").excursions__filter-form
+        label(for="company-filter").excursions__filter-label Фильтр по операторам:
         select(name="companyFilter")
             option(value="") Все
             each company in data.companies

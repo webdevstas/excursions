@@ -32,14 +32,17 @@ block content
             button(type="reset" title="Работает для вновь введённых данных") Очистить
             button(type="button").cancelBtn Отмена
     .pictures-block
-        each picture in data.pictures
-            .pictures-block__item
-                img(src="/images/upload/#{picture}", alt="").pictures-block__img
+        if data.pictures
+            each picture in data.pictures
+                .pictures-block__item
+                    img(src="/images/upload/#{picture}" alt="").pictures-block__img
+                    button.delete-img Удалить
 
     script.
         const inputs = document.querySelectorAll('input')
-        let points = '#{errPoints}'
+        const points = '#{errPoints}'
         const cancelBtn = document.querySelectorAll('.cancelBtn')
+        const deleteImgBtns = document.querySelectorAll('.delete-img')
 
         inputs.forEach((input) => {
             if (points.includes(input.name)) {
@@ -50,5 +53,37 @@ block content
         cancelBtn.forEach( (btn) => {
             btn.addEventListener('click', () => {
                 window.location.replace('/excursions-list')
+            })
+        })
+
+        deleteImgBtns.forEach( (btn, i) => {
+            let index = i
+            btn.addEventListener('click', (e) => {
+                let xhr = new XMLHttpRequest()
+                if (index > 0){
+                    index -= 1
+                }
+                let json = JSON.stringify({
+                    action: 'delete',
+                    index: index
+                })
+
+
+                xhr.open('DELETE', '#{action}', true)
+                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+
+                xhr.send(json)
+
+                xhr.responseType = 'json'
+
+                xhr.onload = function() {
+                    let responseObj = xhr.response
+                    if (responseObj.success) {
+                        btn.parentNode.style.display = 'none' 
+                    }
+                    else {
+                        console.error(responseObj.error)
+                    }
+                }
             })
         })

@@ -17,6 +17,18 @@ header {
     background-color: rgba(0, 0, 0, .5);
 }
 
+input, select, textarea {
+    min-height: 30px;
+    font-size: 18px;
+    color: rgb(46, 46, 46);
+}
+label {
+    margin-bottom: 10px;
+}
+button {
+    font-size: 18px;
+    min-height: 30px;
+}
 .register-form {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -85,6 +97,12 @@ menu {
     justify-content: center;
 }
 
+.companies__list-item span {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
 .companies__btn-block {
     display: flex;
     width: 100%;
@@ -113,8 +131,28 @@ menu {
     justify-content: center;
 }
 
+.excursions__filter-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 40%;
+    border: 1px solid #000;
+    padding: 10px;
+    background-color: rgb(168, 168, 168);
+    margin-top: 20px;
+}
+
+.excursions__filter-label {
+    font-size: 18px;
+    margin: 0;
+    color: #fff
+}
+
 .pictures-block {
+    margin-top: 50px;
     display: grid;
+    gap: 20px;
     grid-template-columns: repeat(4, 1fr);
     width: 100%;
 }

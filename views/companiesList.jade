@@ -2,6 +2,8 @@ extends layout
 
 block content
     h1= title
+    a(href="/register-company")
+        button Добавить
     ul.companies__list
         for company in companies
             li.companies__list-item

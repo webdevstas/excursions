@@ -4,15 +4,13 @@ html
         title= title
         link(rel='stylesheet' href='/stylesheets/style.css')
     body
-        header
-            menu
-                .menu-item
-                    a(href="/companies-list") Список операторов
-                .menu-item
-                    a(href="/register-company") Регистрация оператора
-                .menu-item
-                    a(href="/excursions-list") Список экскурсий
-                .menu-item
-                    a(href="/new-excursion") Добавить экскурсию
         .container
+            header
+                menu
+                    .menu-item
+                        a(href="/companies-list") Список операторов
+                    .menu-item
+                        a(href="/excursions-list") Список экскурсий
+        
             block content
+

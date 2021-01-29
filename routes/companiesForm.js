@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { body, validationResult, check } = require('express-validator');
-const {addCompany} = require('../controllers/companies')
+const { addCompany } = require('../controllers/companies')
 
 
 router.get('/', function (req, res) {
@@ -55,10 +55,14 @@ router.post('/',
             return
         }
         else {
-            addCompany(req, res)
-            
+            try {
+                addCompany(req, res)
+            }
+            catch (err) {
+                console.error(err);
+            }
             res.render('companiesForm', {
-                title: 'Форма добавления компании', 
+                title: 'Форма добавления компании',
                 action: '/register-company',
                 data: {},
                 errors: {},

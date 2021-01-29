@@ -21,7 +21,7 @@ router.route('/:slug')
 	.get(function (req, res) {
 		res.render('companiesForm', {
 			action: '/companies-list/' + req.company.slug,
-			title: 'Редактирование ' + req.company.shortName, data: req.company, success: {
+			title: 'Редактирование оператора: ' + req.company.shortName, data: req.company, success: {
 				isSuccess: false,
 				msg: ''
 			}, errors: {}
@@ -55,7 +55,7 @@ router.route('/:slug')
 			if (!errors.isEmpty()) {
 				res.render('companiesForm', {
 					action: '/companies-list/' + req.company.slug,
-					title: 'Редактирование ' + req.company.shortName,
+					title: 'Редактирование оператора: ' + req.company.shortName,
 					data: req.body,
 					errors: errors.array(),
 					success: {
