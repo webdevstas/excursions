@@ -7,6 +7,7 @@ const { addCompany } = require('../controllers/companies')
 router.get('/', function (req, res) {
 
     if (req.isAuthenticated()) {
+        let username = req.user ? req.user.username : 'guest'
         res.render('companiesForm', {
             action: '/register-company',
             title: 'Форма добавления оператора',
@@ -15,7 +16,8 @@ router.get('/', function (req, res) {
             success: {
                 isSuccess: false,
                 msg: ''
-            }
+            },
+            user: username
         })
     }
     else {
@@ -45,7 +47,7 @@ router.post('/',
 
     function (req, res) {
         const errors = validationResult(req)
-
+        let username = req.user ? req.user.username : 'guest'
         if (!errors.isEmpty()) {
             res.render('companiesForm', {
                 action: '/register-company',
@@ -55,7 +57,8 @@ router.post('/',
                 success: {
                     isSuccess: false,
                     msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
-                }
+                },
+                user: username
             })
             return
         }
@@ -74,7 +77,8 @@ router.post('/',
                 success: {
                     isSuccess: true,
                     msg: 'Компания успешно добавлена'
-                }
+                },
+                user: username
             })
         }
         return

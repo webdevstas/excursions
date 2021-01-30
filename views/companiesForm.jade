@@ -1,12 +1,14 @@
 extends layout
 block content
     h1= title
-    h2(class={success: success.isSuccess} class={error: !success.isSuccess})= success.msg
-    ul
-        - var errPoints = []
-        each err in Object.values(errors)
-            - errPoints.push(err.param)
-                li= err.msg
+    if Object.values(errors) != 0
+        .errors-block
+            h2(class={success: success.isSuccess} class={error: !success.isSuccess})= success.msg
+            ul
+                - var errPoints = []
+                each err in Object.values(errors)
+                    - errPoints.push(err.param)
+                        li= err.msg
     form(method="post" action="#{action}").register-form
         div.input-block
             label(for="fullName") Полное наименование компании

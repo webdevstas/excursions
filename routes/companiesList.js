@@ -7,8 +7,9 @@ const { Companies } = require('../models/companies')
 // Ответ на запрос списка компаний
 router.get('/', async function (req, res) {
 	if (req.isAuthenticated()) {
+		let username = req.user ? req.user.username : 'guest'
 		const companies = await Companies.find().select({ shortName: 1, slug: 1, isApproved: 1 })
-		res.render('companiesList', { title: 'Список операторов', companies: companies });
+		res.render('companiesList', { title: 'Список операторов', companies: companies, user: username });
 	}
 	else {
 		res.redirect('/login')
@@ -25,12 +26,15 @@ router.param('slug', async function (req, res, next, slug) {
 router.route('/:slug')
 	.get(function (req, res) {
 		if (req.isAuthenticated()) {
+			let username = req.user ? req.user.username : 'guest'
 			res.render('companiesForm', {
 				action: '/companies-list/' + req.company.slug,
 				title: 'Редактирование оператора: ' + req.company.shortName, data: req.company, success: {
 					isSuccess: false,
 					msg: ''
-				}, errors: {}
+				}, 
+				errors: {},
+				user: username
 			})
 		}
 	})
@@ -61,6 +65,7 @@ router.route('/:slug')
 				const errors = validationResult(req)
 	
 				if (!errors.isEmpty()) {
+					let username = req.user ? req.user.username : 'guest'
 					res.render('companiesForm', {
 						action: '/companies-list/' + req.company.slug,
 						title: 'Редактирование оператора: ' + req.company.shortName,
@@ -69,7 +74,8 @@ router.route('/:slug')
 						success: {
 							isSuccess: false,
 							msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
-						}
+						},
+						user: username
 					})
 				}
 				else {

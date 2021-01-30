@@ -21,7 +21,7 @@ let companies = {}
 // Ответ на запрос списка экскурсий
 router.get('/',
     async function (req, res) {
-
+        let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
             let excursions = {}
             companies = await Companies.find().select({ shortName: 1 })
@@ -33,7 +33,8 @@ router.get('/',
 
             res.render('excursionsList', {
                 title: 'Список экскурсий',
-                data: { excursions: excursions, companies: companies }
+                data: { excursions: excursions, companies: companies },
+                user: username
             })
         }
         else {
@@ -52,7 +53,7 @@ router.param('slug', async function (req, res, next, slug) {
 // GET роут для отдачи формы редактирования экскурсии
 router.route('/:slug')
     .get(async function (req, res) {
-
+        let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
             companies = await Companies.find().select({ shortName: 1 })
             res.render('excursionsForm', {
@@ -62,7 +63,9 @@ router.route('/:slug')
                 success: {
                     isSuccess: false,
                     msg: ''
-                }, errors: {}
+                }, 
+                errors: {},
+                user: username
             })
         }
         else {
@@ -77,7 +80,7 @@ router.route('/:slug')
         body('price').notEmpty().withMessage('Стоимость обязательна к заполнению').isNumeric().withMessage('Стоимость должна быть числом'),
 
         function (req, res) {
-
+            let username = req.user ? req.user.username : 'guest'
             if (req.isAuthenticated()) {
                 const errors = validationResult(req)
 
@@ -91,7 +94,8 @@ router.route('/:slug')
                         success: {
                             isSuccess: false,
                             msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
-                        }
+                        },
+                        user: username
                     })
                 }
                 else {

@@ -5,13 +5,22 @@ html
         link(rel='stylesheet' href='/stylesheets/style.css')
     body
         .container
+            img(src="/images/menu.svg", alt="")#open-menu
             header
                 menu
-                    .menu-item
-                        a(href="/companies-list") Список операторов
-                    .menu-item
-                        a(href="/excursions-list") Список экскурсий
-                    .menu-item
-                        a(href="/logout") Выйти
+                    .left-menu
+                        .menu-item
+                            a(href="/") Главная
+                        .menu-item
+                            a(href="/companies-list") Список операторов
+                        .menu-item
+                            a(href="/excursions-list") Список экскурсий
+                    .right-menu
+                        .menu-item
+                            span.menu__user= 'Пользователь: ' + user
+                        .menu-item
+                            a(href="/logout") Выйти
             block content
-
+            #shadow-bg
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js")
+        script(src="/javascripts/script.js")

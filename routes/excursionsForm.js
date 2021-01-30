@@ -12,14 +12,14 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 })
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage, limits: {fileSize: 5242880} })
 
 let companies = {}
 
 router.get('/', async function (req, res) {
     if (req.isAuthenticated()) {
         companies = await Companies.find().select({ shortName: 1 })
-
+        let username = req.user ? req.user.username : 'guest'
         res.render('excursionsForm', {
             action: '/new-excursion',
             title: 'Форма добавления экскурсии',
@@ -28,7 +28,8 @@ router.get('/', async function (req, res) {
             success: {
                 isSuccess: false,
                 msg: ''
-            }
+            },
+            user: username
         })
     }
     else {
@@ -43,6 +44,7 @@ router.post('/',
 
     function (req, res) {
         if (req.isAuthenticated()) {
+            let username = req.user ? req.user.username : 'guest'
             const errors = validationResult(req)
             let arrPictures = []
             req.files.forEach(picture => {
@@ -57,7 +59,8 @@ router.post('/',
                     success: {
                         isSuccess: false,
                         msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
-                    }
+                    },
+                    user: username
                 })
                 return
             }
@@ -78,7 +81,8 @@ router.post('/',
                     success: {
                         isSuccess: true,
                         msg: 'Экскурсия успешно добавлена'
-                    }
+                    },
+                    user: username
                 })
             }
             return

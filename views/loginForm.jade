@@ -1,7 +1,7 @@
 extends formLayout
 block content
-    h1= title
     form(action="/login", method="post").login-form
+        div.login-form__title= title
         input(type="text" name="username" placeholder="Имя пользователя")
         input(type="password" name="password" placeholder="Пароль")
         button(type="submit") Войти
