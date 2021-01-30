@@ -6,8 +6,13 @@ const { Companies } = require('../models/companies')
 
 // Ответ на запрос списка компаний
 router.get('/', async function (req, res) {
-	const companies = await Companies.find().select({ shortName: 1, slug: 1, isApproved: 1 })
-	res.render('companiesList', { title: 'Список операторов', companies: companies });
+	if (req.isAuthenticated()) {
+		const companies = await Companies.find().select({ shortName: 1, slug: 1, isApproved: 1 })
+		res.render('companiesList', { title: 'Список операторов', companies: companies });
+	}
+	else {
+		res.redirect('/login')
+	}
 });
 
 // Установим алиас для каждой компании
@@ -19,13 +24,15 @@ router.param('slug', async function (req, res, next, slug) {
 // GET роут для отдачи формы редактирования компании
 router.route('/:slug')
 	.get(function (req, res) {
-		res.render('companiesForm', {
-			action: '/companies-list/' + req.company.slug,
-			title: 'Редактирование оператора: ' + req.company.shortName, data: req.company, success: {
-				isSuccess: false,
-				msg: ''
-			}, errors: {}
-		})
+		if (req.isAuthenticated()) {
+			res.render('companiesForm', {
+				action: '/companies-list/' + req.company.slug,
+				title: 'Редактирование оператора: ' + req.company.shortName, data: req.company, success: {
+					isSuccess: false,
+					msg: ''
+				}, errors: {}
+			})
+		}
 	})
 
 // POST роут для получения обновлённых данных с валидаторами
@@ -50,29 +57,33 @@ router.route('/:slug')
 		body('isApproved').toBoolean(),
 
 		function (req, res) {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				res.render('companiesForm', {
-					action: '/companies-list/' + req.company.slug,
-					title: 'Редактирование оператора: ' + req.company.shortName,
-					data: req.body,
-					errors: errors.array(),
-					success: {
-						isSuccess: false,
-						msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
-					}
-				})
-			}
-			else {
-				updateCompany(req, res)
+			if (req.isAuthenticated()) {
+				const errors = validationResult(req)
+	
+				if (!errors.isEmpty()) {
+					res.render('companiesForm', {
+						action: '/companies-list/' + req.company.slug,
+						title: 'Редактирование оператора: ' + req.company.shortName,
+						data: req.body,
+						errors: errors.array(),
+						success: {
+							isSuccess: false,
+							msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
+						}
+					})
+				}
+				else {
+					updateCompany(req, res)
+				}
 			}
 		})
 
 router.route('/:slug/delete')
 	.post(body('delete').toBoolean(),
 		function (req, res) {
-			deleteCompany(req, res)
+			if (req.isAuthenticated()) {
+				deleteCompany(req, res)
+			}
 		})
 
 

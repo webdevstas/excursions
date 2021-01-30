@@ -17,19 +17,23 @@ const upload = multer({ storage: storage })
 let companies = {}
 
 router.get('/', async function (req, res) {
+    if (req.isAuthenticated()) {
+        companies = await Companies.find().select({ shortName: 1 })
 
-    companies = await Companies.find().select({ shortName: 1 })
-
-    res.render('excursionsForm', {
-        action: '/new-excursion',
-        title: 'Форма добавления экскурсии',
-        data: { body: {}, companies: companies, pictures: [] },
-        errors: {},
-        success: {
-            isSuccess: false,
-            msg: ''
-        }
-    })
+        res.render('excursionsForm', {
+            action: '/new-excursion',
+            title: 'Форма добавления экскурсии',
+            data: { body: {}, companies: companies, pictures: [] },
+            errors: {},
+            success: {
+                isSuccess: false,
+                msg: ''
+            }
+        })
+    }
+    else {
+        res.redirect('/login')
+    }
 })
 
 router.post('/',
@@ -38,45 +42,51 @@ router.post('/',
     body('price').notEmpty().withMessage('Стоимость обязательна к заполнению').isNumeric().withMessage('Стоимость должна быть числом'),
 
     function (req, res) {
-        const errors = validationResult(req)
-        let arrPictures = []
-        req.files.forEach(picture => {
-            arrPictures.push(picture.filename)
-        })
-        if (!errors.isEmpty()) {
-            res.render('excursionsForm', {
-                action: '/new-excursion',
-                title: 'Форма добавления экскурсии',
-                data: { body: req.body, companies: companies, pictures: arrPictures },
-                errors: errors.array(),
-                success: {
-                    isSuccess: false,
-                    msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
-                }
+        if (req.isAuthenticated()) {
+            const errors = validationResult(req)
+            let arrPictures = []
+            req.files.forEach(picture => {
+                arrPictures.push(picture.filename)
             })
+            if (!errors.isEmpty()) {
+                res.render('excursionsForm', {
+                    action: '/new-excursion',
+                    title: 'Форма добавления экскурсии',
+                    data: { body: req.body, companies: companies, pictures: arrPictures },
+                    errors: errors.array(),
+                    success: {
+                        isSuccess: false,
+                        msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
+                    }
+                })
+                return
+            }
+            else {
+    
+                try {
+                    addExcursion(req, res)
+                }
+                catch (err) {
+                    console.error(err);
+                }
+    
+                res.render('excursionsForm', {
+                    title: 'Форма добавления экскурсии',
+                    action: '/new-excursion',
+                    data: { body: {}, companies: companies, pictures: [] },
+                    errors: {},
+                    success: {
+                        isSuccess: true,
+                        msg: 'Экскурсия успешно добавлена'
+                    }
+                })
+            }
             return
         }
         else {
-
-            try {
-                addExcursion(req, res)
-            }
-            catch (err) {
-                console.error(err);
-            }
-
-            res.render('excursionsForm', {
-                title: 'Форма добавления экскурсии',
-                action: '/new-excursion',
-                data: { body: {}, companies: companies, pictures: [] },
-                errors: {},
-                success: {
-                    isSuccess: true,
-                    msg: 'Экскурсия успешно добавлена'
-                }
-            })
+            res.redirect('/login')
         }
-        return
+
     })
 
 module.exports = router

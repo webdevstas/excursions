@@ -6,16 +6,21 @@ const { addCompany } = require('../controllers/companies')
 
 router.get('/', function (req, res) {
 
-    res.render('companiesForm', {
-        action: '/register-company',
-        title: 'Форма добавления оператора',
-        data: {},
-        errors: {},
-        success: {
-            isSuccess: false,
-            msg: ''
-        }
-    })
+    if (req.isAuthenticated()) {
+        res.render('companiesForm', {
+            action: '/register-company',
+            title: 'Форма добавления оператора',
+            data: {},
+            errors: {},
+            success: {
+                isSuccess: false,
+                msg: ''
+            }
+        })
+    }
+    else {
+        res.redirect('/login')
+    }
 })
 
 router.post('/',

@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
 const crypto = require('crypto')
-const Users = require('./models/users')
+const {Users} = require('./models/users')
 
 require('dotenv').config()
 const indexRouter = require('./routes/index');
@@ -14,10 +14,13 @@ const excurionsFormRouter = require('./routes/excursionsForm');
 const companiesListRouter = require('./routes/companiesList');
 const excursionsListRouter = require('./routes/excursionsList');
 const usersRouter = require('./routes/users');
-const authRouter = require('./routes/auth');
+const loginRouter = require('./routes/login');
+const logoutRouter = require('./routes/logout');
 
 const mongoose = require('mongoose');
 const passport = require('passport');
+const genPassword = require('./lib/passportUtils').genPassword
+const validPassword = require('./lib/passportUtils').validPassword
 
 //const db = mongoose.connect('mongodb://mongodb:27017/test', {useNewUrlParser: true, useUnifiedTopology: true, user: 'moder', pass: '123456789'}) //production
 mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DB_USER, pass: process.env.DB_PWD }) // development
@@ -55,9 +58,15 @@ app.use(session({
 }))
 
 // create a user
-// app.use(function(){
-//   Users.create({
-
+// app.use(async function(){
+//   let pwdHash = genPassword('excursions_moderator')
+//   const user = {
+//     username: 'moderator',
+//     salt: pwdHash.salt,
+//     hash: pwdHash.hash
+//   }
+//   Users.create(user, err => {
+//     console.log(err);
 //   })
 // })
 
@@ -68,7 +77,8 @@ app.use(passport.session())
 
 // Routs
 app.use('/', indexRouter);
-app.use('/login', authRouter);
+app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
 app.use('/register-company', companiesFormRouter);
 app.use('/new-excursion', excurionsFormRouter);
 app.use('/companies-list', companiesListRouter);

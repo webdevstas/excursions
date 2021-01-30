@@ -11,11 +11,7 @@ router.route('/')
     .post(passport.authenticate('local', {
         successRedirect: '/companies-list',
         failureRedirect: '/',
-        failureFlash: true
-    }), 
-    function (req, res) {
-        res.end('login')
-    })
+    }))
 
 
 module.exports = router
