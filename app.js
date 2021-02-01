@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
 const crypto = require('crypto')
-const {Users} = require('./models/users')
+const { Users } = require('./models/users')
 
 require('dotenv').config()
 const indexRouter = require('./routes/index');
@@ -13,9 +13,9 @@ const companiesFormRouter = require('./routes/companiesForm');
 const excurionsFormRouter = require('./routes/excursionsForm');
 const companiesListRouter = require('./routes/companiesList');
 const excursionsListRouter = require('./routes/excursionsList');
-const usersRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const logoutRouter = require('./routes/logout');
+const apiRouter = require('./routes/api');
 
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -25,7 +25,7 @@ const validPassword = require('./lib/passportUtils').validPassword
 //const db = mongoose.connect('mongodb://mongodb:27017/test', {useNewUrlParser: true, useUnifiedTopology: true, user: 'moder', pass: '123456789'}) //production
 mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DB_USER, pass: process.env.DB_PWD }) // development
 const db = mongoose.connection
-const MongoStore = require('connect-mongo') (session)
+const MongoStore = require('connect-mongo')(session)
 
 db.on('error', console.error.bind(console, 'CONNECTION ERROR'))
 
@@ -48,7 +48,7 @@ const sessionStore = new MongoStore({
 })
 
 app.use(session({
-  secret: 'secret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   store: sessionStore,
@@ -83,7 +83,7 @@ app.use('/register-company', companiesFormRouter);
 app.use('/new-excursion', excurionsFormRouter);
 app.use('/companies-list', companiesListRouter);
 app.use('/excursions-list', excursionsListRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

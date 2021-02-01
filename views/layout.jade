@@ -19,7 +19,10 @@ html
                         .menu-item
                             span.menu__user= 'Пользователь: ' + user
                         .menu-item
-                            a(href="/logout") Выйти
+                            if user === 'guest'
+                                a(href="/login") Войти
+                            else
+                                a(href="/logout") Выйти
             block content
             #shadow-bg
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js")

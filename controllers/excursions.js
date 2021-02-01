@@ -95,4 +95,14 @@ async function deletePicture(index, slug) {
     return { success: true, error: {} }
 }
 
-module.exports = { addExcursion, updateExcursion, deleteExcursion, deletePicture }
+async function countExcursions() {
+    let countAll = 0,
+        countApproved = 0
+    await Excursions.countDocuments((err, count) => {
+        if (err) throw err
+        countAll = count
+    })
+    return countAll
+}
+
+module.exports = { addExcursion, updateExcursion, deleteExcursion, deletePicture, countExcursions }

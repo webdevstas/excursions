@@ -47,4 +47,18 @@ async function deleteCompany(req, res) {
     }
 }
 
-module.exports = { addCompany, updateCompany, deleteCompany }
+async function countCompanies() {
+    let countAll = 0,
+        countApproved = 0
+    await Companies.countDocuments((err, count) => {
+        if (err) throw err
+        countAll = count
+    })
+    await Companies.countDocuments({isApproved: true}, (err, count) => {
+        if (err) throw err
+        countApproved = count
+    })
+    return {all: countAll, approved: countApproved}
+}
+
+module.exports = { addCompany, updateCompany, deleteCompany, countCompanies }

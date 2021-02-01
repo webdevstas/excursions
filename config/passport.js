@@ -1,8 +1,15 @@
 const passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    {Users} = require('../models/users')
-    const validPassword = require('../lib/passportUtils').validPassword
+    JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt,
+    { Users } = require('../models/users'),
+    validPassword = require('../lib/passportUtils').validPassword,
+    fs = require('fs'),
+    path = require('path'),
+    pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem'),
+    PUB_KEY = fs.readFileSync(pathToKey, 'utf-8')
 
+//local strategy
 passport.use(new LocalStrategy(
     function (username, password, done) {
         Users.findOne({ username: username }, function (err, user) {
@@ -19,10 +26,31 @@ passport.use(new LocalStrategy(
     }
 ))
 
+//jwt strategy
+const options = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: PUB_KEY,
+    algorithms: ['RS256']
+}
+
+passport.use(new JwtStrategy(options, (payload, done) => {
+    Users.findOne({ _id: payload.sub })
+        .then((user) => {
+            if (user) {
+                done(null, user)
+            }
+            else {
+                done(null, false)
+            }
+        })
+        .catch(err => done(err, null))
+}))
+
+
+//serialize and deserialize
 passport.serializeUser((user, done) => {
     done(null, user)
 })
-
 passport.deserializeUser((userId, done) => {
     Users.findById((userId))
         .then((user) => {

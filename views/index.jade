@@ -1,3 +1,9 @@
 extends layout
 block content
   h1= title
+  .counts
+    .counts-block
+      span Всего операторов зарегистрировано: #{countCompanies.all}
+      span Из них одобрено: #{countCompanies.approved}
+    .counts-block
+      span Всего экскурсий: #{countExcursions}
