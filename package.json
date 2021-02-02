@@ -1,10 +1,10 @@
 {
   "name": "app",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "pm2-runtime ./ecosystem.config.js",
-    "dev": "nodemon ./bin/www"
+    "dev": "set NODE_ENV=development && nodemon ./bin/www"
   },
   "dependencies": {
     "connect-mongo": "^3.2.0",

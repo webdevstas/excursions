@@ -32,7 +32,7 @@ router.route('/:slug')
 				title: 'Редактирование оператора: ' + req.company.shortName, data: req.company, success: {
 					isSuccess: false,
 					msg: ''
-				}, 
+				},
 				errors: {},
 				user: username
 			})
@@ -63,7 +63,7 @@ router.route('/:slug')
 		function (req, res) {
 			if (req.isAuthenticated()) {
 				const errors = validationResult(req)
-	
+
 				if (!errors.isEmpty()) {
 					let username = req.user ? req.user.username : 'guest'
 					res.render('companiesForm', {

@@ -28,7 +28,15 @@ router.post('/auth', (req, res) => {
 })
 
 router.get('/excursions', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    let exc = await Excursions.find()
+    let companies = await Companies.find({isApproved: true}).select({shortName: 1}).exec()
+
+    let compNames = []
+    
+    companies.forEach(comp => {
+        compNames.push(comp.shortName)
+    })
+
+    let exc = await Excursions.find({company: compNames})
     res.json(exc)
 })
 

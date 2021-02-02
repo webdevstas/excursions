@@ -8,10 +8,16 @@ services:
       dockerfile: ./Dockerfile
     environment:
       - NODE_ENV=production
+      - PROD_DB_STRING=${PROD_DB_STRING}
+      - PROD_DB_USER=${PROD_DB_USER}
+      - PROD_DB_PWD=${PROD_DB_PWD}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - PM2_PUBLIC_KEY=${PM2_PUBLIC_KEY}
+      - PM2_SECRET_KEY=${PM2_SECRET_KEY}
     ports:
-      - 3000:3000
+      - 80:3000
     volumes: 
-      - .:/usr/src/app
+      - .:/usr/src/app:z
     links: 
       - mongodb
   mongodb:
@@ -22,8 +28,8 @@ services:
     volumes: 
       - data:/data/db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=123456789
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
 
 volumes: 
   data:

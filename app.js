@@ -4,8 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
-const crypto = require('crypto')
-const { Users } = require('./models/users')
 
 require('dotenv').config()
 const indexRouter = require('./routes/index');
@@ -19,11 +17,13 @@ const apiRouter = require('./routes/api');
 
 const mongoose = require('mongoose');
 const passport = require('passport');
-const genPassword = require('./lib/passportUtils').genPassword
-const validPassword = require('./lib/passportUtils').validPassword
 
-//const db = mongoose.connect('mongodb://mongodb:27017/test', {useNewUrlParser: true, useUnifiedTopology: true, user: 'moder', pass: '123456789'}) //production
-mongoose.connect(process.env.DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DB_USER, pass: process.env.DB_PWD }) // development
+if (process.env.NODE_ENV == 'development') {
+  mongoose.connect(process.env.DEV_DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DEV_DB_USER, pass: process.env.DEV_DB_PWD }) // development
+}
+else {
+  mongoose.connect(process.env.PROD_DB_STRING, {useNewUrlParser: true, useUnifiedTopology: true, user:  process.env.PROD_DB_USER, pass: process.env.PROD_DB_PWD}) //production
+}
 const db = mongoose.connection
 const MongoStore = require('connect-mongo')(session)
 
@@ -56,19 +56,6 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24
   }
 }))
-
-// create a user
-// app.use(async function(){
-//   let pwdHash = genPassword('excursions_moderator')
-//   const user = {
-//     username: 'moderator',
-//     salt: pwdHash.salt,
-//     hash: pwdHash.hash
-//   }
-//   Users.create(user, err => {
-//     console.log(err);
-//   })
-// })
 
 // auth
 require('./config/passport')
