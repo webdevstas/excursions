@@ -5,8 +5,9 @@ const { Users } = require('../models/users')
 const utils = require('../lib/passportUtils')
 const { Excursions } = require('../models/excursions')
 const { Companies } = require('../models/companies')
+const cors = require('cors')
 
-router.post('/auth', (req, res) => {
+router.post('/auth', cors(), (req, res) => {
     Users.findOne({ username: req.body.username })
         .then(user => {
             if (!user) {
@@ -27,7 +28,7 @@ router.post('/auth', (req, res) => {
 
 })
 
-router.get('/excursions', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get('/excursions', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
     let companies = await Companies.find({isApproved: true}).select({shortName: 1}).exec()
 
     let compNames = []
