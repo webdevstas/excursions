@@ -8,7 +8,7 @@ block content
         select(name="companyFilter")
             option(value="") Все
             each company in data.companies
-                option(value="#{company.shortName}")= company.shortName
+                option(value="#{company.shortName}" class={success: company.isApproved} class={error: !company.isApproved})= company.shortName
         button(type="submit") Фильтровать
         button(type="reset" onclick="window.location.replace('/excursions-list')") Сбросить
     .excursions
@@ -22,7 +22,7 @@ block content
             h2.excursions__col-title Редактирование
         each excursion in data.excursions
             .excursions__col
-                span.excursions__title= excursion.title
+                span(class={success: excursion.isApproved} class={error: !excursion.isApproved}).excursions__title= excursion.title
             .excursions__col
                 span.excursions__company= excursion.company
             .excursions__col

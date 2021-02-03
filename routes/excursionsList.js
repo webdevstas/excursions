@@ -24,11 +24,11 @@ router.get('/',
         let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
             let excursions = {}
-            companies = await Companies.find().select({ shortName: 1 })
+            companies = await Companies.find().select({ shortName: 1, isApproved: 1 })
             if (req.query.companyFilter) {
-                excursions = await Excursions.find({ company: req.query.companyFilter }).select({ title: 1, company: 1, price: 1, slug: 1 })
+                excursions = await Excursions.find({ company: req.query.companyFilter }).select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
             } else {
-                excursions = await Excursions.find().select({ title: 1, company: 1, price: 1, slug: 1 })
+                excursions = await Excursions.find().select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
             }
 
             res.render('excursionsList', {
