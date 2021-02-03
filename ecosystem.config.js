@@ -2,8 +2,8 @@ module.exports = {
   apps: [{
     name: 'app',
     script: './bin/www',
-    watch: true,
-    ignore_watch: ["node_modules", "*.log"],
+    // watch: true,
+    // ignore_watch: ["node_modules", "*.log"],
     exec_mode: 'cluster',
     instances: 2,
     env: {
