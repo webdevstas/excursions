@@ -7,7 +7,6 @@ const path = require('path')
 async function addExcursion(req, res) {
     // Сохраняем данные из формы
     let excursion = req.body
-
     // Добавляем загруженные изображения
     let arrPictures = []
     req.files.forEach((file) => {
@@ -27,6 +26,8 @@ async function addExcursion(req, res) {
             excursion.slug = slugify(excursion.title)
         }
     })
+
+    console.log(excursion);
 
     // Сохраняем в базу
     await Excursions.create(excursion, function (err) {
@@ -54,7 +55,7 @@ async function updateExcursion(req, res) {
 
 
     //Обновляем данные в базе
-    await Excursions.updateOne({ slug: req.excursion.slug }, excursion, {}, function (err) {
+    await Excursions.updateOne({ slug: req.excursion.slug }, excursion, function (err) {
 
         if (err) throw err
 
