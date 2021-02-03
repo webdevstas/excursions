@@ -18,11 +18,11 @@ const apiRouter = require('./routes/api');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-if (process.env.NODE_ENV == 'development') {
-  mongoose.connect(process.env.DEV_DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DEV_DB_USER, pass: process.env.DEV_DB_PWD }) // development
+if (process.env.NODE_ENV == 'production') {
+  mongoose.connect(process.env.PROD_DB_STRING, {useNewUrlParser: true, useUnifiedTopology: true, user:  process.env.PROD_DB_USER, pass: process.env.PROD_DB_PWD}) //production
 }
 else {
-  mongoose.connect(process.env.PROD_DB_STRING, {useNewUrlParser: true, useUnifiedTopology: true, user:  process.env.PROD_DB_USER, pass: process.env.PROD_DB_PWD}) //production
+  mongoose.connect(process.env.DEV_DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DEV_DB_USER, pass: process.env.DEV_DB_PWD }) // development
 }
 const db = mongoose.connection
 const MongoStore = require('connect-mongo')(session)
