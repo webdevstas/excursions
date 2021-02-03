@@ -41,7 +41,8 @@ router.post('/',
     upload.array('pictures'),
     body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
     body('price').notEmpty().withMessage('Стоимость обязательна к заполнению').isNumeric().withMessage('Стоимость должна быть числом'),
-
+    body('isApproved').toBoolean(),
+    
     function (req, res) {
         if (req.isAuthenticated()) {
             let username = req.user ? req.user.username : 'guest'

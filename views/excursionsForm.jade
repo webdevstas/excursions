@@ -29,6 +29,9 @@ block content
         div.input-block
             label(for="pictures") Изображения
             input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png")
+        div.input-block.approve
+            label(for="isApproved") Одобрено
+            input(type="checkbox" name="isApproved" checked=data.body.isApproved)
         div.input-block
             button(type="submit") Сохранить
             button(type="reset" title="Работает для вновь введённых данных") Очистить

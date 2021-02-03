@@ -26,9 +26,9 @@ router.get('/',
             let excursions = {}
             companies = await Companies.find().select({ shortName: 1 })
             if (req.query.companyFilter) {
-                excursions = await Excursions.find({ company: req.query.companyFilter }).select({ title: 1, slug: 1, company: 1, price: 1 })
+                excursions = await Excursions.find({ company: req.query.companyFilter }).select({ title: 1, company: 1, price: 1 })
             } else {
-                excursions = await Excursions.find().select({ title: 1, slug: 1, company: 1, price: 1 })
+                excursions = await Excursions.find().select({ title: 1, company: 1, price: 1 })
             }
 
             res.render('excursionsList', {
@@ -43,21 +43,21 @@ router.get('/',
     });
 
 // Установим алиас для каждой экскурсии
-router.param('slug', async function (req, res, next, slug) {
-    req.excursion = await Excursions.findOne({ slug: slug })
+router.param('id', async function (req, res, next, id) {
+    req.excursion = await Excursions.findOne({ id: id })
     next()
 })
 
 
 
 // GET роут для отдачи формы редактирования экскурсии
-router.route('/:slug')
+router.route('/:id')
     .get(async function (req, res) {
         let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
             companies = await Companies.find().select({ shortName: 1 })
             res.render('excursionsForm', {
-                action: '/excursions-list/' + req.excursion.slug,
+                action: '/excursions-list/' + req.excursion.id,
                 title: 'Редактирование экскурсии: ' + req.excursion.title,
                 data: { body: req.excursion, companies: companies, selected: req.excursion.company, pictures: req.excursion.picturesURLs },
                 success: {
@@ -74,10 +74,11 @@ router.route('/:slug')
     })
 
 // POST роут для получения обновлённых данных с валидаторами
-router.route('/:slug')
+router.route('/:id')
     .post(upload.array('pictures'),
         body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
         body('price').notEmpty().withMessage('Стоимость обязательна к заполнению').isNumeric().withMessage('Стоимость должна быть числом'),
+        body('isApproved').toBoolean(),
 
         function (req, res) {
             let username = req.user ? req.user.username : 'guest'
@@ -85,9 +86,8 @@ router.route('/:slug')
                 const errors = validationResult(req)
 
                 if (!errors.isEmpty()) {
-                    console.log(req);
                     res.render('excursionsForm', {
-                        action: '/excursions-list/' + req.excursion.slug,
+                        action: '/excursions-list/' + req.excursion.id,
                         title: 'Редактирование ' + req.excursion.title,
                         data: { body: req.body, companies: companies, selected: req.excursion.company },
                         errors: errors.array(),
@@ -114,7 +114,7 @@ router.route('/:slug')
         })
 
 // Удаление экскурсии
-router.route('/:slug/delete')
+router.route('/:id/delete')
     .post(body('delete').toBoolean(),
         function (req, res) {
 
@@ -133,14 +133,14 @@ router.route('/:slug/delete')
 
 
 // Удаления изображения
-router.route('/:slug')
+router.route('/:id')
     .delete(async function (req, res) {
 
         if (req.isAuthenticated()) {
             let result = {}
 
             try {
-                result = await deletePicture(req.body.index, req.excursion.slug)
+                result = await deletePicture(req.body.index, req.excursion.id)
             }
             catch (err) {
                 console.error(err)
