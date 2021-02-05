@@ -335,4 +335,7 @@ h2.success, h2.error {
         grid-template-columns: 1fr;
         gap: 20px;
     }
+    input[type="file"] {
+        width: 100%;
+    }
 }

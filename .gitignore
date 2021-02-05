@@ -3,3 +3,4 @@ node_modules
 id_rsa_priv.pem
 *.log
 /public/images/upload
+/encryption
