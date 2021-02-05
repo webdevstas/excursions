@@ -13,7 +13,10 @@ const passport = require('passport'),
 passport.use(new LocalStrategy(
     function (username, password, done) {
         Users.findOne({ username: username }, function (err, user) {
-            let isValid = validPassword(password, user.hash, user.salt)
+            let isValid = false
+            if (user) {
+                isValid = validPassword(password, user.hash, user.salt)
+            }
             if (err) { return done(err) }
             if (!user) {
                 return done(null, false, { message: 'Неверное имя пользователя.' })

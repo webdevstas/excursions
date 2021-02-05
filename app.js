@@ -17,6 +17,8 @@ const apiRouter = require('./routes/api');
 
 const mongoose = require('mongoose');
 const passport = require('passport');
+const { Users } = require('./models/users');
+const { genPassword } = require('./lib/passportUtils');
 
 if (process.env.NODE_ENV == 'production') {
   mongoose.connect(process.env.PROD_DB_STRING, {useNewUrlParser: true, useUnifiedTopology: true, user:  process.env.PROD_DB_USER, pass: process.env.PROD_DB_PWD}) //production
@@ -56,6 +58,7 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24
   }
 }))
+
 
 // auth
 require('./config/passport')

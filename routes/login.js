@@ -4,14 +4,15 @@ const passport = require('passport')
 
 router.route('/')
     .get(function (req, res) {
-        res.render('loginForm', {username: '', password: '', title: 'Авторизация'})
+        res.render('loginForm', { username: '', password: '', title: 'Авторизация' })
     })
 
 router.route('/')
     .post(passport.authenticate('local', {
-        successRedirect: '/companies-list',
-        failureRedirect: '/',
-    }))
+        successRedirect: '/',
+        failureRedirect: '/login'
+    })
+    )
 
 
 module.exports = router
