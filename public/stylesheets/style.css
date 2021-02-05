@@ -121,6 +121,11 @@ menu {
     color: green;
 }
 
+h2.success, h2.error {
+    background-color: rgba(0, 0, 0, .7);
+    padding: 10px;
+}
+
 .companies__list {
     list-style: none;
     padding: 0;
@@ -161,7 +166,7 @@ menu {
     grid-gap: 1px;
     background-color: #000;
     margin-top: 20px;
-    overflow-block: auto;
+    overflow: auto;
 }
 
 .excursions__col {
@@ -267,7 +272,7 @@ menu {
     font-size: 20px;
     color: #fff;
     background-color: rgba(0, 0, 0, .7);
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 30px;
 }
 
@@ -276,6 +281,7 @@ menu {
         backdrop-filter: blur(10px)
     }
 }
+
 
 @media (max-width: 992px) {
     .register-form {
@@ -324,5 +330,9 @@ menu {
     }
     .container {
         padding: 50px 10px;
+    }
+    .counts {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 }

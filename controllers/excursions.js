@@ -13,6 +13,7 @@ async function addExcursion(req, res) {
         arrPictures.push(file.filename)
     })
     excursion.picturesURLs = arrPictures
+    excursion.isPublished = false
 
     // Проверяем дубли алиасов
     await Excursions.countDocuments({ title: excursion.title }, (err, count) => {
@@ -27,8 +28,6 @@ async function addExcursion(req, res) {
         }
     })
 
-    console.log(excursion);
-
     // Сохраняем в базу
     await Excursions.create(excursion, function (err) {
 
@@ -41,7 +40,9 @@ async function updateExcursion(req, res) {
     // Сохраняем данные из формы
     let excursion = req.body
 
-    excursion.slug = slugify(excursion.title)
+    if (req.excursion.title !== excursion.title) {
+        excursion.slug = slugify(excursion.title)
+    }
 
     // Добавляем загруженные изображения к существующим в базе
     let arrPictures = []
@@ -51,7 +52,9 @@ async function updateExcursion(req, res) {
         arrPictures.push(file.filename)
     })
 
-    excursion.picturesURLs = arrPictures.concat(pictFromBase.picturesURLs)
+    if (pictFromBase) {
+        excursion.picturesURLs = arrPictures.concat(pictFromBase.picturesURLs)
+    }
 
 
     //Обновляем данные в базе
@@ -98,12 +101,21 @@ async function deletePicture(index, slug) {
 
 async function countExcursions() {
     let countAll = 0,
-        countApproved = 0
+        countApproved = 0,
+        countPublished = 0
     await Excursions.countDocuments((err, count) => {
         if (err) throw err
         countAll = count
     })
-    return countAll
+    await Excursions.countDocuments({ isApproved: true }, (err, count) => {
+        if (err) throw err
+        countApproved = count
+    })
+    await Excursions.countDocuments({ isPublished: true }, (err, count) => {
+        if (err) throw err
+        countPublished = count
+    })
+    return { all: countAll, approved: countApproved, published: countPublished }
 }
 
 module.exports = { addExcursion, updateExcursion, deleteExcursion, deletePicture, countExcursions }

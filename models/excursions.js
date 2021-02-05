@@ -7,7 +7,8 @@ const excursionsSchema = new mongoose.Schema({
     price: Number,
     picturesURLs: Array,
     slug: String,
-    isApproved: Boolean
+    isApproved: Boolean,
+    isPublished: Boolean
 })
 
 module.exports.Excursions = mongoose.model('Excursions', excursionsSchema)

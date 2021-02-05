@@ -2,8 +2,10 @@ extends layout
 
 block content
     h1= title
-    h2(class={success: success.isSuccess} class={error: !success.isSuccess} style="background-color: rgba(0, 0, 0, .7); padding: 10px")= success.msg
+    if success.isSuccess
+        h2.success= success.msg
     if Object.values(errors) != 0
+        h2.error= success.msg
         .errors-block
             ul
                 - var errPoints = []

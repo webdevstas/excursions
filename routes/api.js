@@ -29,16 +29,17 @@ router.post('/auth', cors(), (req, res) => {
 })
 
 router.get('/excursions', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
-    let companies = await Companies.find({isApproved: true}).select({shortName: 1}).exec()
+    let excursions = await Excursions.find()
+    res.json(excursions)
+})
 
-    let compNames = []
-    
-    companies.forEach(comp => {
-        compNames.push(comp.shortName)
-    })
+router.param('id', async function (req, res, next, id) {
+    req.excursion = await Excursions.findOne({ _id: id })
+    next()
+})
 
-    let exc = await Excursions.find({company: compNames})
-    res.json(exc)
+router.get('/excursions/:id', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
+    res.json(req.excursion)
 })
 
 module.exports = router

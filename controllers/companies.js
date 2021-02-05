@@ -24,8 +24,10 @@ async function addCompany(req, res) {
 
 async function updateCompany(req, res) {
     const company = req.body
-
-    company.slug = slugify(company.shortName)
+    
+    if (req.company.shortName !== company.shortName) {
+        company.slug = slugify(company.shortName)
+    }
 
     await Companies.updateOne({ slug: req.company.slug }, company, {}, function (err) {
 
