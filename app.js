@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session')
+const flash = require('connect-flash')
 
 require('dotenv').config()
 const indexRouter = require('./routes/index');
@@ -64,6 +65,7 @@ app.use(session({
 require('./config/passport')
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(flash());
 
 // Routs
 app.use('/', indexRouter);

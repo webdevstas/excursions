@@ -4,15 +4,19 @@ const passport = require('passport')
 
 router.route('/')
     .get(function (req, res) {
-        res.render('loginForm', { username: '', password: '', title: 'Авторизация' })
+        let message = req.flash().error;
+        res.render('loginForm', { username: '', password: '', title: 'Авторизация', msg: message })
     })
 
 router.route('/')
-    .post(passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/login'
-    })
-    )
+    .post(
+        passport.authenticate('local',
+            {
+                successRedirect: '/',
+                failureRedirect: '/login',
+                failureFlash: 'Неверное имя пользователя или пароль'
+            }
+        )),
 
 
-module.exports = router
+        module.exports = router

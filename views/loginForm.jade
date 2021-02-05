@@ -2,6 +2,7 @@ extends formLayout
 block content
     form(action="/login", method="post").login-form
         div.login-form__title= title
+        div.error= msg
         input(type="text" name="username" placeholder="Имя пользователя")
         input(type="password" name="password" placeholder="Пароль")
         button(type="submit") Войти
