@@ -359,7 +359,7 @@ h2.success, h2.error {
     color: #212529;
     background-color: var(--main-bg-color);
     background-clip: padding-box;
-    border: 1px solid #ced4da;
+    border: 1px solid #909294;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;

@@ -8,8 +8,7 @@ block content
         for company in companies
             li.companies__list-item
                 if company.isApproved
-                    .badge.bg-success
-                        Одобрено
+                    .badge.bg-success Одобрено
                 span= company.shortName
                 .companies__btn-block
                     a(href="/companies-list/#{company.slug}")

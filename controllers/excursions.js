@@ -50,7 +50,7 @@ async function updateExcursion(req, res) {
 
     // Добавляем загруженные изображения к существующим в базе
     let arrPictures = []
-    let pictFromBase = await Excursions.findOne({ slug: excursion.slug }).select({ picturesURLs: 1 })
+    let pictFromBase = await Excursions.findOne({ slug: excursion.slug ? excursion.slug : slugify(excursion.title) }).select({ picturesURLs: 1 })
 
     req.files.forEach((file) => {
         arrPictures.push(file.filename)
@@ -59,9 +59,11 @@ async function updateExcursion(req, res) {
     if (pictFromBase) {
         excursion.picturesURLs = arrPictures.concat(pictFromBase.picturesURLs)
     }
+    else {
+        excursion.picturesURLs = arrPictures
+    }
 
-
-    //Обновляем данные в базе
+    // Обновляем данные в базе
     await Excursions.updateOne({ slug: req.excursion.slug }, excursion, function (err) {
 
         if (err) throw err
