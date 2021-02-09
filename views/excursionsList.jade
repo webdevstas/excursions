@@ -18,21 +18,27 @@ block content
             h2.excursions__col-title Оператор
         .excursions__col
             h2.excursions__col-title Стоимость
+        .excursions__col.status
+            h2.excursions__col-title Статус
         .excursions__col
             h2.excursions__col-title Редактирование
         each excursion in data.excursions
             .excursions__col
-                if excursion.isApproved || excursion.isPublished
-                    .badge-block
-                        if excursion.isApproved
-                            .badge.bg-success Одобрено
-                        if excursion.isPublished
-                            .badge.bg-info.text-dark Опубликовано
                 span.excursions__title= excursion.title
             .excursions__col
                 span.excursions__company= excursion.company
             .excursions__col
                 span.excursions__price= excursion.price + ' р.'
+            .excursions__col.status
+                .badge-block
+                    if excursion.isApproved
+                        .badge.bg-success Одобрено
+                    else
+                        .badge.bg-danger Не одобрено
+                    if excursion.isPublished
+                        .badge.bg-info.text-dark Опубликовано
+                    else
+                        .badge.bg-danger Не опубликовано
             .excursions__col
                 a(href="/excursions-list/#{excursion.slug}") 
                     button.btn.btn-warning Редактировать
