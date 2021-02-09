@@ -7,17 +7,17 @@ html
         link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
     body
         .container
-            img(src="/images/menu.svg", alt="")#open-menu
             header
+                img(src="/images/menu.svg", alt="")#open-menu
                 menu
-                    .left-menu
+                    .top-menu
                         .menu-item
                             a(href="/") Главная
                         .menu-item
                             a(href="/companies-list") Список операторов
                         .menu-item
                             a(href="/excursions-list") Список экскурсий
-                    .right-menu
+                    .bottom-menu
                         .menu-item
                             span.menu__user= 'Пользователь: ' + user
                         .menu-item
@@ -25,7 +25,8 @@ html
                                 a(href="/login") Войти
                             else
                                 a(href="/logout") Выйти
-            block content
-            #shadow-bg
+            .content
+                block content
+        #shadow-bg
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js")
         script(src="/javascripts/script.js")
