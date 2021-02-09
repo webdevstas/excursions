@@ -148,7 +148,7 @@ h2.success, h2.error {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, .8);
+    background-color: var(--main-bg-color);
 }
 
 .companies__list-item span {
@@ -452,6 +452,7 @@ h2.success, h2.error {
     display: flex;
     flex-direction: column;
     height: 200px;
+    min-width: 13%;
     justify-content: space-between;
     align-items: center;
 }
@@ -547,8 +548,12 @@ h2.success, h2.error {
         cursor: pointer;
     }
     .excursions__filter-form {
-        width: min-content;
+        width: 50%;
     }
+}
+
+@media (max-width: 768px) {
+    
 }
 
 @media (max-width: 576px) {
@@ -564,5 +569,8 @@ h2.success, h2.error {
     .counts {
         grid-template-columns: 1fr;
         gap: 20px;
+    }
+    .excursions__filter-form {
+        width: 93%;
     }
 }
