@@ -2,16 +2,19 @@ body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
     padding: 0;
     margin: 0;
-    background-image: url(../images/bg.jpg);
+    background-image: url(../images/back.jpg);
     background-attachment: fixed;
     background-size: cover;
     background-position: center center;
+    --main-bg-color: rgba(255, 255, 255, .9);
+    --main-text-color: #000;
+    --alt-text-color: #fff;
 }
 
 h1 {
-    color: rgb(236, 236, 236);
+    color: var(--main-text-color);
     display: block;
-    background-color: rgba(0, 0, 0, .7);
+    background-color: var(--main-bg-color);
     padding: 20px;
     text-align: center;
 }
@@ -25,31 +28,34 @@ header {
     top: 0;
     width: 100%;
     position: fixed;
-    background-color: rgba(0, 0, 0, .7);
+    background-color: var(--main-bg-color);
     z-index: 1000;
 }
 
 input, select, textarea {
     min-height: 30px;
     font-size: 18px;
-    color: rgb(46, 46, 46);
+    color: var(--main-text-color);
+    display: block;
+    position: relative;
+    max-width: 100%;
 }
 
 label {
     margin-bottom: 10px;
-    color: #fff;
+    color: var(--main-text-color);
 }
 
-button {
-    font-size: 18px;
-    min-height: 30px;
+input[type="checkbox"] {
+    width: 15px;
 }
 
 .register-form {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    background-color: rgba(0, 0, 0, .7);
+    background-color: var(--main-bg-color);
+    position: relative;
     padding: 20px;
 }
 
@@ -58,6 +64,7 @@ button {
     display: flex;
     flex-direction: column;
     font-size: 18px;
+    min-width: 100px;
 }
 
 .input-block.approve {
@@ -101,19 +108,19 @@ menu {
 }
 
 .menu-item a {
-    color: #fff;
+    color: var(--main-text-color);
     font-size: 20px;
     text-decoration: none;
 }
 
 .menu__user {
     display: block;
-    color: #fff;
+    color: var(--main-text-color);
     font-size: 16px;
 }
 
 .error {
-    border-color: red;
+    border: red 1px solid !important;
     color: red;
 }
 
@@ -122,7 +129,7 @@ menu {
 }
 
 h2.success, h2.error {
-    background-color: rgba(0, 0, 0, .7);
+    background-color: var(--main-bg-color);
     padding: 10px;
 }
 
@@ -141,13 +148,17 @@ h2.success, h2.error {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, .7);
+    background-color: rgba(255, 255, 255, .8);
 }
 
 .companies__list-item span {
     margin-bottom: 20px;
     font-size: 20px;
     font-weight: bold;
+}
+
+.companies__list-item .badge {
+    align-self: start;
 }
 
 .companies__btn-block {
@@ -164,7 +175,7 @@ h2.success, h2.error {
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: minmax(50px, auto);
     grid-gap: 1px;
-    background-color: #000;
+    background-color:#000;
     margin-top: 20px;
     overflow: auto;
 }
@@ -172,13 +183,233 @@ h2.success, h2.error {
 .excursions__col {
     width: 100%;
     height: 100%;
-    background-color: #fff;
+    background-color: var(--main-bg-color);
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
     font-size: 16px;
     flex-wrap: wrap;
+    position: relative;
+}
+
+.excursions__col .btn {
+    min-width: 140px;
+}
+
+.excursions__title{
+    margin: 10px;
+}
+
+.excursions__col-title {
+    margin: 10px;
+}
+
+.excursions__col form {
+    width: max-content;
+}
+
+.excursions__col a {
+    text-decoration: none;
+}
+
+.deleteBtn {
+    display: block;
+    width: 100%;
+}
+
+.btn-group, .btn-group-vertical {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+    flex-wrap: wrap;
+}
+
+.btn-group>.btn-group:not(:last-child)>.btn, .btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.btn-group>.btn-group:not(:first-child)>.btn, .btn-group>.btn:nth-child(n+3), .btn-group>:not(.btn-check)+.btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.btn-group>.btn-group:not(:first-child), .btn-group>.btn:not(:first-child) {
+    margin-left: -1px;
+}
+.btn-group-vertical>.btn, .btn-group>.btn {
+    position: relative;
+    flex: 1 1 auto;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.btn-success:hover {
+    color: var(--alt-text-color);
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+/* .btn:hover {
+    color: #212529;
+} */
+
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+    cursor: pointer;
+}
+
+.btn-success {
+    color: var(--alt-text-color);
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.btn-danger {
+    color: var(--alt-text-color);
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    color: var(--alt-text-color);
+    background-color: #bb2d3b;
+    border-color: #b02a37;
+}
+
+.btn-warning {
+    color: var(--main-text-color);
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-warning:hover {
+    color: var(--main-text-color);
+    background-color: #ffca2c;
+    border-color: #ffc720;
+}
+
+.btn-light {
+    color: var(--main-text-color);
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+
+.btn-light:hover {
+    color: var(--main-text-color);
+    background-color: #f9fafb;
+    border-color: #f9fafb;
+}
+
+.btn-primary {
+    color: var(--alt-text-color);
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    color: var(--alt-text-color);
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.form-select {
+    display: block;
+    padding: .375rem 1.75rem .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    vertical-align: middle;
+    background-color: var(--main-bg-color);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-control {
+    display: block;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: var(--main-bg-color);
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+
+.alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.bg-success {
+    background-color: #198754!important;
+}
+
+.badge {
+    display: inline-block;
+    padding: .35em .65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--alt-text-color);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+}
+
+.bg-info {
+    background-color: #0dcaf0!important;
+}
+
+.badge-block {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px dashed grey;
 }
 
 .excursions__filter-form {
@@ -189,14 +420,14 @@ h2.success, h2.error {
     justify-content: space-between;
     width: 40%;
     padding: 10px;
-    background-color: rgba(0, 0, 0, .7);
+    background-color: var(--main-bg-color);
     margin-top: 20px;
 }
 
 .excursions__filter-label {
     font-size: 18px;
     margin: 0;
-    color: #fff
+    color: var(--main-text-color)
 }
 
 .pictures-block {
@@ -216,25 +447,25 @@ h2.success, h2.error {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, .7);
+    background-color: var(--main-bg-color);
     padding: 20px;
     display: flex;
     flex-direction: column;
-    height: 150px;
+    height: 200px;
     justify-content: space-between;
     align-items: center;
 }
 
 .login-form__title {
     font-size: 20px;
-    color: #fff;
+    color: var(--main-text-color);
 }
 
 .errors-block {
-    background-color: rgba(0, 0, 0, .7);
+    background-color: var(--main-bg-color);
     padding: 20px;
     margin-bottom: 20px;
-    color: #fff
+    color: var(--main-text-color)
 }
 
 #open-menu {
@@ -253,7 +484,7 @@ h2.success, h2.error {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, .7);
     z-index: 500;
     display: none;
     left: -1000px;
@@ -270,8 +501,8 @@ h2.success, h2.error {
     display: flex;
     flex-direction: column;
     font-size: 20px;
-    color: #fff;
-    background-color: rgba(0, 0, 0, .7);
+    color: var(--main-text-color);
+    background-color: var(--main-bg-color);
     justify-content: flex-start;
     padding: 30px;
 }
@@ -281,7 +512,6 @@ h2.success, h2.error {
         backdrop-filter: blur(10px)
     }
 }
-
 
 @media (max-width: 992px) {
     .register-form {
@@ -296,7 +526,7 @@ h2.success, h2.error {
         top: 0;
         flex-direction: column;
         height: 100%;
-        background-color: rgba(0, 0, 0, .9);
+        background-color: var(--main-bg-color);
         margin: 0;
         padding: 50px;
         justify-content: flex-start;
@@ -334,8 +564,5 @@ h2.success, h2.error {
     .counts {
         grid-template-columns: 1fr;
         gap: 20px;
-    }
-    input[type="file"] {
-        width: 100%;
     }
 }

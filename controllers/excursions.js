@@ -28,10 +28,14 @@ async function addExcursion(req, res) {
         }
     })
 
-    // Сохраняем в базу
-    await Excursions.create(excursion, function (err) {
+    
 
+    // Сохраняем в базу
+    await Excursions.create(excursion, function (err, data) {
         if (err) throw err
+        if (!data.slug) {
+            Excursions.updateOne({_id: data._id}, {slug: data._id})
+        }
 
     })
 }

@@ -15,29 +15,30 @@ block content
     form(method="post" action="#{action}" enctype="multipart/form-data").register-form
         div.input-block
             label(for="company") Оператор
-            select(type="text" name="company" rows="1")
+            select(type="text" name="company" rows="1").form-select
                 each company in data.companies
                     - var isSelected = data.selected === company.shortName
                     option(value="#{company.shortName}" selected=isSelected)= company.shortName
         div.input-block
             label(for="title") Название экскурсии
-            input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}")
+            input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}").form-control
         div.input-block
             label(for="description") Описание экскурсии
-            textarea(type="text" name="description" rows="1") #{data.body.description ? data.body.description : ''}
+            textarea(type="text" name="description" rows="1").form-control #{data.body.description ? data.body.description : ''}
         div.input-block
             label(for="price") Стоимость экскурсии
-            input(type="text" name="price" value="#{data.body.price ? data.body.price : ''}")
+            input(type="text" name="price" value="#{data.body.price ? data.body.price : ''}").form-control
         div.input-block
             label(for="pictures") Изображения
-            input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png")
+            input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png").form-control
         div.input-block.approve
             label(for="isApproved") Одобрено
             input(type="checkbox" name="isApproved" checked=data.body.isApproved)
         div.input-block
-            button(type="submit") Сохранить
-            button(type="reset" title="Работает для вновь введённых данных") Очистить
-            button(type="button").cancelBtn Отмена
+            .btn-group
+                button(type="submit").btn.btn-success Сохранить
+                button(type="reset" title="Работает для вновь введённых данных").btn.btn-warning Очистить
+                button(type="button").btn.cancelBtn.btn-danger Отмена
     .pictures-block
         if data.pictures
             each picture in data.pictures

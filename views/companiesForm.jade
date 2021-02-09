@@ -1,6 +1,8 @@
 extends layout
 block content
     h1= title
+    if success.isSuccess
+        h2.success= success.msg
     if Object.values(errors) != 0
         h2(class={success: success.isSuccess} class={error: !success.isSuccess} style="background-color: rgba(0, 0, 0, .7); padding: 10px")= success.msg
         .errors-block
@@ -12,59 +14,60 @@ block content
     form(method="post" action="#{action}").register-form
         div.input-block
             label(for="fullName") Полное наименование компании
-            textarea(type="text" name="fullName" rows="1") #{data.fullName ? data.fullName : ''}
+            textarea(type="text" name="fullName" rows="1").form-control #{data.fullName ? data.fullName : ''}
         div.input-block
             label(for="shortName") Краткое наименование компании
-            input(type="text" name="shortName" value="#{data.shortName ? data.shortName : ''}")
+            input(type="text" name="shortName" value="#{data.shortName ? data.shortName : ''}").form-control
         div.input-block
             label(for="formOfOwnership") Форма собственности
-            input(type="text" name="formOfOwnership" value="#{data.formOfOwnership ? data.formOfOwnership : ''}")
+            input(type="text" name="formOfOwnership" value="#{data.formOfOwnership ? data.formOfOwnership : ''}").form-control
         div.input-block
             label(for="kindOfActivity") Вид деятельности
-            input(type="text" name="kindOfActivity" value="#{data.kindOfActivity ? data.kindOfActivity : ''}")
+            input(type="text" name="kindOfActivity" value="#{data.kindOfActivity ? data.kindOfActivity : ''}").form-control
         div.input-block
             label(for="legalAddress") Юридический адрес
-            input(type="text" name="legalAddress" value="#{data.legalAddress ? data.legalAddress : ''}")
+            input(type="text" name="legalAddress" value="#{data.legalAddress ? data.legalAddress : ''}").form-control
         div.input-block
             label(for="actualAddress") Фактичесий адрес
-            input(type="text" name="actualAddress" value="#{data.actualAddress ? data.actualAddress : ''}")
+            input(type="text" name="actualAddress" value="#{data.actualAddress ? data.actualAddress : ''}").form-control
         div.input-block
             label(for="head") Руководитель
-            input(type="text" name="head" value="#{data.head ? data.head : ''}")
+            input(type="text" name="head" value="#{data.head ? data.head : ''}").form-control
         div.input-block
             label(for="phoneNumber") Номер телефона организации
-            input(type="tel" name="phoneNumber" value="#{data.phoneNumber ? data.phoneNumber : ''}")
+            input(type="tel" name="phoneNumber" value="#{data.phoneNumber ? data.phoneNumber : ''}").form-control
         div.input-block
             label(for="faxNumber") Факс
-            input(type="tel" name="faxNumber" value="#{data.faxNumber ? data.faxNumber : ''}")
+            input(type="tel" name="faxNumber" value="#{data.faxNumber ? data.faxNumber : ''}").form-control
         div.input-block
             label(for="email") Электронная почта
-            input(type="email" name="email" value="#{data.email ? data.email : ''}")
+            input(type="email" name="email" value="#{data.email ? data.email : ''}").form-control
         div.input-block
             label(for="inn") ИНН
-            input(type="text" name="inn" value="#{data.inn ? data.inn : ''}")
+            input(type="text" name="inn" value="#{data.inn ? data.inn : ''}").form-control
         div.input-block
             label(for="ogrn") ОГРН
-            input(type="text" name="ogrn" value="#{data.ogrn ? data.ogrn : ''}")
+            input(type="text" name="ogrn" value="#{data.ogrn ? data.ogrn : ''}").form-control
         div.input-block
             label(for="kpp") КПП
-            input(type="text" name="kpp" value="#{data.kpp ? data.kpp : ''}")
+            input(type="text" name="kpp" value="#{data.kpp ? data.kpp : ''}").form-control
         div.input-block
             label(for="okved") ОКВЭД
-            input(type="text" name="okved" value="#{data.okved ? data.okved : ''}")
+            input(type="text" name="okved" value="#{data.okved ? data.okved : ''}").form-control
         div.input-block
             label(for="registrationInformation") Регистрационная информация
-            input(type="text" name="registrationInformation" value="#{data.registrationInformation ? data.registrationInformation : ''}")
+            input(type="text" name="registrationInformation" value="#{data.registrationInformation ? data.registrationInformation : ''}").form-control
         div.input-block
             label(for="bankInformation") Банковские реквизиты
-            input(type="text" name="bankInformation" value="#{data.bankInformation ? data.bankInformation : ''}")
+            input(type="text" name="bankInformation" value="#{data.bankInformation ? data.bankInformation : ''}").form-control
         div.input-block.approve
             label(for="isApproved") Одобрено
             input(type="checkbox" name="isApproved" checked=data.isApproved)
         div.input-block
-            button(type="submit") Сохранить
-            button(type="reset" title="Работает для вновь введённых данных") Очистить
-            button(type="button").cancelBtn Отмена
+            .btn-group
+                button(type="submit").btn.btn-success Сохранить
+                button(type="reset" title="Работает для вновь введённых данных").btn.btn-warning Очистить
+                button(type="button").cancelBtn.btn.btn-danger Отмена
 
     script.
         const inputs = document.querySelectorAll('input')

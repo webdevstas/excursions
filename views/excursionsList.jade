@@ -2,15 +2,15 @@ extends layout
 block content
     h1= title
     a(href="/new-excursion")
-        button Добавить
+        button.btn.btn-primary Добавить
     form(action="/excursions-list" method="get").excursions__filter-form
         label(for="company-filter").excursions__filter-label Фильтр по операторам:
-        select(name="companyFilter")
+        select(name="companyFilter").form-select
             option(value="") Все
             each company in data.companies
                 option(value="#{company.shortName}" class={success: company.isApproved} class={error: !company.isApproved})= company.shortName
-        button(type="submit") Фильтровать
-        button(type="reset" onclick="window.location.replace('/excursions-list')") Сбросить
+        button(type="submit").btn.btn-success Фильтровать
+        button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-warning Сбросить
     .excursions
         .excursions__col
             h2.excursions__col-title Название
@@ -22,16 +22,22 @@ block content
             h2.excursions__col-title Редактирование
         each excursion in data.excursions
             .excursions__col
-                span(class={success: excursion.isApproved} class={error: !excursion.isApproved}).excursions__title= excursion.title
+                if excursion.isApproved || excursion.isPublished
+                    .badge-block
+                        if excursion.isApproved
+                            .badge.bg-success Одобрено
+                        if excursion.isPublished
+                            .badge.bg-info.text-dark Опубликовано
+                span.excursions__title= excursion.title
             .excursions__col
                 span.excursions__company= excursion.company
             .excursions__col
                 span.excursions__price= excursion.price + ' р.'
             .excursions__col
                 a(href="/excursions-list/#{excursion.slug}") 
-                    button Редактировать
+                    button.btn.btn-warning Редактировать
                 form(action="/excursions-list/#{excursion.slug}/delete" method="post")
-                    button.deleteBtn Удалить
+                    button.deleteBtn.btn.btn-danger Удалить
                     input(type="hidden" name="delete")
     script. 
         const deleteBtn = document.querySelectorAll('.deleteBtn')

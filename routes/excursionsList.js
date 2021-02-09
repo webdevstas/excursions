@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { body, validationResult, check } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 const { updateExcursion, deleteExcursion, deletePicture } = require('../controllers/excursions')
 const { Excursions } = require('../models/excursions')
 const { Companies } = require('../models/companies')
@@ -25,12 +25,15 @@ router.get('/',
         if (req.isAuthenticated()) {
             let excursions = {}
             companies = await Companies.find().select({ shortName: 1, isApproved: 1 })
+
+            // Фильтр по наименованю компании
             if (req.query.companyFilter) {
                 excursions = await Excursions.find({ company: req.query.companyFilter }).select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
             } else {
-                excursions = await Excursions.find().select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
+                excursions = await Excursions.find().select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1, isPublished: 1 })
             }
 
+            // Вывод
             res.render('excursionsList', {
                 title: 'Список экскурсий',
                 data: { excursions: excursions, companies: companies },

@@ -3,16 +3,19 @@ extends layout
 block content
     h1= title
     a(href="/register-company")
-        button Добавить
+        button.btn.btn-primary Добавить
     ul.companies__list
         for company in companies
             li.companies__list-item
-                span(class={success: company.isApproved} class={error: !company.isApproved})= company.shortName
+                if company.isApproved
+                    .badge.bg-success
+                        Одобрено
+                span= company.shortName
                 .companies__btn-block
                     a(href="/companies-list/#{company.slug}")
-                        button Редактировать
+                        button.btn.btn-warning Редактировать
                     form(action="/companies-list/#{company.slug}/delete" method="post")
-                        button.deleteBtn Удалить
+                        button.deleteBtn.btn.btn-danger Удалить
                         input(type="hidden" name="delete")
     script. 
         const deleteBtn = document.querySelectorAll('.deleteBtn')
