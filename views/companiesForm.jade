@@ -4,7 +4,7 @@ block content
     if success.isSuccess
         h2.success= success.msg
     if Object.values(errors) != 0
-        h2(class={success: success.isSuccess} class={error: !success.isSuccess} style="background-color: rgba(0, 0, 0, .7); padding: 10px")= success.msg
+        h2(class={success: success.isSuccess} class={error: !success.isSuccess})= success.msg
         .errors-block
             ul
                 - var errPoints = []
@@ -16,7 +16,7 @@ block content
             label(for="fullName") Полное наименование компании:
             textarea(type="text" name="fullName" rows="1").form-control #{data.fullName ? data.fullName : ''}
         div.input-block
-            label(for="shortName") Краткое наименование компании:
+            label(for="shortName") Краткое наименование компании: *
             input(type="text" name="shortName" value="#{data.shortName ? data.shortName : ''}").form-control
         div.input-block
             label(for="formOfOwnership") Форма собственности:
@@ -64,6 +64,7 @@ block content
             label(for="isApproved") Одобрено:
             input(type="checkbox" name="isApproved" checked=data.isApproved)
         div.input-block
+            .required-attention *Поля обязательные к заполнению
             .btn-group
                 button(type="submit").btn.btn-success Сохранить
                 button(type="reset" title="Работает для вновь введённых данных").btn.btn-warning Очистить

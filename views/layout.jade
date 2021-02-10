@@ -11,20 +11,16 @@ html
                 img(src="/images/menu.svg", alt="")#open-menu
                 menu
                     .top-menu
-                        .menu-item
-                            a(href="/") Главная
-                        .menu-item
-                            a(href="/companies-list") Список операторов
-                        .menu-item
-                            a(href="/excursions-list") Список экскурсий
+                        
+                            a(href="/").menu-item Главная
+                            a(href="/companies-list").menu-item Список операторов
+                            a(href="/excursions-list").menu-item Список экскурсий
                     .bottom-menu
-                        .menu-item
                             span.menu__user= 'Пользователь: ' + user
-                        .menu-item
                             if user === 'guest'
-                                a(href="/login") Войти
+                                a(href="/login").menu-item Войти
                             else
-                                a(href="/logout") Выйти
+                                a(href="/logout").menu-item Выйти
             .content
                 block content
         #shadow-bg
