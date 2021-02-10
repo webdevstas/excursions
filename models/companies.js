@@ -17,10 +17,15 @@ const companiesSchema = new mongoose.Schema({
     okved: String,
     registrationInformation: String,
     bankInformation: String,
-    isApproved: Boolean, 
+    isApproved: Boolean,
     slug: {
         type: String,
         unique: true
+    }
+}, {
+    timestamps: {
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt'
     }
 })
 

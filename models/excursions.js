@@ -11,7 +11,12 @@ const excursionsSchema = new mongoose.Schema({
         unique: true
     },
     isApproved: Boolean,
-    isPublished: Boolean
+    isPublished: Boolean,
+}, {
+    timestamps: {
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt'
+    }
 })
 
 module.exports.Excursions = mongoose.model('Excursions', excursionsSchema)

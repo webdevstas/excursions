@@ -43,7 +43,8 @@ label {
 }
 
 input[type="checkbox"] {
-    width: 30px;
+    width: 20px;
+    height: 20px;
 }
 
 .container {
@@ -170,6 +171,7 @@ h2.success, h2.error {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    margin-top: 20px;
 }
 
 .companies__list-item {
@@ -178,9 +180,10 @@ h2.success, h2.error {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     background-color: var(--main-bg-color);
     border-radius: 0.25rem;
+    height: 150px;
 }
 
 .companies__list-item span {
