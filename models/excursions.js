@@ -6,7 +6,10 @@ const excursionsSchema = new mongoose.Schema({
     description: String,
     price: Number,
     picturesURLs: Array,
-    slug: String,
+    slug: {
+        type: String,
+        unique: true
+    },
     isApproved: Boolean,
     isPublished: Boolean
 })
