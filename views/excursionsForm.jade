@@ -13,28 +13,88 @@ block content
                     - errPoints.push(err.param)
                         li= err.msg
     form(method="post" action="#{action}" enctype="multipart/form-data").register-form
-        div.input-block
+        .input-block
             label(for="company") Оператор: *
             select(type="text" name="company" rows="1").form-select
                 each company in data.companies
                     - var isSelected = data.selected === company.shortName
                     option(value="#{company.shortName}" selected=isSelected)= company.shortName
-        div.input-block
+        .input-block
             label(for="title") Название экскурсии: *
             input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}").form-control
-        div.input-block
+        .input-block
             label(for="description") Описание экскурсии:
             textarea(type="text" name="description" rows="1").form-control #{data.body.description ? data.body.description : ''}
-        div.input-block
+        .input-block
             label(for="price") Стоимость экскурсии: *
             input(type="text" name="price" value="#{data.body.price ? data.body.price : ''}").form-control
-        div.input-block
+        .input-block
             label(for="pictures") Изображения:
             input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png").form-control
-        div.input-block.approve
+        .input-block.approve
             label(for="isApproved") Одобрено:
             input(type="checkbox" name="isApproved" checked=data.body.isApproved)
-        div.input-block
+        .input-block
+            label(for="tags") Выберите подходящие теги:
+            .tags
+                .tag-item 
+                    input(type="checkbox" name="tags" value='обзорные экскурсии')
+                    label(for="") обзорные экскурсии
+                .tag-item 
+                    input(type="checkbox" name="tags" value='автобусные туры')
+                    label(for="") автобусные туры
+                .tag-item 
+                    input(type="checkbox" name="tags" value='автомобильные туры')
+                    label(for="") автомобильные туры
+                .tag-item 
+                    input(type="checkbox" name="tags" value='джиппинг')
+                    label(for="") джиппинг
+                .tag-item 
+                    input(type="checkbox" name="tags" value='квадроциклы')
+                    label(for="") квадроциклы
+                .tag-item 
+                    input(type="checkbox" name="tags" value='мотоциклы')
+                    label(for="") мотоциклы
+                .tag-item 
+                    input(type="checkbox" name="tags" value='велосипедные')
+                    label(for="") велосипедные
+                .tag-item 
+                    input(type="checkbox" name="tags" value='конные прогулки')
+                    label(for="") конные прогулки
+                .tag-item 
+                    input(type="checkbox" name="tags" value='морские прогулки')
+                    label(for="") морские прогулки
+                .tag-item 
+                    input(type="checkbox" name="tags" value='дайвинг')
+                    label(for="") дайвинг
+                .tag-item 
+                    input(type="checkbox" name="tags" value='рафтинг')
+                    label(for="") рафтинг
+                .tag-item 
+                    input(type="checkbox" name="tags" value='парки в Сочи')
+                    label(for="") парки в Сочи
+                .tag-item 
+                    input(type="checkbox" name="tags" value='музеи Сочи')
+                    label(for="") музеи Сочи
+                .tag-item 
+                    input(type="checkbox" name="tags" value='квесты')
+                    label(for="") квесты
+                .tag-item 
+                    input(type="checkbox" name="tags" value='полеты на парапланах')
+                    label(for="") полеты на парапланах   
+                .tag-item 
+                    input(type="checkbox" name="tags" value='Олимпийский парк')
+                    label(for="") Олимпийский парк
+                .tag-item 
+                    input(type="checkbox" name="tags" value='Красная поляна')
+                    label(for="") Красная поляна
+                .tag-item 
+                    input(type="checkbox" name="tags" value='Сочи')
+                    label(for="") Сочи
+                .tag-item 
+                    input(type="checkbox" name="tags" value='Адлер')
+                    label(for="") Адлер
+        .input-block
             .required-attention *Поля обязательные к заполнению
             .btn-group
                 button(type="submit").btn.btn-success Сохранить
@@ -52,6 +112,14 @@ block content
         const points = '#{errPoints}'
         const cancelBtn = document.querySelectorAll('.cancelBtn')
         const deleteImgBtns = document.querySelectorAll('.delete-img')
+        const tagCheckboxes = document.querySelectorAll('input[name="tags"]')
+        const tags = '#{data.tags}'
+
+        tagCheckboxes.forEach(item => {
+            if (tags.includes(item.value)) {
+                item.checked = true
+            }
+        })
 
         inputs.forEach((input) => {
             if (points.includes(input.name)) {

@@ -28,8 +28,6 @@ async function addExcursion(req, res) {
         }
     })
 
-    
-
     // Сохраняем в базу
     await Excursions.create(excursion, function (err, data) {
         if (err) throw err

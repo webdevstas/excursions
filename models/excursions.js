@@ -12,6 +12,7 @@ const excursionsSchema = new mongoose.Schema({
     },
     isApproved: Boolean,
     isPublished: Boolean,
+    tags: [String]
 }, {
     timestamps: {
         createdAt: 'createdAt',

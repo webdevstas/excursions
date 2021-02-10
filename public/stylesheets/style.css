@@ -59,10 +59,22 @@ input[type="checkbox"] {
 .register-form {
     background-color: var(--main-bg-color);
     position: relative;
-    padding: 20px;
+    padding: 10px;
     border-radius: 0.25rem;
     width: 60%;
     margin: auto;
+}
+
+.tags {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.tag-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .required-attention {
@@ -73,15 +85,15 @@ input[type="checkbox"] {
 .input-block {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    font-size: 18px;
+    font-size: 16px;
     min-width: 100px;
     align-items: center;
     margin-bottom: 10px;
 }
 
 .input-block.approve {
-    justify-content: space-between;
-    align-items: end;
+    justify-content: flex-start;
+    align-items: center;
     display: flex;
     flex-direction: row;
 }
@@ -460,17 +472,17 @@ h2.success, h2.error {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    width: 40%;
+    justify-content: space-around;
     padding: 10px;
     background-color: var(--main-bg-color);
     margin-top: 20px;
     border-radius: 0.25rem;
+    width: 50%;
 }
 
-.excursions__filter-form .btn {
+/* .excursions__filter-form .btn {
     margin-top: 10px;
-}
+} */
 
 .excursions__filter-label {
     font-size: 18px;
