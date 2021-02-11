@@ -51,7 +51,7 @@ router.route('/:slug')
 		body('head').trim().escape(),
 		body('phoneNumber').trim().escape(),
 		body('faxNumber').trim().escape(),
-		body('email').trim().escape(),
+		body('email').trim().escape().notEmpty().withMessage('Электронная почта обязательна к заполнению').isEmail().withMessage('Введите корректный email'),
 		check('inn').optional({ nullable: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение ИНН'),
 		check('ogrn').optional({ nullable: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение ОГРН'),
 		check('kpp').optional({ nullable: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение КПП'),

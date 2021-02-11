@@ -81,6 +81,7 @@ router.route('/:slug')
     .post(upload.array('pictures'),
         body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
         body('price').notEmpty().withMessage('Стоимость обязательна к заполнению').isNumeric().withMessage('Стоимость должна быть числом'),
+        body('description').notEmpty().withMessage('Описание обязательно к заполнению').isLength({min: 5 ,max: 50}).withMessage('Количество символов должно быть от 5 до 50'),
         body('isApproved').toBoolean(),
 
         function (req, res) {

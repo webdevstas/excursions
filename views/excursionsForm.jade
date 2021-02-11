@@ -21,13 +21,13 @@ block content
                     option(value="#{company.shortName}" selected=isSelected)= company.shortName
         .input-block
             label(for="title") Название экскурсии: *
-            input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}").form-control
+            input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}" required).form-control
         .input-block
-            label(for="description") Описание экскурсии:
-            textarea(type="text" name="description" rows="1").form-control #{data.body.description ? data.body.description : ''}
+            label(for="description") Описание экскурсии: *
+            textarea(type="text" name="description" rows="1" required).form-control #{data.body.description ? data.body.description : ''}
         .input-block
             label(for="price") Стоимость экскурсии: *
-            input(type="text" name="price" value="#{data.body.price ? data.body.price : ''}").form-control
+            input(type="text" name="price" value="#{data.body.price ? data.body.price : ''}" required).form-control
         .input-block
             label(for="pictures") Изображения:
             input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png").form-control
@@ -109,6 +109,7 @@ block content
 
     script.
         const inputs = document.querySelectorAll('input')
+        const textAreas = document.querySelectorAll('textarea')
         const points = '#{errPoints}'
         const cancelBtn = document.querySelectorAll('.cancelBtn')
         const deleteImgBtns = document.querySelectorAll('.delete-img')
@@ -118,6 +119,12 @@ block content
         tagCheckboxes.forEach(item => {
             if (tags.includes(item.value)) {
                 item.checked = true
+            }
+        })
+
+        textAreas.forEach((item) => {
+            if (points.includes(item.name)) {
+                item.classList.add('error')
             }
         })
 

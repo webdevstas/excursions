@@ -7,6 +7,9 @@ const { Excursions } = require('../models/excursions')
 const { Companies } = require('../models/companies')
 const cors = require('cors')
 
+/**
+ * Authentication
+ */
 router.post('/auth', cors(), (req, res) => {
     Users.findOne({ username: req.body.username })
         .then(user => {
@@ -28,8 +31,52 @@ router.post('/auth', cors(), (req, res) => {
 
 })
 
+
+/**
+ * Companies
+ */
+router.get('/companies', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
+    let companies = []
+    if (req.query.status === 'approved') {
+        companies = await Companies.find({isApproved: true})
+    }
+    else if (req.query.status === 'rejected') {
+        companies = await Companies.find({isApproved: false})
+    }
+    else {
+        companies = await Companies.find()
+    }
+    res.json(companies)
+})
+
+
+router.param('id', async function (req, res, next, id) {
+    req.company = await Companies.findOne({ _id: id })
+    next()
+})
+
+router.get('/companies/:id', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
+    res.json(req.company)
+})
+
+
+/**
+ * Excursions
+ */
 router.get('/excursions', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
-    let excursions = await Excursions.find()
+    let excursions
+    if (req.query.company) {
+        excursions = await Excursions.find({company: req.query.company})
+    } 
+    else if (req.query.status === 'approved') {
+        excursions = await Excursions.find({isApproved: true})
+    }
+    else if (req.query.status === 'rejected') {
+        excursions = await Excursions.find({isApproved: false})
+    }
+    else {
+        excursions = await Excursions.find()
+    }   
     res.json(excursions)
 })
 
@@ -42,4 +89,8 @@ router.get('/excursions/:id', cors(), passport.authenticate('jwt', { session: fa
     res.json(req.excursion)
 })
 
+
+/**
+ * Exports
+ */
 module.exports = router
