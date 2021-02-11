@@ -9,6 +9,7 @@ body {
     --main-bg-color: rgba(255, 255, 255, .9);
     --main-text-color: #000;
     --alt-text-color: #fff;
+    background-color: #45535e;
 }
 
 h1 {
@@ -40,6 +41,17 @@ input, select, textarea {
 
 label {
     color: var(--main-text-color);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    border-bottom-left-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+    transition: 0.1s;
+}
+
+label.focused {
+    background-color: rgb(212, 212, 212);
 }
 
 input[type="checkbox"] {
@@ -145,6 +157,10 @@ menu {
     width: 180px;
     align-items: center;
     transition: all .2s;
+}
+
+.menu-item_active {
+    background-color: rgb(212, 212, 212);
 }
 
 .menu-item:hover {
@@ -468,21 +484,15 @@ h2.success, h2.error {
 }
 
 .excursions__filter-form {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     padding: 10px;
     background-color: var(--main-bg-color);
     margin-top: 20px;
     border-radius: 0.25rem;
     width: 50%;
 }
-
-/* .excursions__filter-form .btn {
-    margin-top: 10px;
-} */
 
 .excursions__filter-label {
     font-size: 18px;
@@ -537,6 +547,10 @@ h2.success, h2.error {
     left: 10px;
     top: 10px;
     display: none;
+    z-index: 1500;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 #shadow-bg {
@@ -580,7 +594,7 @@ h2.success, h2.error {
     }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
     .register-form {
         grid-template-columns: repeat(1, 1fr);
     }
@@ -598,17 +612,14 @@ h2.success, h2.error {
         z-index: 1000;
     }
     .register-form {
-        width: 90%;
-    }
-    .menu-item {
-        margin: 10px 0;
+        width: auto;
     }
     #open-menu {
         display: block;
         cursor: pointer;
     }
     .excursions__filter-form {
-        width: 50%;
+        width: auto;
     }
     .container {
         display: block;
@@ -621,13 +632,15 @@ h2.success, h2.error {
     }
     .content {
         padding: 20px;
-        ;
     }
 }
 
 @media (max-width: 768px) {
     .input-block {
         grid-template-columns: 1fr;
+    }
+    label.focused {
+        background-color: transparent;
     }
 }
 
@@ -650,5 +663,14 @@ h2.success, h2.error {
     }
     .input-block {
         width: 100%;
+    }
+    .excursions__filter-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 320px) {
+    .tags {
+        grid-template-columns: 1fr;
     }
 }

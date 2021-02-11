@@ -4,25 +4,38 @@ html
         meta(name="viewport" content="width=device-width, initial-scale=1")
         title= title
         link(rel='stylesheet' href='/stylesheets/style.css')
-        link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
+        link(rel="shortcut icon" href="/favicon.ico" type="image/x-icon")
     body
         .container
             header
-                img(src="/images/menu.svg", alt="")#open-menu
+                img(src="/images/menu.svg" alt="")#open-menu
                 menu
                     .top-menu
-                        
-                            a(href="/").menu-item Главная
-                            a(href="/companies-list").menu-item Список операторов
-                            a(href="/excursions-list").menu-item Список экскурсий
+
+                        a(href="/").menu-item Главная
+                        a(href="/companies-list").menu-item Список операторов
+                        a(href="/excursions-list").menu-item Список экскурсий
                     .bottom-menu
-                            span.menu__user= 'Пользователь: ' + user
-                            if user === 'guest'
-                                a(href="/login").menu-item Войти
-                            else
-                                a(href="/logout").menu-item Выйти
+                        span.menu__user= 'Пользователь: ' + user
+                        if user === 'guest'
+                            a(href="/login").menu-item Войти
+                        else
+                            a(href="/logout").menu-item Выйти
             .content
                 block content
         #shadow-bg
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js")
         script(src="/javascripts/script.js")
+        script.
+            const menuItems = document.querySelectorAll('.menu-item')
+            const title = '#{title}'
+
+            makeItemSelected(menuItems, title)
+            
+            function makeItemSelected(itemsArr, name) {
+                itemsArr.forEach(item => {
+                    if (name === item.innerText) {
+                        item.classList.add('menu-item_active')
+                    }
+                })
+            }

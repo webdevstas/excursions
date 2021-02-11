@@ -2,12 +2,13 @@ const sideMenu = document.querySelector('menu')
 const openBtn = document.querySelector('#open-menu')
 const shadowBg = document.querySelector('#shadow-bg')
 
-window.onload = function() {
-    if(document.documentElement.clientWidth < 993) {
+
+window.onload = function () {
+    if (document.documentElement.clientWidth < 993) {
         sideMenu.classList.add('side')
     }
 
-    window.addEventListener('resize',function () {
+    window.addEventListener('resize', function () {
         if (document.documentElement.clientWidth < 993) {
             sideMenu.classList.add('side')
         }
@@ -18,8 +19,8 @@ window.onload = function() {
             })
         }
     })
-    
-    openBtn.addEventListener('click', function() {
+
+    openBtn.addEventListener('click', function () {
         gsap.to(openBtn, {
             x: 1000,
             duration: 1
@@ -27,7 +28,7 @@ window.onload = function() {
         gsap.to(sideMenu, {
             x: 500,
             delay: 0.5
-            
+
         })
         gsap.to(shadowBg, {
             display: 'block',
@@ -36,7 +37,7 @@ window.onload = function() {
         })
     })
 
-    shadowBg.addEventListener('click', function() {
+    shadowBg.addEventListener('click', function () {
         gsap.to(openBtn, {
             x: 0,
             duration: 1
@@ -49,6 +50,26 @@ window.onload = function() {
             x: 0
         })
     })
+
+    /**
+     * Функционал подсветки соседнего с input lable для форм
+     */
+    const inputBlocks = document.querySelectorAll('.input-block')
+
+    inputBlocks.forEach(item => {
+        let input = item.lastChild
+        let label = item.firstChild
+
+        input.addEventListener('focusin', e => {
+            label.classList.add('focused')
+        })
+
+        input.addEventListener('focusout', e => {
+            label.classList.remove('focused')
+        })
+    })
+
+
 }
 
 
