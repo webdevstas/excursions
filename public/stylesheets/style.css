@@ -1,5 +1,6 @@
 body {
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 14px Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    /* font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; */
     padding: 0;
     margin: 0;
     background-image: url(../images/back-3.jpg);
