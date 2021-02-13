@@ -10,7 +10,7 @@ block content
                 each err in Object.values(errors)
                     - errPoints.push(err.param)
                         li= err.msg
-    form(method="post" action="#{action}").register-form
+    form(method="post" action="#{action}").register-form.with-shadow
         div.input-block
             label(for="fullName") Полное наименование компании:
             textarea(type="text" name="fullName" rows="1").form-control #{data.fullName ? data.fullName : ''}

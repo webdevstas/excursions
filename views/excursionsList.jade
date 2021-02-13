@@ -1,8 +1,8 @@
 extends layout
 block content
     a(href="/new-excursion")
-        button.btn.btn-primary Добавить
-    form(action="/excursions-list" method="get").excursions__filter-form
+        button.btn.btn-primary.with-shadow Добавить
+    form(action="/excursions-list" method="get").excursions__filter-form.with-shadow
         label(for="company-filter").excursions__filter-label Фильтр по операторам:
         select(name="companyFilter").form-select
             option(value="") Все
@@ -10,7 +10,7 @@ block content
                 option(value="#{company.shortName}" class={success: company.isApproved} class={error: !company.isApproved})= company.shortName
         button(type="submit").btn.btn-light Фильтровать
         button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-light Сбросить
-    .excursions
+    .excursions.with-shadow
         .excursions__col
             h2.excursions__col-title Название
         .excursions__col

@@ -8,18 +8,19 @@ body {
     background-size: cover;
     background-position: center center;
     --main-bg-color: rgb(230, 230, 230);
+    --alt-bg-color: #33485c;
     --main-text-color: #000;
     --alt-text-color: #fff;
     background-color: #BFBFBF;
 }
 
 h1 {
-    color: rgb(133, 133, 133);
-    display: block;
-    background-color: var(--main-bg-color);
-    padding: 20px 50px;
+    color: rgb(190, 190, 190);
     text-align: start;
     margin: 0;
+    font-size: 22px;
+    font-weight: normal;
+    margin-left: 30px;
 }
 
 a {
@@ -28,6 +29,24 @@ a {
 
 header {
     position: relative;
+}
+
+.top-header {
+    display: grid;
+    background-color: #2a3b4c;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    z-index: 1000;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+}
+
+.top-header__logo {
+    width: auto;
+    justify-self: center;
 }
 
 input, select, textarea {
@@ -67,7 +86,7 @@ input[type="checkbox"] {
 
 .content {
     grid-column-start: 2;
-    padding: 20px 50px;
+    padding: 90px 30px 20px 30px;
 }
 
 .register-form {
@@ -114,14 +133,14 @@ input[type="checkbox"] {
 
 menu {
     left: 0;
-    top: 0;
+    top: 60px; 
     margin: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: fixed;
-    height: 100%;
-    background-color: var(--main-bg-color);
+    height: calc(100% - 60px);
+    background-color: var(--alt-bg-color);
     padding: 0;
     width: 200px;
 }
@@ -134,7 +153,6 @@ menu {
     height: 15%;
     align-items: center;
     width: 100%;
-    padding-top: 50px;
 }
 
 .bottom-menu {
@@ -148,7 +166,7 @@ menu {
 }
 
 .menu-item {
-    color: var(--main-text-color);
+    color: var(--alt-text-color);
     font-size: 18px;
     text-decoration: none;
     display: flex;
@@ -162,18 +180,19 @@ menu {
 
 .menu-item_active {
     background-color: rgb(212, 212, 212);
+    color: var(--main-text-color);
 }
 
 .menu-item:hover {
-    background-color: #45535e;
+    background-color: #2a3b4c;
     color: var(--alt-text-color);
 }
 
 .menu__user {
     display: block;
-    color: var(--main-text-color);
+    color: var(--alt-text-color);
     font-size: 16px;
-    border: 1px solid #0e1821;
+    border: 1px solid var(--alt-text-color);
     border-radius: 0.25rem;
     padding: 10px;
     margin: 10px;
@@ -240,10 +259,11 @@ h2.success, h2.error {
     grid-auto-rows: minmax(50px, auto);
     grid-auto-columns: auto;
     grid-gap: 1px;
-    background-color: #000;
+    background-color: #d6d6d6;
     margin-top: 20px;
     overflow: auto;
     border-radius: 0.25rem;
+    width: 75%;
 }
 
 .excursions__col {
@@ -413,6 +433,7 @@ h2.success, h2.error {
     -webkit-box-shadow: 0px 0px 10px 0px rgba(34, 60, 80, 0.3);
     -moz-box-shadow: 0px 0px 10px 0px rgba(34, 60, 80, 0.3);
     box-shadow: 0px 0px 10px 0px rgba(34, 60, 80, 0.3);
+    width: 100%;
 }
 
 .form-control {
@@ -489,7 +510,11 @@ h2.success, h2.error {
     background-color: var(--main-bg-color);
     margin-top: 20px;
     border-radius: 0.25rem;
-    width: 50%;
+    width: 25%;
+}
+
+.excursions__filter-form .btn {
+    width: fit-content;
 }
 
 .excursions__filter-label {
@@ -544,7 +569,7 @@ h2.success, h2.error {
     height: auto;
     position: fixed;
     left: 10px;
-    top: 10px;
+    top: 5px;
     display: none;
     z-index: 1500;
     user-select: none;
@@ -568,8 +593,8 @@ h2.success, h2.error {
 
 .counts {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
 }
 
 .counts-block {
@@ -603,6 +628,7 @@ h2.success, h2.error {
     color: #495057;
     background-color: #fff;
 }
+
 .nav-tabs .nav-link {
     margin-bottom: -1px;
     border: 1px solid transparent;
@@ -614,7 +640,7 @@ h2.success, h2.error {
     display: block;
     padding: .5rem 1rem;
     text-decoration: none;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 }
 
 .tab-pane {
@@ -644,6 +670,11 @@ h2.success, h2.error {
     border-radius: 0.25rem;
 }
 
+.with-shadow {
+    -webkit-box-shadow: 0px 0px 18px 6px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 0px 18px 6px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 0px 18px 6px rgba(34, 60, 80, 0.2);
+}
 
 @supports (backdrop-filter: blur(10px)) {
     #shadow-bg {
@@ -694,7 +725,7 @@ h2.success, h2.error {
         grid-template-columns: 1fr 1fr;
     }
     h1 {
-        text-align: center;
+        margin: 0;
     }
 }
 

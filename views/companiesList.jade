@@ -2,10 +2,10 @@ extends layout
 
 block content
     a(href="/register-company")
-        button.btn.btn-primary Добавить
+        button.btn.btn-primary.with-shadow Добавить
     ul.companies__list
         for company in companies
-            li.companies__list-item
+            li.companies__list-item.with-shadow
                 if company.isApproved
                     .badge.bg-success Одобрено
                 else 

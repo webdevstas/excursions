@@ -8,10 +8,12 @@ html
     body
         .container
             header
+                .top-header
+                    img(src="/images/logo.png" alt="" height='40').top-header__logo
+                    h1= title
                 img(src="/images/menu.svg" alt="")#open-menu
                 menu
                     .top-menu
-
                         a(href="/").menu-item Главная
                         a(href="/companies-list").menu-item Список операторов
                         a(href="/excursions-list").menu-item Список экскурсий
@@ -21,7 +23,6 @@ html
                             a(href="/login").menu-item Войти
                         else
                             a(href="/logout").menu-item Выйти
-            h1= title
             .content
                 block content
         #shadow-bg

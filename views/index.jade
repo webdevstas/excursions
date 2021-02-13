@@ -1,10 +1,10 @@
 extends layout
 block content
-  .counts
-    .counts-block
-      span Всего операторов зарегистрировано: #{countCompanies.all}
-      span Из них одобрено: #{countCompanies.approved}
-    .counts-block
-      span Всего экскурсий: #{countExcursions.all}
-      span Одобрено экскурсий: #{countExcursions.approved}
-      span Опубликовано экскурсий: #{countExcursions.published}
+    .counts
+        .counts-block.with-shadow
+            span Всего операторов зарегистрировано: #{countCompanies.all}
+            span Из них одобрено: #{countCompanies.approved}
+        .counts-block.with-shadow
+            span Всего экскурсий: #{countExcursions.all}
+            span Одобрено экскурсий: #{countExcursions.approved}
+            span Опубликовано экскурсий: #{countExcursions.published}

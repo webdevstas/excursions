@@ -11,7 +11,7 @@ block content
                 each err in Object.values(errors)
                     - errPoints.push(err.param)
                         li= err.msg
-    form(method="post" action="#{action}" enctype="multipart/form-data").register-form
+    form(method="post" action="#{action}" enctype="multipart/form-data").register-form.with-shadow
         ul#myTab.nav.nav-tabs
             li.nav-item
                 a#main-tab.tab.nav-link.active(href='#main' aria-controls='main') Основная информация
@@ -130,7 +130,7 @@ block content
     .pictures-block
         if data.pictures
             each picture in data.pictures
-                .pictures-block__item
+                .pictures-block__item.with-shadow
                     img(src="/images/upload/#{picture}" alt="").pictures-block__img
                     button.delete-img.btn.btn-light Удалить
 
