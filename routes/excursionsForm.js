@@ -3,7 +3,9 @@ const router = express.Router()
 const { body, validationResult, check } = require('express-validator');
 const { addExcursion } = require('../controllers/excursions')
 const { Companies } = require('../models/companies')
-const multer = require('multer')
+const { Tickets } = require('../models/tickets')
+const multer = require('multer');
+const mongoose = require('mongoose');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './public/images/upload')
@@ -12,7 +14,7 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 })
-const upload = multer({ storage: storage, limits: {fileSize: 5242880} })
+const upload = multer({ storage: storage, limits: { fileSize: 5242880 } })
 
 let companies = {}
 
@@ -40,12 +42,13 @@ router.get('/', async function (req, res) {
 router.post('/',
     upload.array('pictures'),
     body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
-    body('price').notEmpty().withMessage('Стоимость обязательна к заполнению').isNumeric().withMessage('Стоимость должна быть числом'),
-    body('description').notEmpty().withMessage('Описание обязательно к заполнению').isLength({min: 5 ,max: 50}).withMessage('Количество символов должно быть от 5 до 50'),
+    body('description').notEmpty().withMessage('Описание обязательно к заполнению').isLength({ min: 5, max: 50 }).withMessage('Количество символов должно быть от 5 до 50'),
     body('isApproved').toBoolean(),
-    
-    function (req, res) {
+    body('tickets').notEmpty().withMessage('Добавьте по крайней мере один билет'),
+
+    async function (req, res) {
         if (req.isAuthenticated()) {
+            companies = await Companies.find().select({ shortName: 1 })
             let username = req.user ? req.user.username : 'guest'
             const errors = validationResult(req)
             let arrPictures = []
@@ -67,14 +70,13 @@ router.post('/',
                 return
             }
             else {
-    
                 try {
                     addExcursion(req, res)
                 }
                 catch (err) {
-                    console.error(err);
+                    console.error(err); 
                 }
-    
+
                 res.render('excursionsForm', {
                     title: 'Форма добавления экскурсии',
                     action: '/new-excursion',
@@ -91,8 +93,9 @@ router.post('/',
         }
         else {
             res.redirect('/login')
-        }
+        } 
 
     })
+
 
 module.exports = router

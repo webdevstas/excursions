@@ -1,7 +1,6 @@
 extends layout
 
 block content
-    h1= title
     if success.isSuccess
         h2.success= success.msg
     if Object.values(errors) != 0
@@ -13,99 +12,127 @@ block content
                     - errPoints.push(err.param)
                         li= err.msg
     form(method="post" action="#{action}" enctype="multipart/form-data").register-form
-        .input-block
-            label(for="company") Оператор: *
-            select(type="text" name="company" rows="1").form-select
-                each company in data.companies
-                    - var isSelected = data.selected === company.shortName
-                    option(value="#{company.shortName}" selected=isSelected)= company.shortName
-        .input-block
-            label(for="title") Название экскурсии: *
-            input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}" required).form-control
-        .input-block
-            label(for="description") Описание экскурсии: *
-            textarea(type="text" name="description" rows="1" required).form-control #{data.body.description ? data.body.description : ''}
-        .input-block
-            label(for="price") Стоимость экскурсии: *
-            input(type="text" name="price" value="#{data.body.price ? data.body.price : ''}" required).form-control
-        .input-block
-            label(for="pictures") Изображения:
-            input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png").form-control
-        .input-block.approve
-            label(for="isApproved") Одобрено:
-            input(type="checkbox" name="isApproved" checked=data.body.isApproved)
-        .input-block
-            label(for="tags") Выберите подходящие теги:
-            .tags
-                .tag-item 
-                    input(type="checkbox" name="tags" value='обзорные экскурсии')
-                    label(for="") обзорные экскурсии
-                .tag-item 
-                    input(type="checkbox" name="tags" value='автобусные туры')
-                    label(for="") автобусные туры
-                .tag-item 
-                    input(type="checkbox" name="tags" value='автомобильные туры')
-                    label(for="") автомобильные туры
-                .tag-item 
-                    input(type="checkbox" name="tags" value='джиппинг')
-                    label(for="") джиппинг
-                .tag-item 
-                    input(type="checkbox" name="tags" value='квадроциклы')
-                    label(for="") квадроциклы
-                .tag-item 
-                    input(type="checkbox" name="tags" value='мотоциклы')
-                    label(for="") мотоциклы
-                .tag-item 
-                    input(type="checkbox" name="tags" value='велосипедные')
-                    label(for="") велосипедные
-                .tag-item 
-                    input(type="checkbox" name="tags" value='конные прогулки')
-                    label(for="") конные прогулки
-                .tag-item 
-                    input(type="checkbox" name="tags" value='морские прогулки')
-                    label(for="") морские прогулки
-                .tag-item 
-                    input(type="checkbox" name="tags" value='дайвинг')
-                    label(for="") дайвинг
-                .tag-item 
-                    input(type="checkbox" name="tags" value='рафтинг')
-                    label(for="") рафтинг
-                .tag-item 
-                    input(type="checkbox" name="tags" value='парки в Сочи')
-                    label(for="") парки в Сочи
-                .tag-item 
-                    input(type="checkbox" name="tags" value='музеи Сочи')
-                    label(for="") музеи Сочи
-                .tag-item 
-                    input(type="checkbox" name="tags" value='квесты')
-                    label(for="") квесты
-                .tag-item 
-                    input(type="checkbox" name="tags" value='полеты на парапланах')
-                    label(for="") полеты на парапланах   
-                .tag-item 
-                    input(type="checkbox" name="tags" value='Олимпийский парк')
-                    label(for="") Олимпийский парк
-                .tag-item 
-                    input(type="checkbox" name="tags" value='Красная поляна')
-                    label(for="") Красная поляна
-                .tag-item 
-                    input(type="checkbox" name="tags" value='Сочи')
-                    label(for="") Сочи
-                .tag-item 
-                    input(type="checkbox" name="tags" value='Адлер')
-                    label(for="") Адлер
+        ul#myTab.nav.nav-tabs
+            li.nav-item
+                a#main-tab.tab.nav-link.active(href='#main' aria-controls='main') Основная информация
+            li.nav-item
+                a#tickets-tab.tab.nav-link(href='#tickets' aria-controls='tickets') Типы билетов
+        .tab-pane.visible#main
+            .input-block
+                label(for="company") Оператор: *
+                select(type="text" name="company" rows="1").form-select
+                    each company in data.companies
+                        - var isSelected = data.selected === company.shortName
+                        option(value="#{company.shortName}" selected=isSelected)= company.shortName
+            .input-block
+                label(for="title") Название экскурсии: *
+                input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}" required).form-control
+            .input-block
+                label(for="description") Описание экскурсии: *
+                textarea(type="text" name="description" rows="1" required).form-control #{data.body.description ? data.body.description : ''}
+            .input-block
+                label(for="pictures") Изображения:
+                input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png").form-control
+            .input-block.approve
+                label(for="isApproved") Одобрено:
+                input(type="checkbox" name="isApproved" checked=data.body.isApproved)
+            .input-block
+                label(for="tags") Выберите подходящие теги:
+                .tags
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='обзорные экскурсии')
+                        label(for="") обзорные экскурсии
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='автобусные туры')
+                        label(for="") автобусные туры
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='автомобильные туры')
+                        label(for="") автомобильные туры
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='джиппинг')
+                        label(for="") джиппинг
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='квадроциклы')
+                        label(for="") квадроциклы
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='мотоциклы')
+                        label(for="") мотоциклы
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='велосипедные')
+                        label(for="") велосипедные
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='конные прогулки')
+                        label(for="") конные прогулки
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='морские прогулки')
+                        label(for="") морские прогулки
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='дайвинг')
+                        label(for="") дайвинг
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='рафтинг')
+                        label(for="") рафтинг
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='парки в Сочи')
+                        label(for="") парки в Сочи
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='музеи Сочи')
+                        label(for="") музеи Сочи
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='квесты')
+                        label(for="") квесты
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='полеты на парапланах')
+                        label(for="") полеты на парапланах   
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='Олимпийский парк')
+                        label(for="") Олимпийский парк
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='Красная поляна')
+                        label(for="") Красная поляна
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='Сочи')
+                        label(for="") Сочи
+                    .tag-item 
+                        input(type="checkbox" name="tags" value='Адлер')
+                        label(for="") Адлер
+        .tab-pane#tickets
+            .input-block
+                label(for="ticket-title") Наименование: *
+                input(type="text" name="ticket-title").form-control
+            .input-block
+                label(for="ticket-description") Описание: *
+                textarea(name="ticket-description" rows="1").form-control
+            .input-block
+                label(for="ticket-price") Стоимость: *
+                input(type="number" name="ticket-price").form-control
+            .input-block
+                div
+                button#add-ticket.btn.btn-light Добавить
+                input(name="tickets" type="hidden")#tickets-input
+            ul#tickets-list
+                li.tickets-list__item 
+                    span Наименование: 
+                    span Стоимость:
+                    span Удалить:
+                if data.tickets
+                    each ticket in data.tickets 
+                        li.tickets-list__item
+                            span= ticket.title
+                            span #{ticket.price} руб.
+                            button.btn.btn-light.delete-ticket(data-ticket-id="#{ticket._id}") Удалить
         .input-block
             .required-attention *Поля обязательные к заполнению
             .btn-group
-                button(type="submit").btn.btn-success Сохранить
-                button(type="reset" title="Работает для вновь введённых данных").btn.btn-warning Очистить
-                button(type="button").btn.cancelBtn.btn-danger Отмена
+                button(type="submit").btn.btn-light Сохранить
+                button(type="reset" title="Работает для вновь введённых данных").btn.btn-light Очистить
+                button(type="button").btn.cancelBtn.btn-light Отмена
     .pictures-block
         if data.pictures
             each picture in data.pictures
                 .pictures-block__item
                     img(src="/images/upload/#{picture}" alt="").pictures-block__img
-                    button.delete-img.btn.btn-danger Удалить
+                    button.delete-img.btn.btn-light Удалить
 
     script.
         const inputs = document.querySelectorAll('input')
@@ -148,7 +175,7 @@ block content
                     index -= 1
                 }
                 let json = JSON.stringify({
-                    action: 'delete',
+                    action: 'deleteImg',
                     index: index
                 })
 
@@ -167,6 +194,112 @@ block content
                     }
                     else {
                         console.error(responseObj.error)
+                    }
+                }
+            })
+        })
+
+        /**
+        * Переключение вкладок
+        */
+        const mainTab = document.querySelector('#main-tab'),
+            ticketsTab = document.querySelector('#tickets-tab'),
+            mainPane = document.querySelector('#main'),
+            ticketsPane = document.querySelector('#tickets'),
+            allTabs = document.querySelectorAll('.tab')
+
+        allTabs.forEach(function (tab) {
+            tab.addEventListener('click', e => {
+                changeTabContent(tab)
+            })
+        })
+
+        function changeTabContent(el) {
+            let aria = el.getAttribute('aria-controls')
+            let pane = document.querySelector(`#${aria}`)
+            let otherPane = pane.nextElementSibling.classList.contains('tab-pane') ? pane.nextElementSibling : pane.previousElementSibling
+
+            allTabs.forEach(tab => {
+                tab.classList.remove('active')
+            })
+
+            el.classList.add('active')
+
+            otherPane.classList.remove('visible')
+            pane.classList.add('visible')
+        }
+
+        /**
+        *  Добавление билета
+        */
+        const addBtn = document.querySelector('#add-ticket'),
+            titleInp = document.querySelector('input[name="ticket-title"]'),
+            descriptionInp = document.querySelector('textarea[name="ticket-description"]'),
+            priceInp = document.querySelector('input[name="ticket-price"]'),
+            ticketsArr = [],
+            ticketsListEl = document.querySelector('#tickets-list')
+            
+
+        addBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            let ticket = {
+                title: titleInp.value,
+                description: descriptionInp.value,
+                price: priceInp.value
+            }
+            ticketsArr.push(ticket)
+            let ticketsString = JSON.stringify(ticketsArr)
+            let ticketsInput = document.querySelector('#tickets-input')
+
+            let addEl = new Promise((resolve, reject) => {
+                ticketsListEl.innerHTML += `<li class=tickets-list__item><span>${ticket.title}</span><span>${ticket.price} руб.</span><button class="btn btn-light delete-ticket">Удалить</button></li>`
+                resolve()
+            })
+
+            addEl.then(() => {
+                const deleteTicketBtn = document.querySelectorAll('.delete-ticket')
+                deleteTicketBtn.forEach( btn => {
+                    btn.addEventListener('click', e => {
+                        e.preventDefault()
+                        ticketsArr.pop()
+                        btn.parentNode.style.display = 'none'
+                    })
+                })
+            })
+
+            
+            ticketsInput.value = ticketsString
+        })
+
+        /**
+        * Удаление билета
+        */
+        const deleteTicketBtn = document.querySelectorAll('.delete-ticket')
+        deleteTicketBtn.forEach( btn => {
+            btn.addEventListener('click', e => {
+                e.preventDefault()
+                if (btn.dataset.ticketId) {
+                    let xhr = new XMLHttpRequest()
+                    let json = JSON.stringify({
+                        action: 'deleteTicket',
+                        id: btn.dataset.ticketId
+                    })
+                    xhr.open('DELETE', '#{action}', true)
+                    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+
+                    xhr.send(json)
+
+                    xhr.responseType = 'json'
+
+                    xhr.onload = function() {
+                        let responseObj = xhr.response
+                        if (responseObj.success) {
+                            btn.parentNode.style.display = 'none' 
+                        }
+                        else {
+                            console.error(responseObj.error)
+                        }
                     }
                 }
             })

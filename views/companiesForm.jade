@@ -1,6 +1,5 @@
 extends layout
 block content
-    h1= title
     if success.isSuccess
         h2.success= success.msg
     if Object.values(errors) != 0
@@ -66,9 +65,9 @@ block content
         div.input-block
             .required-attention *Поля обязательные к заполнению
             .btn-group
-                button(type="submit").btn.btn-success Сохранить
-                button(type="reset" title="Работает для вновь введённых данных").btn.btn-warning Очистить
-                button(type="button").cancelBtn.btn.btn-danger Отмена
+                button(type="submit").btn.btn-light Сохранить
+                button(type="reset" title="Работает для вновь введённых данных").btn.btn-light Очистить
+                button(type="button").cancelBtn.btn.btn-light Отмена
 
     script.
         const inputs = document.querySelectorAll('input')

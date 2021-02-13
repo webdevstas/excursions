@@ -2,11 +2,27 @@ const { Excursions } = require('../models/excursions')
 const { slugify } = require('transliteration')
 const fs = require('fs')
 const path = require('path')
+const { Tickets } = require('../models/tickets')
 
 
 async function addExcursion(req, res) {
+
     // Сохраняем данные из формы
-    let excursion = req.body
+    let excursion = {
+        company: req.body.company,
+        title: req.body.title,
+        description: req.body.description,
+        price: req.body.price,
+        isApproved: req.body.isApproved,
+        tags: req.body.tags
+    }
+
+    // Получаем типы билетов
+    let tickets = []
+    if (req.body.tickets) {
+        tickets = JSON.parse(req.body.tickets)
+    }
+
     // Добавляем загруженные изображения
     let arrPictures = []
     req.files.forEach((file) => {
@@ -28,13 +44,21 @@ async function addExcursion(req, res) {
         }
     })
 
-    // Сохраняем в базу
-    await Excursions.create(excursion, function (err, data) {
-        if (err) throw err
-        if (!data.slug) {
-            Excursions.updateOne({_id: data._id}, {slug: data._id})
-        }
+    // Сохраняем билеты
+    await Tickets.insertMany(tickets, (err, data) => {
+        let ids = []
+        data.forEach(item => {
+            ids.push(item._id)
+        })
+        excursion.tickets = ids
 
+        // Сохраняем экскурсию
+        Excursions.create(excursion, function (err, data) {
+            if (err) throw err
+            if (!data.slug) {
+                Excursions.updateOne({ _id: data._id }, { slug: data._id })
+            }
+        })
     })
 }
 
@@ -42,30 +66,44 @@ async function updateExcursion(req, res) {
     // Сохраняем данные из формы
     let excursion = req.body
 
+    // Получаем типы билетов
+    let tickets = []
+    if (req.body.tickets) {
+        tickets = JSON.parse(req.body.tickets)
+    }
+
     if (req.excursion.title !== excursion.title) {
         excursion.slug = slugify(excursion.title)
     }
 
     // Добавляем загруженные изображения к существующим в базе
     let arrPictures = []
-    let pictFromBase = await Excursions.findOne({ slug: excursion.slug ? excursion.slug : slugify(excursion.title) }).select({ picturesURLs: 1 })
+    let pictFromBase = req.excursion.picturesURLs  
 
     req.files.forEach((file) => {
         arrPictures.push(file.filename)
     })
 
     if (pictFromBase) {
-        excursion.picturesURLs = arrPictures.concat(pictFromBase.picturesURLs)
+        excursion.picturesURLs = arrPictures.concat(pictFromBase)
     }
     else {
         excursion.picturesURLs = arrPictures
     }
 
-    // Обновляем данные в базе
-    await Excursions.updateOne({ slug: req.excursion.slug }, excursion, function (err) {
+    // Сохраняем билеты
+    await Tickets.insertMany(tickets, async (err, data) => {
+        let ids = req.excursion.tickets
+        data.forEach(item => {
+            ids.push(item._id)
+        })
+        excursion.tickets = ids
+        // Обновляем данные в базе
+        Excursions.updateOne({ slug: req.excursion.slug }, excursion, function (err) {
 
-        if (err) throw err
+            if (err) throw err
 
+        })
     })
 }
 
@@ -103,6 +141,13 @@ async function deletePicture(index, slug) {
     return { success: true, error: {} }
 }
 
+async function deleteTicket (id) {
+    await Tickets.deleteOne({_id: id}, (err) => {
+        if (err) throw err
+    })
+    return { success: true, error: {} }
+}
+
 async function countExcursions() {
     let countAll = 0,
         countApproved = 0,
@@ -122,4 +167,4 @@ async function countExcursions() {
     return { all: countAll, approved: countApproved, published: countPublished }
 }
 
-module.exports = { addExcursion, updateExcursion, deleteExcursion, deletePicture, countExcursions }
+module.exports = { addExcursion, updateExcursion, deleteExcursion, deletePicture, countExcursions, deleteTicket }

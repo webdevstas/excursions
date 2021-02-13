@@ -1,7 +1,6 @@
 extends layout
 
 block content
-    h1= title
     a(href="/register-company")
         button.btn.btn-primary Добавить
     ul.companies__list
@@ -14,9 +13,9 @@ block content
                 span= company.shortName
                 .companies__btn-block
                     a(href="/companies-list/#{company.slug}")
-                        button.btn.btn-warning Редактировать
+                        button.btn.btn-light Редактировать
                     form(action="/companies-list/#{company.slug}/delete" method="post")
-                        button.deleteBtn.btn.btn-danger Удалить
+                        button.deleteBtn.btn.btn-light Удалить
                         input(type="hidden" name="delete")
     script. 
         const deleteBtn = document.querySelectorAll('.deleteBtn')

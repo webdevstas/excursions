@@ -4,7 +4,6 @@ const excursionsSchema = new mongoose.Schema({
     company: String,
     title: String,
     description: String,
-    price: Number,
     picturesURLs: Array,
     slug: {
         type: String,
@@ -12,7 +11,11 @@ const excursionsSchema = new mongoose.Schema({
     },
     isApproved: Boolean,
     isPublished: Boolean,
-    tags: [String]
+    tags: [String],
+    tickets: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Tickets'
+    }]
 }, {
     timestamps: {
         createdAt: 'createdAt',

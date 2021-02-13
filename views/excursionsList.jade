@@ -1,6 +1,5 @@
 extends layout
 block content
-    h1= title
     a(href="/new-excursion")
         button.btn.btn-primary Добавить
     form(action="/excursions-list" method="get").excursions__filter-form
@@ -9,15 +8,13 @@ block content
             option(value="") Все
             each company in data.companies
                 option(value="#{company.shortName}" class={success: company.isApproved} class={error: !company.isApproved})= company.shortName
-        button(type="submit").btn.btn-success Фильтровать
-        button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-warning Сбросить
+        button(type="submit").btn.btn-light Фильтровать
+        button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-light Сбросить
     .excursions
         .excursions__col
             h2.excursions__col-title Название
         .excursions__col
             h2.excursions__col-title Оператор
-        .excursions__col
-            h2.excursions__col-title Стоимость
         .excursions__col.status
             h2.excursions__col-title Статус
         .excursions__col
@@ -27,8 +24,6 @@ block content
                 span.excursions__title= excursion.title
             .excursions__col
                 span.excursions__company= excursion.company
-            .excursions__col
-                span.excursions__price= excursion.price + ' р.'
             .excursions__col.status
                 .badge-block
                     if excursion.isApproved
@@ -41,9 +36,9 @@ block content
                         .badge.bg-danger Не опубликовано
             .excursions__col
                 a(href="/excursions-list/#{excursion.slug}") 
-                    button.btn.btn-warning Редактировать
+                    button.btn.btn-light Редактировать
                 form(action="/excursions-list/#{excursion.slug}/delete" method="post")
-                    button.deleteBtn.btn.btn-danger Удалить
+                    button.deleteBtn.btn.btn-light Удалить
                     input(type="hidden" name="delete")
     script. 
         const deleteBtn = document.querySelectorAll('.deleteBtn')
