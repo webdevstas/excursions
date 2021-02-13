@@ -38,20 +38,20 @@ router.post('/auth', cors(), (req, res) => {
 router.get('/companies', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
     let companies = []
     if (req.query.status === 'approved') {
-        companies = await Companies.find({isApproved: true})
+        companies = await Companies.find({isApproved: true}).select('-__v')
     }
     else if (req.query.status === 'rejected') {
-        companies = await Companies.find({isApproved: false})
+        companies = await Companies.find({isApproved: false}).select('-__v')
     }
     else {
-        companies = await Companies.find()
+        companies = await Companies.find().select('-__v')
     }
     res.json(companies)
 })
 
 
 router.param('id', async function (req, res, next, id) {
-    req.company = await Companies.findOne({ _id: id })
+    req.company = await Companies.findOne({ _id: id }).select('-__v')
     next()
 })
 
@@ -66,22 +66,22 @@ router.get('/companies/:id', cors(), passport.authenticate('jwt', { session: fal
 router.get('/excursions', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
     let excursions
     if (req.query.company) {
-        excursions = await Excursions.find({company: req.query.company})
+        excursions = await Excursions.find({company: req.query.company}).populate('tickets').select('-__v')
     } 
     else if (req.query.status === 'approved') {
-        excursions = await Excursions.find({isApproved: true})
+        excursions = await Excursions.find({isApproved: true}).populate('tickets').select('-__v')
     }
     else if (req.query.status === 'rejected') {
-        excursions = await Excursions.find({isApproved: false})
+        excursions = await Excursions.find({isApproved: false}).populate('tickets').select('-__v')
     }
     else {
-        excursions = await Excursions.find()
+        excursions = await Excursions.find().populate('tickets').select('-__v')
     }   
     res.json(excursions)
 })
 
 router.param('id', async function (req, res, next, id) {
-    req.excursion = await Excursions.findOne({ _id: id })
+    req.excursion = await Excursions.findOne({ _id: id }).populate('tickets').select('-__v')
     next()
 })
 

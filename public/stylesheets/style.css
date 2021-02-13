@@ -10,14 +10,14 @@ body {
     --main-bg-color: rgb(230, 230, 230);
     --main-text-color: #000;
     --alt-text-color: #fff;
-    background-color: #45535e;
+    background-color: #BFBFBF;
 }
 
 h1 {
-    color: var(--main-text-color);
+    color: rgb(133, 133, 133);
     display: block;
     background-color: var(--main-bg-color);
-    padding: 20px;
+    padding: 20px 50px;
     text-align: start;
     margin: 0;
 }
@@ -594,7 +594,6 @@ h2.success, h2.error {
 
 .nav {
     display: flex;
-    flex-wrap: wrap;
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
