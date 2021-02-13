@@ -719,13 +719,20 @@ h2.success, h2.error {
         width: 90%;
     }
     .content {
-        padding: 20px;
+        padding: 60px 20px;
     }
     .pictures-block {
         grid-template-columns: 1fr 1fr;
     }
     h1 {
         margin: 0;
+        text-align: center;
+    }
+    .top-header {
+        grid-template-columns: 1fr;
+    }
+    .top-header__logo {
+        display: none;
     }
 }
 
