@@ -42,7 +42,7 @@ router.get('/', async function (req, res) {
 router.post('/',
     upload.array('pictures'),
     body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
-    body('description').notEmpty().withMessage('Описание обязательно к заполнению').isLength({ min: 5, max: 50 }).withMessage('Количество символов должно быть от 5 до 50'),
+    body('description').notEmpty().withMessage('Описание обязательно к заполнению').isLength({ min: 5, max: 50 }).withMessage('Количество символов в описании должно быть от 5 до 50'),
     body('isApproved').toBoolean(),
     body('tickets').notEmpty().withMessage('Добавьте по крайней мере один билет'),
 
