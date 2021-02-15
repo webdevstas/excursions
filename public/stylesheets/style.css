@@ -805,6 +805,9 @@ h2.success, h2.error {
         grid-template-columns: 1fr;
         gap: 5px;
     }
+    .status-description {
+        width: auto;
+    }
 }
 
 @media (max-width: 320px) {
