@@ -29,7 +29,7 @@ block content
                 input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}").form-control
             .input-block
                 label(for="description") Описание экскурсии: *
-                textarea(type="text" name="description" rows="1").form-control #{data.body.description ? data.body.description : ''}
+                textarea(type="text" name="description").form-control #{data.body.description ? data.body.description : ''}
             .input-block
                 label(for="pictures") Изображения:
                 input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png").form-control

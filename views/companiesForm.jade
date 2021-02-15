@@ -13,7 +13,7 @@ block content
     form(method="post" action="#{action}").register-form.with-shadow
         div.input-block
             label(for="fullName") Полное наименование компании:
-            textarea(type="text" name="fullName" rows="1").form-control #{data.fullName ? data.fullName : ''}
+            textarea(type="text" name="fullName").form-control #{data.fullName ? data.fullName : ''}
         div.input-block
             label(for="shortName") Краткое наименование компании: *
             input(type="text" name="shortName" value="#{data.shortName ? data.shortName : ''}").form-control
@@ -22,16 +22,16 @@ block content
             input(type="text" name="formOfOwnership" value="#{data.formOfOwnership ? data.formOfOwnership : ''}").form-control
         div.input-block
             label(for="kindOfActivity") Вид деятельности:
-            input(type="text" name="kindOfActivity" value="#{data.kindOfActivity ? data.kindOfActivity : ''}").form-control
+            textarea(type="text" name="kindOfActivity").form-control= data.kindOfActivity ? data.kindOfActivity : ''
         div.input-block
             label(for="legalAddress") Юридический адрес:
-            input(type="text" name="legalAddress" value="#{data.legalAddress ? data.legalAddress : ''}").form-control
+            textarea(type="text" name="legalAddress").form-control= data.legalAddress ? data.legalAddress : ''
         div.input-block
             label(for="actualAddress") Фактичесий адрес:
-            input(type="text" name="actualAddress" value="#{data.actualAddress ? data.actualAddress : ''}").form-control
+            textarea(type="text" name="actualAddress").form-control= data.actualAddress ? data.actualAddress : ''
         div.input-block
             label(for="head") Руководитель:
-            input(type="text" name="head" value="#{data.head ? data.head : ''}").form-control
+            textarea(type="text" name="head").form-control= data.head ? data.head : ''
         div.input-block
             label(for="phoneNumber") Номер телефона организации:
             input(type="tel" name="phoneNumber" value="#{data.phoneNumber ? data.phoneNumber : ''}").form-control
