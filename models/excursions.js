@@ -15,7 +15,8 @@ const excursionsSchema = new mongoose.Schema({
     tickets: [{
         type: mongoose.Types.ObjectId,
         ref: 'Tickets'
-    }]
+    }],
+    informationPhone: Number
 }, {
     timestamps: {
         createdAt: 'createdAt',

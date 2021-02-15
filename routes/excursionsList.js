@@ -69,8 +69,6 @@ router.param('slug', async function (req, res, next, slug) {
     next()
 })
 
-
-
 // GET роут для отдачи формы редактирования экскурсии
 router.route('/:slug')
     .get(async function (req, res) {
@@ -101,6 +99,7 @@ router.route('/:slug')
         body('description').notEmpty().withMessage('Описание обязательно к заполнению'),
         body('isApproved').toBoolean(),
         body('tickets').notEmpty().withMessage('Добавьте по крайней мере один билет'),
+        body('informationPhone').notEmpty().withMessage('Телефон для справок обязателен к заполнению'),
 
         function (req, res) {
             let username = req.user ? req.user.username : 'guest'

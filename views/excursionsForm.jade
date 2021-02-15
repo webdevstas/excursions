@@ -31,6 +31,9 @@ block content
                 label(for="description") Описание экскурсии: *
                 textarea(type="text" name="description").form-control #{data.body.description ? data.body.description : ''}
             .input-block
+                label(for="informationPhone") Телефон для справок: *
+                input(type="tel" name="informationPhone" value="#{data.body.informationPhone ? data.body.informationPhone : ''}").form-control
+            .input-block
                 label(for="pictures") Изображения:
                 input(type="file" name="pictures" multiple accept=".jpg, .jpeg, .png").form-control
             .input-block.approve

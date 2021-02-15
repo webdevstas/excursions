@@ -14,7 +14,8 @@ async function addExcursion(req, res) {
         description: req.body.description,
         price: req.body.price,
         isApproved: req.body.isApproved,
-        tags: req.body.tags
+        tags: req.body.tags,
+        informationPhone: req.body.informationPhone
     }
 
     // Получаем типы билетов
