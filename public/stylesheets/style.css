@@ -502,6 +502,13 @@ h2.success, h2.error {
     padding: 10px;
 }
 
+.filter-form__wrap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 75%;
+}
+
 .excursions__filter-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -510,7 +517,6 @@ h2.success, h2.error {
     background-color: var(--main-bg-color);
     margin-top: 20px;
     border-radius: 0.25rem;
-    width: 25%;
 }
 
 .excursions__filter-form .btn {
@@ -778,6 +784,11 @@ h2.success, h2.error {
     }
     .login-form {
         width: 75%;
+    }
+    .filter-form__wrap {
+        width: auto;
+        grid-template-columns: 1fr;
+        gap: 5px;
     }
 }
 

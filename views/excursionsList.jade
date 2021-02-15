@@ -2,14 +2,23 @@ extends layout
 block content
     a(href="/new-excursion")
         button.btn.btn-primary.with-shadow Добавить
-    form(action="/excursions-list" method="get").excursions__filter-form.with-shadow
-        label(for="company-filter").excursions__filter-label Фильтр по операторам:
-        select(name="companyFilter").form-select
-            option(value="") Все
-            each company in data.companies
-                option(value="#{company.shortName}" class={success: company.isApproved} class={error: !company.isApproved})= company.shortName
-        button(type="submit").btn.btn-light Фильтровать
-        button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-light Сбросить
+    .filter-form__wrap
+        form(action="/excursions-list" method="get").excursions__filter-form.with-shadow
+            label(for="company-filter").excursions__filter-label Фильтр по операторам:
+            select(name="companyFilter").form-select
+                option(value="") Все
+                each company in data.companies
+                    option(value="#{company.shortName}")= company.shortName
+            button(type="submit").btn.btn-light Фильтровать
+            button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-light Сбросить
+        form(action="/excursions-list" method="get").excursions__filter-form.with-shadow
+            label(for="excursion-filter").excursions__filter-label Фильтр по экскурсиям:
+            select(name="excursionFilter").form-select
+                option(value="") Все
+                each excursion in data.excursionsFilterList
+                    option(value="#{excursion}")= excursion
+            button(type="submit").btn.btn-light Фильтровать
+            button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-light Сбросить
     .excursions.with-shadow
         .excursions__col
             h2.excursions__col-title Название

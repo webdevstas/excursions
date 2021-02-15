@@ -24,19 +24,30 @@ router.get('/',
         let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
             let excursions = {}
-            companies = await Companies.find().select({ shortName: 1, isApproved: 1 })
+            companies = await Companies.find().select({ shortName: 1})
+            let excursionsFilterList = await await Excursions.find().select({ title: 1})
+            let filteredExcList = []
 
-            // Фильтр по наименованю компании
+            excursionsFilterList.forEach(item => {
+                if (!filteredExcList.includes(item.title, 0)) {
+                    filteredExcList.push(item.title)
+                }
+            })
+
+            // Фильтры
             if (req.query.companyFilter) {
                 excursions = await Excursions.find({ company: req.query.companyFilter }).select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
-            } else {
+            }
+            else if (req.query.excursionFilter) {
+                excursions = await Excursions.find({ title: req.query.excursionFilter }).select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
+            }
+            else {
                 excursions = await Excursions.find().select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1, isPublished: 1 })
             }
-
             // Вывод
             res.render('excursionsList', {
                 title: 'Список экскурсий',
-                data: { excursions: excursions, companies: companies },
+                data: { excursions: excursions, companies: companies,  excursionsFilterList: filteredExcList},
                 user: username
             })
         }
