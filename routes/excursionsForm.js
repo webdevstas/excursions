@@ -42,7 +42,7 @@ router.get('/', async function (req, res) {
 router.post('/',
     upload.array('pictures'),
     body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
-    body('description').notEmpty().withMessage('Описание обязательно к заполнению').isLength({ min: 5, max: 50 }).withMessage('Количество символов в описании должно быть от 5 до 50'),
+    body('description').notEmpty().withMessage('Описание экскурсиии обязательно к заполнению.'),
     body('isApproved').toBoolean(),
     body('tickets').notEmpty().withMessage('Добавьте по крайней мере один билет'),
 
@@ -77,17 +77,18 @@ router.post('/',
                     console.error(err); 
                 }
 
-                res.render('excursionsForm', {
-                    title: 'Форма добавления экскурсии',
-                    action: '/new-excursion',
-                    data: { body: {}, companies: companies, pictures: [] },
-                    errors: {},
-                    success: {
-                        isSuccess: true,
-                        msg: 'Экскурсия успешно добавлена'
-                    },
-                    user: username
-                })
+                res.redirect('/excursions-list')
+                // res.render('excursionsForm', {
+                //     title: 'Форма добавления экскурсии',
+                //     action: '/new-excursion',
+                //     data: { body: {}, companies: companies, pictures: [] },
+                //     errors: {},
+                //     success: {
+                //         isSuccess: true,
+                //         msg: 'Экскурсия успешно добавлена'
+                //     },
+                //     user: username
+                // })
             }
             return
         }

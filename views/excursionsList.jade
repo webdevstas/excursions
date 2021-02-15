@@ -49,6 +49,15 @@ block content
                 form(action="/excursions-list/#{excursion.slug}/delete" method="post")
                     button.deleteBtn.btn.btn-light Удалить
                     input(type="hidden" name="delete")
+    .status-description
+        h2 Описание статусов
+        .status-description__item
+            .badge.bg-success Одобрено
+            p Этот статус присваевается при создании или редактировании экскурсии, если экскурсия одобрена - она будет опубликована на терминалах во время ближайшего обновления.
+                
+        .status-description__item
+            .badge.bg-info.text-dark Опубликовано
+            p Этот статус указывает на то, что экскурсия в данный момент показывается на терминалах.
     script. 
         const deleteBtn = document.querySelectorAll('.deleteBtn')
 

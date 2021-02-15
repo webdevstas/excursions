@@ -237,8 +237,9 @@ block content
             descriptionInp = document.querySelector('textarea[name="ticket-description"]'),
             priceInp = document.querySelector('input[name="ticket-price"]'),
             ticketsArr = [],
-            ticketsListEl = document.querySelector('#tickets-list')
-            
+            ticketsListEl = document.querySelector('#tickets-list'),
+            ticketsInput = document.querySelector('#tickets-input')
+        let ticketsString = ''
 
         addBtn.addEventListener('click', (e) => {
             e.preventDefault()
@@ -249,9 +250,8 @@ block content
                 price: priceInp.value
             }
             ticketsArr.push(ticket)
-            let ticketsString = JSON.stringify(ticketsArr)
-            let ticketsInput = document.querySelector('#tickets-input')
-
+            ticketsString = JSON.stringify(ticketsArr)
+            
             let addEl = new Promise((resolve, reject) => {
                 ticketsListEl.innerHTML += `<li class=tickets-list__item><span>${ticket.title}</span><span>${ticket.price} руб.</span><button class="btn btn-light delete-ticket">Удалить</button></li>`
                 resolve()
@@ -267,10 +267,12 @@ block content
                     })
                 })
             })
-
-            
             ticketsInput.value = ticketsString
         })
+
+        if (ticketsArr.length == 0) {
+                ticketsInput.value = '#{data.hasTickets}'
+            }
 
         /**
         * Удаление билета

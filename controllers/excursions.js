@@ -78,7 +78,7 @@ async function updateExcursion(req, res) {
 
     // Добавляем загруженные изображения к существующим в базе
     let arrPictures = []
-    let pictFromBase = req.excursion.picturesURLs  
+    let pictFromBase = req.excursion.picturesURLs
 
     req.files.forEach((file) => {
         arrPictures.push(file.filename)
@@ -94,9 +94,11 @@ async function updateExcursion(req, res) {
     // Сохраняем билеты
     await Tickets.insertMany(tickets, async (err, data) => {
         let ids = req.excursion.tickets
-        data.forEach(item => {
-            ids.push(item._id)
-        })
+        if (data) {
+            data.forEach(item => {
+                ids.push(item._id)
+            })
+        }
         excursion.tickets = ids
         // Обновляем данные в базе
         Excursions.updateOne({ slug: req.excursion.slug }, excursion, function (err) {
@@ -141,8 +143,8 @@ async function deletePicture(index, slug) {
     return { success: true, error: {} }
 }
 
-async function deleteTicket (id) {
-    await Tickets.deleteOne({_id: id}, (err) => {
+async function deleteTicket(id) {
+    await Tickets.deleteOne({ _id: id }, (err) => {
         if (err) throw err
     })
     return { success: true, error: {} }

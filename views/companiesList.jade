@@ -17,6 +17,11 @@ block content
                     form(action="/companies-list/#{company.slug}/delete" method="post")
                         button.deleteBtn.btn.btn-light Удалить
                         input(type="hidden" name="delete")
+    .status-description
+        h2 Описание статусов
+        .status-description__item
+            .badge.bg-success Одобрено
+            p Этот статус присваевается при создании или редактировании оператора, если оператор одобрен, то его экскурсии потенциально могут быть опубликованы на терминалах.
     script. 
         const deleteBtn = document.querySelectorAll('.deleteBtn')
 

@@ -42,23 +42,23 @@ block content
             label(for="email") Электронная почта: *
             input(type="email" name="email" value="#{data.email ? data.email : ''}").form-control
         div.input-block
-            label(for="inn") ИНН:
+            label(for="inn") ИНН: *
             input(type="text" name="inn" value="#{data.inn ? data.inn : ''}").form-control
         div.input-block
-            label(for="ogrn") ОГРН:
+            label(for="ogrn") ОГРН: *
             input(type="text" name="ogrn" value="#{data.ogrn ? data.ogrn : ''}").form-control
         div.input-block
-            label(for="kpp") КПП:
+            label(for="kpp") КПП: *
             input(type="text" name="kpp" value="#{data.kpp ? data.kpp : ''}").form-control
         div.input-block
             label(for="okved") ОКВЭД:
             input(type="text" name="okved" value="#{data.okved ? data.okved : ''}").form-control
         div.input-block
-            label(for="registrationInformation") Регистрационная информация:
-            input(type="text" name="registrationInformation" value="#{data.registrationInformation ? data.registrationInformation : ''}").form-control
+            label(for="registrationInformation") Сведения о регистрации:
+            textarea(type="text" name="registrationInformation").form-control= data.registrationInformation ? data.registrationInformation : ''
         div.input-block
             label(for="bankInformation") Банковские реквизиты:
-            input(type="text" name="bankInformation" value="#{data.bankInformation ? data.bankInformation : ''}").form-control
+            textarea(type="text" name="bankInformation").form-control= data.bankInformation ? data.bankInformation : ''
         div.input-block.approve
             label(for="isApproved") Одобрено:
             input(type="checkbox" name="isApproved" checked=data.isApproved)

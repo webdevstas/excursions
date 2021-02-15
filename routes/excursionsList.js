@@ -59,6 +59,13 @@ router.get('/',
 // Установим алиас для каждой экскурсии
 router.param('slug', async function (req, res, next, slug) {
     req.excursion = await Excursions.findOne({ slug: slug }).populate('tickets')
+    // Проверка наличия билетов
+    if (req.excursion.tickets.length > 0) {
+        req.excursion.hasTickets = '1'
+    }
+    else {
+        req.excursion.hasTickets = ''
+    }
     next()
 })
 
@@ -73,7 +80,7 @@ router.route('/:slug')
             res.render('excursionsForm', {
                 action: '/excursions-list/' + req.excursion.slug,
                 title: 'Редактирование экскурсии: ' + req.excursion.title,
-                data: { body: req.excursion, companies: companies, selected: req.excursion.company, pictures: req.excursion.picturesURLs, tags: req.excursion.tags, tickets: req.excursion.tickets },
+                data: { body: req.excursion, companies: companies, selected: req.excursion.company, pictures: req.excursion.picturesURLs, tags: req.excursion.tags, tickets: req.excursion.tickets, hasTickets: req.excursion.hasTickets },
                 success: {
                     isSuccess: false,
                     msg: ''
@@ -91,7 +98,7 @@ router.route('/:slug')
 router.route('/:slug')
     .post(upload.array('pictures'),
         body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
-        body('description').notEmpty().withMessage('Описание обязательно к заполнению').isLength({ min: 5, max: 50 }).withMessage('Количество символов в описании должно быть от 5 до 50'),
+        body('description').notEmpty().withMessage('Описание обязательно к заполнению'),
         body('isApproved').toBoolean(),
         body('tickets').notEmpty().withMessage('Добавьте по крайней мере один билет'),
 
@@ -104,7 +111,7 @@ router.route('/:slug')
                     res.render('excursionsForm', {
                         action: '/excursions-list/' + req.excursion.slug,
                         title: 'Редактирование ' + req.excursion.title,
-                        data: { body: req.body, companies: companies, selected: req.excursion.company, tickets: req.excursion.tickets },
+                        data: { body: req.body, companies: companies, selected: req.excursion.company, tickets: req.excursion.tickets, tags: req.excursion.tags },
                         errors: errors.array(),
                         success: {
                             isSuccess: false,
