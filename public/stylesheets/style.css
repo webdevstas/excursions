@@ -773,14 +773,17 @@ h2.success, h2.error {
     .excursions__filter-form {
         grid-template-columns: 1fr;
     }
-    
+    .content {
+        padding: 110px 30px 20px 30px;
+    }
+    .login-form {
+        width: 75%;
+    }
 }
 
 @media (max-width: 320px) {
     .tags {
         grid-template-columns: 1fr;
     }
-    .content {
-        padding: 110px 30px 20px 30px;
-    }
+    
 }
