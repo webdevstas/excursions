@@ -112,15 +112,13 @@ async function updateExcursion(req, res) {
 
 // Удаление экскурсии
 async function deleteExcursion(req, res) {
-    if (req.body.delete) {
-        Excursions.deleteOne({ slug: req.excursion.slug }, function (err, result) {
-            if (err) throw err
+    Excursions.deleteOne({ slug: req.excursion.slug }, function (err, result) {
+        if (err) throw err
 
-            if (result.ok) {
-                res.redirect('/excursions-list')
-            }
-        })
-    }
+        if (result.ok) {
+            res.redirect('/excursions-list')
+        }
+    })
 }
 
 // Удаление изображения

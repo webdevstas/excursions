@@ -23,31 +23,20 @@ router.get('/',
     async function (req, res) {
         let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
-            let excursions = {}
-            companies = await Companies.find().select({ shortName: 1})
-            let excursionsFilterList = await await Excursions.find().select({ title: 1})
+            companies = await Companies.find().select({ shortName: 1 })
+            let excursionsFilterList = await await Excursions.find().select({ title: 1 })
             let filteredExcList = []
+            let excursions = await Excursions.find().select({title: 1, slug: 1, company: 1, isApproved: 1, isPublished: 1})
 
             excursionsFilterList.forEach(item => {
                 if (!filteredExcList.includes(item.title, 0)) {
                     filteredExcList.push(item.title)
                 }
             })
-
-            // Фильтры
-            if (req.query.companyFilter) {
-                excursions = await Excursions.find({ company: req.query.companyFilter }).select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
-            }
-            else if (req.query.excursionFilter) {
-                excursions = await Excursions.find({ title: req.query.excursionFilter }).select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
-            }
-            else {
-                excursions = await Excursions.find().select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1, isPublished: 1 })
-            }
             // Вывод
             res.render('excursionsList', {
                 title: 'Список экскурсий',
-                data: { excursions: excursions, companies: companies,  excursionsFilterList: filteredExcList},
+                data: { companies: companies, excursionsFilterList: filteredExcList, excursions: excursions },
                 user: username
             })
         }
@@ -55,6 +44,28 @@ router.get('/',
             res.redirect('/login')
         }
     });
+
+// Фильтры
+router.get('/filter', async function (req, res) {
+    if (req.isAuthenticated()) {
+        let excursions = {}
+        if (req.query.companyFilter || req.query.excursionFilter) {
+            let match = {}
+            if (req.query.companyFilter) {
+                match.company = req.query.companyFilter
+            }
+            if (req.query.excursionFilter) {
+                match.title = req.query.excursionFilter
+            }
+            excursions = await Excursions.find(match).select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 })
+            res.status(200).json(excursions)
+        }
+        else {
+            excursions = await Excursions.find().select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 })
+            res.status(200).json(excursions)
+        }
+    }
+})
 
 // Установим алиас для каждой экскурсии
 router.param('slug', async function (req, res, next, slug) {
@@ -136,21 +147,20 @@ router.route('/:slug')
 
 // Удаление экскурсии
 router.route('/:slug/delete')
-    .post(body('delete').toBoolean(),
-        function (req, res) {
+    .post(function (req, res) {
 
-            if (req.isAuthenticated()) {
-                try {
-                    deleteExcursion(req, res)
-                }
-                catch (err) {
-                    console.error(err)
-                }
+        if (req.isAuthenticated()) {
+            try {
+                deleteExcursion(req, res)
             }
-            else {
-                res.redirect('/login')
+            catch (err) {
+                console.error(err)
             }
-        })
+        }
+        else {
+            res.redirect('/login')
+        }
+    })
 
 
 router.route('/:slug')

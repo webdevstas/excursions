@@ -507,6 +507,7 @@ h2.success, h2.error {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     width: 75%;
+    margin-top: 20px;
 }
 
 .excursions__filter-form {
