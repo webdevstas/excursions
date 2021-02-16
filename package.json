@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "pm2-runtime ./ecosystem.config.js",
-    "dev": "set NODE_ENV=development && nodemon ./bin/www"
+    "dev": "set NODE_ENV=development && nodemon ./bin/www",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "connect-flash": "^0.1.1",
@@ -26,9 +28,11 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "transliteration": "^2.2.0"
+    "transliteration": "^2.2.0",
+    "snyk": "^1.455.0"
   },
   "devDependencies": {
     "eslint": "^7.18.0"
-  }
+  },
+  "snyk": true
 }
