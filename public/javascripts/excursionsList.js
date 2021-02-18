@@ -4,12 +4,12 @@ let deleteBtn = document.querySelectorAll('.deleteBtn')
 
 filterSelect.forEach(item => {
     item.addEventListener('change', async () => {
-        render(await getExcursions())
+        render(await getExcursions(buildQuery(filterSelect)))
     })
 })
 
-async function getExcursions() {
-    let response = await fetch(buildQuery(filterSelect))
+async function getExcursions(query) {
+    let response = await fetch(query)
     let items = response.json()
     return items
 }
@@ -79,3 +79,24 @@ function render(list) {
         })
     })
 }
+
+const searchInp = document.querySelector('#search'),
+    promise = new Promise((resolve, reject) => {
+        resolve(getExcursions('/excursions-list/filter'))
+    })
+
+let filtered = []
+
+promise.then((items) => {
+    searchInp.addEventListener('input', () => {
+        items.forEach(item => {
+            if (item.title.toLowerCase().startsWith(searchInp.value.toLowerCase())) {
+                filtered.push(item)
+            }
+            render(filtered)
+        })
+        filtered = []
+    })
+})
+
+

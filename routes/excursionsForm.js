@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { body, validationResult, check } = require('express-validator');
+const { body, validationResult, check } = require('express-validator')
 const { addExcursion } = require('../controllers/excursions')
 const { Companies } = require('../models/companies')
 const { Tickets } = require('../models/tickets')
-const multer = require('multer');
-const mongoose = require('mongoose');
+const multer = require('multer')
+const mongoose = require('mongoose')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './public/images/upload')
@@ -15,12 +15,14 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage, limits: { fileSize: 5242880 } })
+const { unescapeOne, unescapeMany } = require('../lib/helpers')
 
 let companies = {}
 
 router.get('/', async function (req, res) {
     if (req.isAuthenticated()) {
-        companies = await Companies.find().select({ shortName: 1 })
+        let escapedCompanies = await Companies.find().select({ shortName: 1 })
+        companies = unescapeMany(escapedCompanies)
         let username = req.user ? req.user.username : 'guest'
         res.render('excursionsForm', {
             action: '/new-excursion',
@@ -41,15 +43,16 @@ router.get('/', async function (req, res) {
 
 router.post('/',
     upload.array('pictures'),
-    body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
-    body('description').notEmpty().withMessage('Описание экскурсиии обязательно к заполнению'),
+    body('title').trim().escape().notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
+    body('description').trim().escape().notEmpty().withMessage('Описание экскурсиии обязательно к заполнению'),
     body('isApproved').toBoolean(),
-    body('tickets').notEmpty().withMessage('Добавьте по крайней мере один билет'),
-    body('informationPhone').notEmpty().withMessage('Телефон для справок обязателен к заполнению'),
+    body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению'),
+    // body('tickets').trim().escape().notEmpty().withMessage('Добавьте по крайней мере один билет'),
 
     async function (req, res) {
         if (req.isAuthenticated()) {
-            companies = await Companies.find().select({ shortName: 1 })
+            let escapedCompanies = await Companies.find().select({ shortName: 1 })
+            companies = unescapeMany(escapedCompanies)
             let username = req.user ? req.user.username : 'guest'
             const errors = validationResult(req)
             let arrPictures = []
@@ -75,28 +78,15 @@ router.post('/',
                     addExcursion(req, res)
                 }
                 catch (err) {
-                    console.error(err); 
+                    console.error(err);
                 }
-
                 res.redirect('/excursions-list')
-                // res.render('excursionsForm', {
-                //     title: 'Форма добавления экскурсии',
-                //     action: '/new-excursion',
-                //     data: { body: {}, companies: companies, pictures: [] },
-                //     errors: {},
-                //     success: {
-                //         isSuccess: true,
-                //         msg: 'Экскурсия успешно добавлена'
-                //     },
-                //     user: username
-                // })
             }
             return
         }
         else {
             res.redirect('/login')
-        } 
-
+        }
     })
 
 

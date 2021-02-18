@@ -4,15 +4,20 @@ block content
         button.btn.btn-primary.with-shadow Добавить
     .filter-form__wrap
         div
+            label(for="companyFilter") Компания:
             select(name="companyFilter").form-select.filter-select
                 option(value="") Все
                 each company in data.companies
                     option(value="#{company.shortName}")= company.shortName
         div
+            label(for="companyFilter") Экскурсия:
             select(name="excursionFilter").form-select.filter-select
                 option(value="") Все
                 each excursion in data.excursionsFilterList
                     option(value="#{excursion}")= excursion
+        div 
+            label(for="search") Поиск по экскурсиям:  
+            input(type="text").form-control#search
     .excursions.with-shadow
         if data.excursions
             .excursions__col
