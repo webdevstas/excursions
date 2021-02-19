@@ -18,14 +18,18 @@ const companiesSchema = new mongoose.Schema({
     registrationInformation: String,
     bankInformation: String,
     isApproved: Boolean,
+    createdAt: String,
+    updatedAt: String,
     slug: {
         type: String,
         unique: true
     }
 }, {
     timestamps: {
-        createdAt: 'createdAt',
-        updatedAt: 'updatedAt'
+        currentTime: () => {
+            let date = new Date()
+            return date.toISOString()
+        }
     }
 })
 

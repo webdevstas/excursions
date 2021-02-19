@@ -3,13 +3,14 @@ const { slugify } = require('transliteration')
 const fs = require('fs')
 const path = require('path')
 const { Tickets } = require('../models/tickets')
+const { Companies } = require('../models/companies')
 
 
 async function addExcursion(req, res) {
-
+    let company = await Companies.findOne({shortName: req.body.company}).select({_id: 1})
     // Сохраняем данные из формы
     let excursion = {
-        company: req.body.company,
+        company: company._id,
         title: req.body.title,
         description: req.body.description,
         price: req.body.price,

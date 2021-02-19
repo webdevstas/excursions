@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const excursionsSchema = new mongoose.Schema({
-    company: String,
+    company: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Companies'
+    },
     title: String,
     description: String,
     picturesURLs: Array,
@@ -16,11 +19,15 @@ const excursionsSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Tickets'
     }],
-    informationPhone: String
+    informationPhone: String,
+    createdAt: String,
+    updatedAt: String,
 }, {
     timestamps: {
-        createdAt: 'createdAt',
-        updatedAt: 'updatedAt'
+        currentTime: () => {
+            let date = new Date()
+            return date.toISOString()
+        }
     }
 })
 
