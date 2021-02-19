@@ -44,7 +44,6 @@ router.post('/',
     body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
     body('description').notEmpty().withMessage('Описание экскурсиии обязательно к заполнению'),
     body('isApproved').toBoolean(),
-    body('tickets').notEmpty().withMessage('Добавьте по крайней мере один билет'),
     body('informationPhone').notEmpty().withMessage('Телефон для справок обязателен к заполнению'),
 
     async function (req, res) {

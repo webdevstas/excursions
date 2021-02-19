@@ -29,7 +29,6 @@ router.post('/auth', cors(), (req, res) => {
                 res.status(401).json({ success: false, msg: 'Неверный пароль' })
             }
         })
-
 })
 
 
@@ -46,7 +45,7 @@ router.get('/companies', cors(), passport.authenticate('jwt', { session: false }
     }
     else if (req.query.updatedAt) {
         let query = req.query.updatedAt
-        companies = await Companies.find({updatedAt: {$regex: query, $options: 'i'}})
+        companies = await Companies.find({ updatedAt: { $regex: query, $options: 'i' } })
         res.json(companies)
     }
     else {
@@ -70,7 +69,7 @@ router.get('/companies/:id', cors(), passport.authenticate('jwt', { session: fal
  * Excursions
  */
 router.get('/excursions', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
-    let excursions
+    let excursions = []
     if (req.query.company) {
         excursions = await Excursions.find({ company: req.query.company }).populate('tickets').select('-__v')
     }
@@ -79,6 +78,10 @@ router.get('/excursions', cors(), passport.authenticate('jwt', { session: false 
     }
     else if (req.query.status === 'rejected') {
         excursions = await Excursions.find({ isApproved: false }).populate('tickets').select('-__v')
+    }
+    else if (req.query.updatedAt) {
+        let query = req.query.updatedAt
+        excursions = await Excursions.find({ updatedAt: { $regex: query, $options: 'i' } })
     }
     else {
         excursions = await Excursions.find().populate('tickets').select('-__v')
