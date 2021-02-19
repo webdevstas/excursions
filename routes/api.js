@@ -46,7 +46,7 @@ router.get('/companies', cors(), passport.authenticate('jwt', { session: false }
     }
     else if (req.query.updatedAt) {
         let query = req.query.updatedAt
-        companies = await Companies.find({updatedAt: {$regex: query}})
+        companies = await Companies.find({updatedAt: {$regex: query, $options: 'i'}})
         res.json(companies)
     }
     else {
