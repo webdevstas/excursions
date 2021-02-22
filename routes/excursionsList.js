@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage })
-const { unescapeOne, unescapeMany } = require('../lib/helpers')
+const { unescapeOne, unescapeMany, unescapeString } = require('../lib/helpers')
 
 
 let companies = {}

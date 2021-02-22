@@ -21,8 +21,7 @@ let companies = {}
 
 router.get('/', async function (req, res) {
     if (req.isAuthenticated()) {
-        let escapedCompanies = await Companies.find().select({ shortName: 1 })
-        companies = unescapeMany(escapedCompanies)
+        companies = unescapeMany(await Companies.find().select({ shortName: 1 }))
         let username = req.user ? req.user.username : 'guest'
         res.render('excursionsForm', {
             action: '/new-excursion',
