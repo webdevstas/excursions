@@ -7,7 +7,7 @@ const { Companies } = require('../models/companies')
 
 
 async function addExcursion(req, res) {
-    let company = await Companies.findOne({shortName: req.body.company}).select({_id: 1})
+    let company = await Companies.findOne({_id: req.body.company}).select({_id: 1})
     // Сохраняем данные из формы
     let excursion = {
         company: company._id,
