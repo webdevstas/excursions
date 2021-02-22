@@ -14,6 +14,7 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage })
+const { unescapeOne, unescapeMany } = require('../lib/helpers')
 
 
 let companies = {}
@@ -23,31 +24,21 @@ router.get('/',
     async function (req, res) {
         let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
-            let excursions = {}
-            companies = await Companies.find().select({ shortName: 1})
-            let excursionsFilterList = await await Excursions.find().select({ title: 1})
-            let filteredExcList = []
-
-            excursionsFilterList.forEach(item => {
-                if (!filteredExcList.includes(item.title, 0)) {
-                    filteredExcList.push(item.title)
+            let escapedCompanies = await Companies.find().select({ shortName: 1 })
+            companies = unescapeMany(escapedCompanies)
+            let excursionsList = await Excursions.find().select({ title: 1 }),
+            unescapedExcursionsList = unescapeMany(excursionsList),
+            filteredExcursionsList = [],
+            excursions = unescapeMany(await Excursions.find().select({title: 1, slug: 1, company: 1, isApproved: 1, isPublished: 1}).sort({title: 'asc'}))
+            unescapedExcursionsList.forEach(item => {
+                if (!filteredExcursionsList.includes(item.title, 0)) {
+                    filteredExcursionsList.push(item.title)
                 }
             })
-
-            // Фильтры
-            if (req.query.companyFilter) {
-                excursions = await Excursions.find({ company: req.query.companyFilter }).select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
-            }
-            else if (req.query.excursionFilter) {
-                excursions = await Excursions.find({ title: req.query.excursionFilter }).select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1 })
-            }
-            else {
-                excursions = await Excursions.find().select({ title: 1, company: 1, price: 1, slug: 1, isApproved: 1, isPublished: 1 })
-            }
             // Вывод
             res.render('excursionsList', {
                 title: 'Список экскурсий',
-                data: { excursions: excursions, companies: companies,  excursionsFilterList: filteredExcList},
+                data: { companies: companies, excursionsFilterList: filteredExcursionsList, excursions: excursions },
                 user: username
             })
         }
@@ -56,9 +47,31 @@ router.get('/',
         }
     });
 
+// Фильтры
+router.get('/filter', async function (req, res) {
+    if (req.isAuthenticated()) {
+        let excursions = {}
+        if (req.query.companyFilter || req.query.excursionFilter) {
+            let match = {}
+            if (req.query.companyFilter) {
+                match.company = req.query.companyFilter
+            }
+            if (req.query.excursionFilter) {
+                match.title = req.query.excursionFilter
+            }
+            excursions = await Excursions.find(match).select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({title: 'asc'})
+            res.status(200).json(excursions)
+        }
+        else {
+            excursions = await Excursions.find().select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({title: 'asc'})
+            res.status(200).json(excursions)
+        }
+    }
+})
+
 // Установим алиас для каждой экскурсии
 router.param('slug', async function (req, res, next, slug) {
-    req.excursion = await Excursions.findOne({ slug: slug }).populate('tickets')
+    req.excursion = unescapeOne(await Excursions.findOne({ slug: slug }).populate('tickets'))
     // Проверка наличия билетов
     if (req.excursion.tickets.length > 0) {
         req.excursion.hasTickets = '1'
@@ -74,7 +87,7 @@ router.route('/:slug')
     .get(async function (req, res) {
         let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
-            companies = await Companies.find().select({ shortName: 1 })
+            companies = unescapeMany(await Companies.find().select({ shortName: 1 }))
             res.render('excursionsForm', {
                 action: '/excursions-list/' + req.excursion.slug,
                 title: 'Редактирование экскурсии: ' + req.excursion.title,
@@ -95,11 +108,11 @@ router.route('/:slug')
 // POST роут для получения обновлённых данных с валидаторами
 router.route('/:slug')
     .post(upload.array('pictures'),
-        body('title').notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
-        body('description').notEmpty().withMessage('Описание обязательно к заполнению'),
+        body('title').trim().escape().notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
+        body('description').trim().escape().notEmpty().withMessage('Описание обязательно к заполнению'),
         body('isApproved').toBoolean(),
-        body('tickets').notEmpty().withMessage('Добавьте по крайней мере один билет'),
-        body('informationPhone').notEmpty().withMessage('Телефон для справок обязателен к заполнению'),
+        body('tickets').trim().escape().notEmpty().withMessage('Добавьте по крайней мере один билет'),
+        body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению'),
 
         function (req, res) {
             let username = req.user ? req.user.username : 'guest'
@@ -136,21 +149,20 @@ router.route('/:slug')
 
 // Удаление экскурсии
 router.route('/:slug/delete')
-    .post(body('delete').toBoolean(),
-        function (req, res) {
+    .post(function (req, res) {
 
-            if (req.isAuthenticated()) {
-                try {
-                    deleteExcursion(req, res)
-                }
-                catch (err) {
-                    console.error(err)
-                }
+        if (req.isAuthenticated()) {
+            try {
+                deleteExcursion(req, res)
             }
-            else {
-                res.redirect('/login')
+            catch (err) {
+                console.error(err)
             }
-        })
+        }
+        else {
+            res.redirect('/login')
+        }
+    })
 
 
 router.route('/:slug')

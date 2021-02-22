@@ -21,12 +21,12 @@ const excursionsSchema = new mongoose.Schema({
     }],
     informationPhone: String,
     createdAt: String,
-    updatedAt: String
+    updatedAt: String,
 }, {
     timestamps: {
         currentTime: () => {
             let date = new Date()
-            return  date.toISOString()
+            return date.toISOString()
         }
     }
 })
