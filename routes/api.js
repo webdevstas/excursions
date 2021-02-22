@@ -7,6 +7,7 @@ const { Excursions } = require('../models/excursions')
 const { Companies } = require('../models/companies')
 const cors = require('cors')
 
+
 /**
  * Authentication
  */
@@ -28,7 +29,6 @@ router.post('/auth', cors(), (req, res) => {
                 res.status(401).json({ success: false, msg: 'Неверный пароль' })
             }
         })
-
 })
 
 
@@ -50,8 +50,8 @@ router.get('/companies', cors(), passport.authenticate('jwt', { session: false }
     }
     else {
         companies = await Companies.find().select('-__v')
+        res.json(companies)
     }
-    res.json(companies)
 })
 
 
