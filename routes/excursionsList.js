@@ -27,9 +27,9 @@ router.get('/',
             let escapedCompanies = await Companies.find().select({ shortName: 1 })
             companies = unescapeMany(escapedCompanies)
             let excursionsList = await Excursions.find().select({ title: 1 }),
-            unescapedExcursionsList = unescapeMany(excursionsList),
-            filteredExcursionsList = [],
-            excursions = unescapeMany(await Excursions.find().select({title: 1, slug: 1, company: 1, isApproved: 1, isPublished: 1}).sort({title: 'asc'}))
+                unescapedExcursionsList = unescapeMany(excursionsList),
+                filteredExcursionsList = [],
+                excursions = unescapeMany(await Excursions.find().select({ title: 1, slug: 1, company: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate('company'))
             unescapedExcursionsList.forEach(item => {
                 if (!filteredExcursionsList.includes(item.title, 0)) {
                     filteredExcursionsList.push(item.title)
@@ -59,11 +59,11 @@ router.get('/filter', async function (req, res) {
             if (req.query.excursionFilter) {
                 match.title = req.query.excursionFilter
             }
-            excursions = await Excursions.find(match).select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({title: 'asc'})
+            excursions = await Excursions.find(match).select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate('company')
             res.status(200).json(excursions)
         }
         else {
-            excursions = await Excursions.find().select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({title: 'asc'})
+            excursions = await Excursions.find().select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate('company')
             res.status(200).json(excursions)
         }
     }
@@ -71,7 +71,7 @@ router.get('/filter', async function (req, res) {
 
 // Установим алиас для каждой экскурсии
 router.param('slug', async function (req, res, next, slug) {
-    req.excursion = unescapeOne(await Excursions.findOne({ slug: slug }).populate('tickets'))
+    req.excursion = unescapeOne(await Excursions.findOne({ slug: slug }).populate('tickets').populate('company'))
     // Проверка наличия билетов
     if (req.excursion.tickets.length > 0) {
         req.excursion.hasTickets = '1'
@@ -91,7 +91,15 @@ router.route('/:slug')
             res.render('excursionsForm', {
                 action: '/excursions-list/' + req.excursion.slug,
                 title: 'Редактирование экскурсии: ' + req.excursion.title,
-                data: { body: req.excursion, companies: companies, selected: req.excursion.company, pictures: req.excursion.picturesURLs, tags: req.excursion.tags, tickets: req.excursion.tickets, hasTickets: req.excursion.hasTickets },
+                data: {
+                    body: req.excursion,
+                    companies: companies,
+                    selected: req.excursion.company.shortName,
+                    pictures: req.excursion.picturesURLs,
+                    tags: req.excursion.tags,
+                    tickets: req.excursion.tickets,
+                    hasTickets: req.excursion.hasTickets
+                },
                 success: {
                     isSuccess: false,
                     msg: ''
@@ -111,7 +119,7 @@ router.route('/:slug')
         body('title').trim().escape().notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
         body('description').trim().escape().notEmpty().withMessage('Описание обязательно к заполнению'),
         body('isApproved').toBoolean(),
-        body('tickets').trim().escape().notEmpty().withMessage('Добавьте по крайней мере один билет'),
+        // body('tickets').trim().escape().notEmpty().withMessage('Добавьте по крайней мере один билет'),
         body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению'),
 
         function (req, res) {

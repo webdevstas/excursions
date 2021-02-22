@@ -27,6 +27,7 @@ const companiesSchema = new mongoose.Schema({
 }, {
     timestamps: {
         currentTime: () => {
+            let date = new Date()
             return date.toISOString()
         }
     }

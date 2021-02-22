@@ -47,7 +47,7 @@ function render(list) {
                     <span class="excursions__title">${item.title}</span>
                 </div>
                 <div class="excursions__col">
-                    <span class="excursions__company">${item.company}</span>
+                    <span class="excursions__company">${item.company.shortName}</span>
                 </div>
                 <div class="excursions__col status">
                     <div class="badge-block">

@@ -8,7 +8,7 @@ block content
             select(name="companyFilter").form-select.filter-select
                 option(value="") Все
                 each company in data.companies
-                    option(value="#{company.shortName}")= company.shortName
+                    option(value="#{company._id}")= company.shortName
         div
             label(for="companyFilter") Экскурсия:
             select(name="excursionFilter").form-select.filter-select
@@ -32,7 +32,7 @@ block content
                 .excursions__col
                     span.excursions__title= excursion.title
                 .excursions__col
-                    span.excursions__company= excursion.company
+                    span.excursions__company= excursion.company.shortName
                 .excursions__col.status
                     .badge-block
                         if excursion.isApproved

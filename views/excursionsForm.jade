@@ -23,7 +23,7 @@ block content
                 select(type="text" name="company" rows="1").form-select
                     each company in data.companies
                         - var isSelected = data.selected === company.shortName
-                        option(value="#{company.shortName}" selected=isSelected)= company.shortName
+                        option(value="#{company._id}" selected=isSelected)= company.shortName
             .input-block
                 label(for="title") Название экскурсии: *
                 input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}").form-control
