@@ -3,52 +3,52 @@ block content
     a(href="/new-excursion")
         button.btn.btn-primary.with-shadow Добавить
     .filter-form__wrap
-        form(action="/excursions-list" method="get").excursions__filter-form.with-shadow
-            label(for="company-filter").excursions__filter-label Фильтр по операторам:
-            select(name="companyFilter").form-select
+        div
+            label(for="companyFilter") Компания:
+            select(name="companyFilter").form-select.filter-select
                 option(value="") Все
                 each company in data.companies
-                    option(value="#{company.shortName}")= company.shortName
-            button(type="submit").btn.btn-light Фильтровать
-            button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-light Сбросить
-        form(action="/excursions-list" method="get").excursions__filter-form.with-shadow
-            label(for="excursion-filter").excursions__filter-label Фильтр по экскурсиям:
-            select(name="excursionFilter").form-select
+                    option(value="#{company._id}")= company.shortName
+        div
+            label(for="companyFilter") Экскурсия:
+            select(name="excursionFilter").form-select.filter-select
                 option(value="") Все
                 each excursion in data.excursionsFilterList
                     option(value="#{excursion}")= excursion
-            button(type="submit").btn.btn-light Фильтровать
-            button(type="reset" onclick="window.location.replace('/excursions-list')").btn.btn-light Сбросить
+        div 
+            label(for="search") Поиск по экскурсиям:  
+            input(type="text").form-control#search
     .excursions.with-shadow
-        .excursions__col
-            h2.excursions__col-title Название
-        .excursions__col
-            h2.excursions__col-title Оператор
-        .excursions__col.status
-            h2.excursions__col-title Статус
-        .excursions__col
-            h2.excursions__col-title Редактирование
-        each excursion in data.excursions
+        if data.excursions
             .excursions__col
-                span.excursions__title= excursion.title
+                h2.excursions__col-title Название
             .excursions__col
-                span.excursions__company= excursion.company
+                h2.excursions__col-title Оператор
             .excursions__col.status
-                .badge-block
-                    if excursion.isApproved
-                        .badge.bg-success Одобрено
-                    else
-                        .badge.bg-danger Не одобрено
-                    if excursion.isPublished
-                        .badge.bg-info.text-dark Опубликовано
-                    else
-                        .badge.bg-danger Не опубликовано
+                h2.excursions__col-title Статус
             .excursions__col
-                a(href="/excursions-list/#{excursion.slug}") 
-                    button.btn.btn-light Редактировать
-                form(action="/excursions-list/#{excursion.slug}/delete" method="post")
-                    button.deleteBtn.btn.btn-light Удалить
-                    input(type="hidden" name="delete")
+                h2.excursions__col-title Редактирование
+            each excursion in data.excursions
+                .excursions__col
+                    span.excursions__title= excursion.title
+                .excursions__col
+                    span.excursions__company= excursion.company.shortName
+                .excursions__col.status
+                    .badge-block
+                        if excursion.isApproved
+                            .badge.bg-success Одобрено
+                        else
+                            .badge.bg-danger Не одобрено
+                        if excursion.isPublished
+                            .badge.bg-info.text-dark Опубликовано
+                        else
+                            .badge.bg-danger Не опубликовано
+                .excursions__col
+                    a(href="/excursions-list/#{excursion.slug}") 
+                        button.btn.btn-light Редактировать
+                    form(action="/excursions-list/#{excursion.slug}/delete" method="post")
+                        button.deleteBtn.btn.btn-light Удалить
+                        input(type="hidden" name="delete")
     .status-description
         h2 Описание статусов
         .status-description__item
@@ -58,16 +58,5 @@ block content
         .status-description__item
             .badge.bg-info.text-dark Опубликовано
             p Этот статус указывает на то, что экскурсия в данный момент показывается на терминалах.
-    script. 
-        const deleteBtn = document.querySelectorAll('.deleteBtn')
-
-        deleteBtn.forEach( (btn)=> {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault()
-                let result = confirm('Подтвердите удаление')
-                if(result) {
-                    e.target.nextSibling.value = true
-                    e.target.form.submit()
-                }
-            })
-        })
+    script(src="/javascripts/excursionsList.js") 
+        

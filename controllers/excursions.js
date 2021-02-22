@@ -3,13 +3,15 @@ const { slugify } = require('transliteration')
 const fs = require('fs')
 const path = require('path')
 const { Tickets } = require('../models/tickets')
+const { Companies } = require('../models/companies')
+const { unescapeOne, unescapeMany, unescapeString } = require('../lib/helpers')
 
 
 async function addExcursion(req, res) {
-
+    let company = await Companies.findOne({_id: req.body.company}).select({_id: 1})
     // Сохраняем данные из формы
     let excursion = {
-        company: req.body.company,
+        company: company._id,
         title: req.body.title,
         description: req.body.description,
         price: req.body.price,
@@ -38,10 +40,10 @@ async function addExcursion(req, res) {
         if (err) throw err
 
         if (count > 0) {
-            excursion.slug = slugify(excursion.title + '-' + (count + 1))
+            excursion.slug = slugify(unescapeString(excursion.title) + '-' + (count + 1))
         }
         else {
-            excursion.slug = slugify(excursion.title)
+            excursion.slug = slugify(unescapeString(excursion.title))
         }
     })
 
@@ -74,7 +76,7 @@ async function updateExcursion(req, res) {
     }
 
     if (req.excursion.title !== excursion.title) {
-        excursion.slug = slugify(excursion.title)
+        excursion.slug = slugify(unescapeString(excursion.title))
     }
 
     // Добавляем загруженные изображения к существующим в базе
@@ -102,7 +104,7 @@ async function updateExcursion(req, res) {
         }
         excursion.tickets = ids
         // Обновляем данные в базе
-        Excursions.updateOne({ slug: req.excursion.slug }, excursion, function (err) {
+        Excursions.updateOne({ _id: req.excursion._id }, excursion, function (err) {
 
             if (err) throw err
 
@@ -112,15 +114,13 @@ async function updateExcursion(req, res) {
 
 // Удаление экскурсии
 async function deleteExcursion(req, res) {
-    if (req.body.delete) {
-        Excursions.deleteOne({ slug: req.excursion.slug }, function (err, result) {
-            if (err) throw err
+    Excursions.deleteOne({ _id: req.excursion._id }, function (err, result) {
+        if (err) throw err
 
-            if (result.ok) {
-                res.redirect('/excursions-list')
-            }
-        })
-    }
+        if (result.ok) {
+            res.redirect('/excursions-list')
+        }
+    })
 }
 
 // Удаление изображения

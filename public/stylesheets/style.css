@@ -62,8 +62,6 @@ input, select, textarea {
 label {
     color: var(--main-text-color);
     height: 100%;
-    display: flex;
-    align-items: center;
     padding-left: 10px;
     border-bottom-left-radius: 0.25rem;
     border-top-left-radius: 0.25rem;
@@ -507,6 +505,7 @@ h2.success, h2.error {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     width: 75%;
+    margin-top: 20px;
 }
 
 .excursions__filter-form {
@@ -519,14 +518,13 @@ h2.success, h2.error {
     border-radius: 0.25rem;
 }
 
-.excursions__filter-form .btn {
-    width: fit-content;
-}
-
-.excursions__filter-label {
+.filter-form__wrap label {
     font-size: 18px;
-    margin: 0;
-    color: var(--main-text-color)
+    margin-bottom: 10px;
+}
+.filter-form__wrap input {
+    width: -webkit-fill-available;
+    width: -moz-available;
 }
 
 .pictures-block {
@@ -759,6 +757,9 @@ h2.success, h2.error {
     }
     .top-header__logo {
         display: none;
+    }
+    .filter-form__wrap {
+        width: auto;
     }
 }
 

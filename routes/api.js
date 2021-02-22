@@ -7,6 +7,7 @@ const { Excursions } = require('../models/excursions')
 const { Companies } = require('../models/companies')
 const cors = require('cors')
 
+
 /**
  * Authentication
  */
@@ -28,7 +29,6 @@ router.post('/auth', cors(), (req, res) => {
                 res.status(401).json({ success: false, msg: 'Неверный пароль' })
             }
         })
-
 })
 
 
@@ -38,15 +38,20 @@ router.post('/auth', cors(), (req, res) => {
 router.get('/companies', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
     let companies = []
     if (req.query.status === 'approved') {
-        companies = await Companies.find({isApproved: true}).select('-__v')
+        companies = await Companies.find({ isApproved: true }).select('-__v')
     }
     else if (req.query.status === 'rejected') {
-        companies = await Companies.find({isApproved: false}).select('-__v')
+        companies = await Companies.find({ isApproved: false }).select('-__v')
+    }
+    else if (req.query.updatedAt) {
+        let query = req.query.updatedAt
+        companies = await Companies.find({ updatedAt: { $regex: query, $options: 'i' } })
+        res.json(companies)
     }
     else {
         companies = await Companies.find().select('-__v')
+        res.json(companies)
     }
-    res.json(companies)
 })
 
 
@@ -64,19 +69,23 @@ router.get('/companies/:id', cors(), passport.authenticate('jwt', { session: fal
  * Excursions
  */
 router.get('/excursions', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
-    let excursions
+    let excursions = []
     if (req.query.company) {
-        excursions = await Excursions.find({company: req.query.company}).populate('tickets').select('-__v')
-    } 
+        excursions = await Excursions.find({ company: req.query.company }).populate('tickets').select('-__v')
+    }
     else if (req.query.status === 'approved') {
-        excursions = await Excursions.find({isApproved: true}).populate('tickets').select('-__v')
+        excursions = await Excursions.find({ isApproved: true }).populate('tickets').select('-__v')
     }
     else if (req.query.status === 'rejected') {
-        excursions = await Excursions.find({isApproved: false}).populate('tickets').select('-__v')
+        excursions = await Excursions.find({ isApproved: false }).populate('tickets').select('-__v')
+    }
+    else if (req.query.updatedAt) {
+        let query = req.query.updatedAt
+        excursions = await Excursions.find({ updatedAt: { $regex: query, $options: 'i' } })
     }
     else {
         excursions = await Excursions.find().populate('tickets').select('-__v')
-    }   
+    }
     res.json(excursions)
 })
 

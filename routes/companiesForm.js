@@ -27,22 +27,22 @@ router.get('/', function (req, res) {
 
 router.post('/',
 
-    body('fullName').trim(),
-    body('shortName').trim().notEmpty().withMessage('Краткое наименование компании обязательно к заполнению'),
-    body('formOfOwnership').trim(),
-    body('kindOfActivity').trim(),
-    body('legalAddress').trim(),
-    body('actualAddress').trim(),
-    body('head').trim(),
-    body('phoneNumber').trim(),
-    body('faxNumber').trim(),
-    body('email').trim().notEmpty().withMessage('Электронная почта обязательна к заполнению').isEmail().withMessage('Введите корректный email'),
-    check('inn').notEmpty().withMessage('Инн обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ИНН'),
-    check('ogrn').notEmpty().withMessage('ОГРН обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ОГРН'),
-    check('kpp').notEmpty().withMessage('КПП обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение КПП'),
-    body('okved').trim(),
-    body('registrationInformation').trim(),
-    body('bankInformation').trim(),
+    body('fullName').trim().escape(),
+    body('shortName').trim().escape().notEmpty().withMessage('Краткое наименование компании обязательно к заполнению'),
+    body('formOfOwnership').trim().escape(),
+    body('kindOfActivity').trim().escape(),
+    body('legalAddress').trim().escape(),
+    body('actualAddress').trim().escape(),
+    body('head').trim().escape(),
+    body('phoneNumber').trim().escape(),
+    body('faxNumber').trim().escape(),
+    body('email').trim().escape().notEmpty().withMessage('Электронная почта обязательна к заполнению').isEmail().withMessage('Введите корректный email'),
+    check('inn').escape().notEmpty().withMessage('Инн обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ИНН'),
+    check('ogrn').escape().notEmpty().withMessage('ОГРН обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ОГРН'),
+    check('kpp').escape().notEmpty().withMessage('КПП обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение КПП'),
+    body('okved').trim().escape(),
+    body('registrationInformation').trim().escape(),
+    body('bankInformation').trim().escape(),
     body('isApproved').toBoolean(),
 
     function (req, res) {
@@ -71,18 +71,7 @@ router.post('/',
             }
 
             res.redirect('/companies-list')
-
-            // res.render('companiesForm', {
-            //     title: 'Форма добавления компании',
-            //     action: '/register-company',
-            //     data: {},
-            //     errors: {},
-            //     success: {
-            //         isSuccess: true,
-            //         msg: 'Компания успешно добавлена'
-            //     },
-            //     user: username
-            // })
+            
         }
         return
     })
