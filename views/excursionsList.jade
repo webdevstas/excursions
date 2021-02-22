@@ -30,9 +30,9 @@ block content
                 h2.excursions__col-title Редактирование
             each excursion in data.excursions
                 .excursions__col
-                    span.excursions__title= excursion.title
+                    span.excursions__title= unescapeString(excursion.title)
                 .excursions__col
-                    span.excursions__company= excursion.company.shortName
+                    span.excursions__company= unescapeString(excursion.company.shortName)
                 .excursions__col.status
                     .badge-block
                         if excursion.isApproved

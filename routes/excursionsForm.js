@@ -15,13 +15,13 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage, limits: { fileSize: 5242880 } })
-const { unescapeOne, unescapeMany } = require('../lib/helpers')
+const { unescapeOne, unescapeMany, unescapeString } = require('../lib/helpers')
 
 let companies = {}
 
 router.get('/', async function (req, res) {
     if (req.isAuthenticated()) {
-        companies = unescapeMany(await Companies.find().select({ shortName: 1 }))
+        companies = await Companies.find().select({ shortName: 1, _id: 1 })
         let username = req.user ? req.user.username : 'guest'
         res.render('excursionsForm', {
             action: '/new-excursion',
@@ -32,7 +32,8 @@ router.get('/', async function (req, res) {
                 isSuccess: false,
                 msg: ''
             },
-            user: username
+            user: username,
+            unescapeString: unescapeString
         })
     }
     else {

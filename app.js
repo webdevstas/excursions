@@ -64,7 +64,7 @@ app.use(session({
 }))
 
 
-// auth
+// passport
 require('./config/passport')
 app.use(passport.initialize())
 app.use(passport.session())

@@ -22,8 +22,8 @@ block content
                 label(for="company") Оператор: *
                 select(type="text" name="company" rows="1").form-select
                     each company in data.companies
-                        - var isSelected = data.selected === company.shortName
-                        option(value="#{company._id}" selected=isSelected)= company.shortName
+                        - var isSelected = data.selected === unescapeString(company.shortName)
+                        option(value="#{company._id}" selected=isSelected)= unescapeString(company.shortName)
             .input-block
                 label(for="title") Название экскурсии: *
                 input(type="text" name="title" value="#{data.body.title ? data.body.title : ''}").form-control

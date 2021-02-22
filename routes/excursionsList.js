@@ -39,7 +39,8 @@ router.get('/',
             res.render('excursionsList', {
                 title: 'Список экскурсий',
                 data: { companies: companies, excursionsFilterList: filteredExcursionsList, excursions: excursions },
-                user: username
+                user: username,
+                unescapeString: unescapeString
             })
         }
         else {
