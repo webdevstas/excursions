@@ -35,8 +35,8 @@ router.post('/',
     body('legalAddress').trim().escape(),
     body('actualAddress').trim().escape(),
     body('head').trim().escape(),
-    body('phoneNumber').trim().escape().optional({nullabale: true, checkFalsy: true}).isNumeric().withMessage('Введите числовое значение номера телефона'),
-    body('faxNumber').trim().escape().optional({nullabale: true, checkFalsy: true}).isNumeric().withMessage('Введите числовое значение номера факса'),
+    body('phoneNumber').trim().escape().optional({ nullabale: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение номера телефона'),
+    body('faxNumber').trim().escape().optional({ nullabale: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение номера факса'),
     body('email').trim().escape().notEmpty().withMessage('Электронная почта обязательна к заполнению').isEmail().withMessage('Введите корректный email'),
     check('inn').escape().notEmpty().withMessage('Инн обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ИНН'),
     check('ogrn').escape().notEmpty().withMessage('ОГРН обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ОГРН'),
@@ -65,15 +65,10 @@ router.post('/',
             return
         }
         else {
-            try {
-                addCompany(req, res)
-            }
-            catch (err) {
-                console.error(err);
-            }
+            // addCompany(req, res)
 
             res.redirect('/companies-list')
-            
+
         }
         return
     })

@@ -73,12 +73,7 @@ router.post('/',
                 return
             }
             else {
-                try {
-                    addExcursion(req, res)
-                }
-                catch (err) {
-                    console.error(err);
-                }
+                // addExcursion(req, res)
                 res.redirect('/excursions-list')
             }
             return
