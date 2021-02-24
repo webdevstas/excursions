@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage })
-const { unescapeOne, unescapeMany, unescapeString } = require('../lib/helpers')
+const { unescapeString } = require('../lib/helpers')
 
 
 let companies = {}
@@ -24,13 +24,11 @@ router.get('/',
     async function (req, res) {
         let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
-            let escapedCompanies = await Companies.find().select({ shortName: 1 })
-            companies = unescapeMany(escapedCompanies)
+            companies = await Companies.find().select({ shortName: 1 })
             let excursionsList = await Excursions.find().select({ title: 1 }),
-                unescapedExcursionsList = unescapeMany(excursionsList),
                 filteredExcursionsList = [],
-                excursions = unescapeMany(await Excursions.find().select({ title: 1, slug: 1, company: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate('company'))
-            unescapedExcursionsList.forEach(item => {
+                excursions = await Excursions.find().select({ title: 1, slug: 1, company: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate('company')
+                excursionsList.forEach(item => {
                 if (!filteredExcursionsList.includes(item.title, 0)) {
                     filteredExcursionsList.push(item.title)
                 }
@@ -72,7 +70,7 @@ router.get('/filter', async function (req, res) {
 
 // Установим алиас для каждой экскурсии
 router.param('slug', async function (req, res, next, slug) {
-    req.excursion = unescapeOne(await Excursions.findOne({ slug: slug }).populate('tickets').populate('company'))
+    req.excursion = await Excursions.findOne({ slug: slug }).populate('tickets').populate('company')
     // Проверка наличия билетов
     if (req.excursion.tickets.length > 0) {
         req.excursion.hasTickets = '1'
@@ -88,7 +86,7 @@ router.route('/:slug')
     .get(async function (req, res) {
         let username = req.user ? req.user.username : 'guest'
         if (req.isAuthenticated()) {
-            companies = unescapeMany(await Companies.find().select({ shortName: 1 }))
+            companies = await Companies.find().select({ shortName: 1 })
             res.render('excursionsForm', {
                 action: '/excursions-list/' + req.excursion.slug,
                 title: 'Редактирование экскурсии: ' + req.excursion.title,
@@ -99,8 +97,9 @@ router.route('/:slug')
                     pictures: req.excursion.picturesURLs,
                     tags: req.excursion.tags,
                     tickets: req.excursion.tickets,
-                    hasTickets: req.excursion.hasTickets
+                    hasTickets: req.excursion.hasTickets,
                 },
+                unescapeString: unescapeString,
                 success: {
                     isSuccess: false,
                     msg: ''

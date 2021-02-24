@@ -1,6 +1,6 @@
 const { Companies } = require('../models/companies')
 const { slugify } = require('transliteration')
-
+const { unescapeString } = require('../lib/helpers')
 
 async function addCompany(req, res) {
     let company = req.body
@@ -8,10 +8,10 @@ async function addCompany(req, res) {
         if (err) throw err
 
         if (count > 0) {
-            company.slug = slugify(company.shortName + '-' + count)
+            company.slug = slugify(unescapeString(company.shortName) + '-' + count)
         }
         else {
-            company.slug = slugify(company.shortName)
+            company.slug = slugify(unescapeString(company.shortName))
         }
     })
 
@@ -25,8 +25,8 @@ async function addCompany(req, res) {
 async function updateCompany(req, res) {
     const company = req.body
     
-    if (req.company.shortName !== company.shortName) {
-        company.slug = slugify(company.shortName)
+    if (unescapeString(req.company).shortName !== unescapeString(company.shortName)) {
+        company.slug = slugify(unescapeString(company.shortName))
     }
 
     await Companies.updateOne({ slug: req.company.slug }, company, {}, function (err) {

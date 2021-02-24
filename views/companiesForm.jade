@@ -13,25 +13,25 @@ block content
     form(method="post" action="#{action}").register-form.with-shadow
         div.input-block
             label(for="fullName") Полное наименование компании:
-            textarea(type="text" name="fullName").form-control #{data.fullName ? data.fullName : ''}
+            textarea(type="text" name="fullName").form-control #{data.fullName ? unescapeString(data.fullName) : ''}
         div.input-block
             label(for="shortName") Краткое наименование компании: *
-            input(type="text" name="shortName" value="#{data.shortName ? data.shortName : ''}").form-control
+            input(type="text" name="shortName" value="#{data.shortName ? unescapeString(data.shortName) : ''}").form-control
         div.input-block
             label(for="formOfOwnership") Форма собственности:
-            input(type="text" name="formOfOwnership" value="#{data.formOfOwnership ? data.formOfOwnership : ''}").form-control
+            input(type="text" name="formOfOwnership" value="#{data.formOfOwnership ? unescapeString(data.formOfOwnership) : ''}").form-control
         div.input-block
             label(for="kindOfActivity") Вид деятельности:
-            textarea(type="text" name="kindOfActivity").form-control= data.kindOfActivity ? data.kindOfActivity : ''
+            textarea(type="text" name="kindOfActivity").form-control= data.kindOfActivity ? unescapeString(data.kindOfActivity) : ''
         div.input-block
             label(for="legalAddress") Юридический адрес:
-            textarea(type="text" name="legalAddress").form-control= data.legalAddress ? data.legalAddress : ''
+            textarea(type="text" name="legalAddress").form-control= data.legalAddress ? unescapeString(data.legalAddress) : ''
         div.input-block
             label(for="actualAddress") Фактичесий адрес:
-            textarea(type="text" name="actualAddress").form-control= data.actualAddress ? data.actualAddress : ''
+            textarea(type="text" name="actualAddress").form-control= data.actualAddress ? unescapeString(data.actualAddress) : ''
         div.input-block
             label(for="head") Руководитель:
-            textarea(type="text" name="head").form-control= data.head ? data.head : ''
+            textarea(type="text" name="head").form-control= data.head ? unescapeString(data.head) : ''
         div.input-block
             label(for="phoneNumber") Номер телефона организации:
             input(type="tel" name="phoneNumber" value="#{data.phoneNumber ? data.phoneNumber : ''}").form-control
@@ -55,10 +55,10 @@ block content
             input(type="text" name="okved" value="#{data.okved ? data.okved : ''}").form-control
         div.input-block
             label(for="registrationInformation") Сведения о регистрации:
-            textarea(type="text" name="registrationInformation").form-control= data.registrationInformation ? data.registrationInformation : ''
+            textarea(type="text" name="registrationInformation").form-control= data.registrationInformation ? unescapeString(data.registrationInformation) : ''
         div.input-block
             label(for="bankInformation") Банковские реквизиты:
-            textarea(type="text" name="bankInformation").form-control= data.bankInformation ? data.bankInformation : ''
+            textarea(type="text" name="bankInformation").form-control= data.bankInformation ? unescapeString(data.bankInformation) : ''
         div.input-block.approve
             label(for="isApproved") Одобрено:
             input(type="checkbox" name="isApproved" checked=data.isApproved)

@@ -8,13 +8,13 @@ block content
             select(name="companyFilter").form-select.filter-select
                 option(value="") Все
                 each company in data.companies
-                    option(value="#{company._id}")= company.shortName
+                    option(value="#{company._id}")= unescapeString(company.shortName)
         div
             label(for="companyFilter") Экскурсия:
             select(name="excursionFilter").form-select.filter-select
                 option(value="") Все
                 each excursion in data.excursionsFilterList
-                    option(value="#{excursion}")= excursion
+                    option(value="#{excursion}")= unescapeString(excursion)
         div 
             label(for="search") Поиск по экскурсиям:  
             input(type="text").form-control#search

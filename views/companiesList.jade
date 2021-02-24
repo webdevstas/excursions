@@ -10,7 +10,7 @@ block content
                     .badge.bg-success Одобрено
                 else 
                     .badge.bg-danger Не одобрено
-                span= company.shortName
+                span= unescapeString(company.shortName)
                 .companies__btn-block
                     a(href="/companies-list/#{company.slug}")
                         button.btn.btn-light Редактировать

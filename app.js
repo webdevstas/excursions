@@ -24,10 +24,10 @@ const { Users } = require('./models/users')
 const { genPassword } = require('./lib/passportUtils')
 
 if (process.env.NODE_ENV == 'production') {
-  mongoose.connect(process.env.PROD_DB_STRING, {useNewUrlParser: true, useUnifiedTopology: true, user:  process.env.PROD_DB_USER, pass: process.env.PROD_DB_PWD}) //production
+    mongoose.connect(process.env.PROD_DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.PROD_DB_USER, pass: process.env.PROD_DB_PWD }) //production
 }
 else {
-  mongoose.connect(process.env.DEV_DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DEV_DB_USER, pass: process.env.DEV_DB_PWD }) // development
+    mongoose.connect(process.env.DEV_DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DEV_DB_USER, pass: process.env.DEV_DB_PWD }) // development
 }
 const db = mongoose.connection
 const MongoStore = require('connect-mongo')(session)
@@ -49,18 +49,18 @@ app.disable('x-powered-by')
 
 // session
 const sessionStore = new MongoStore({
-  mongooseConnection: db,
-  collection: 'sessions'
+    mongooseConnection: db,
+    collection: 'sessions'
 })
 
 app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  store: sessionStore,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24
-  }
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24
+    }
 }))
 
 
@@ -82,18 +82,18 @@ app.use('/api', apiRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+    next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500)
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500)
+    res.render('error');
 });
 
 module.exports = app

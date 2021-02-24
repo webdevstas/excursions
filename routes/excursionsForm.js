@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage, limits: { fileSize: 5242880 } })
-const { unescapeOne, unescapeMany, unescapeString } = require('../lib/helpers')
+const { unescapeString } = require('../lib/helpers')
 
 let companies = {}
 
@@ -51,8 +51,7 @@ router.post('/',
 
     async function (req, res) {
         if (req.isAuthenticated()) {
-            let escapedCompanies = await Companies.find().select({ shortName: 1 })
-            companies = unescapeMany(escapedCompanies)
+            companies = await Companies.find().select({ shortName: 1 })
             let username = req.user ? req.user.username : 'guest'
             const errors = validationResult(req)
             let arrPictures = []

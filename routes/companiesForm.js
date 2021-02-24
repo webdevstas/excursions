@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { body, validationResult, check } = require('express-validator');
 const { addCompany } = require('../controllers/companies')
-
+const { unescapeString } = require('../lib/helpers')
 
 router.get('/', function (req, res) {
 
@@ -17,7 +17,8 @@ router.get('/', function (req, res) {
                 isSuccess: false,
                 msg: ''
             },
-            user: username
+            user: username,
+            unescapeString: unescapeString
         })
     }
     else {
@@ -58,7 +59,8 @@ router.post('/',
                     isSuccess: false,
                     msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
                 },
-                user: username
+                user: username,
+                unescapeString: unescapeString
             })
             return
         }

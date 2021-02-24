@@ -4,16 +4,14 @@ const { body, validationResult, check } = require('express-validator');
 const { render } = require('jade');
 const { updateCompany, deleteCompany } = require('../controllers/companies')
 const { Companies } = require('../models/companies')
-const { unescapeOne, unescapeMany } = require('../lib/helpers')
+const { unescapeString } = require('../lib/helpers')
 
 // Ответ на запрос списка компаний
 router.get('/', async function (req, res) {
 	if (req.isAuthenticated()) {
 		let username = req.user ? req.user.username : 'guest'
-		const escapedCompanies = await Companies.find().select({ shortName: 1, slug: 1, isApproved: 1 }),
-			unescapedCompanies = unescapeMany(escapedCompanies)
-
-		res.render('companiesList', { title: 'Список операторов', companies: unescapedCompanies, user: username });
+		const escapedCompanies = await Companies.find().select({ shortName: 1, slug: 1, isApproved: 1 })
+		res.render('companiesList', { title: 'Список операторов', companies: escapedCompanies, user: username, unescapeString: unescapeString });
 	}
 	else {
 		res.redirect('/login')
@@ -22,8 +20,7 @@ router.get('/', async function (req, res) {
 
 // Установим алиас для каждой компании
 router.param('slug', async function (req, res, next, slug) {
-	let escapedResults = await Companies.findOne({ slug: slug })
-	req.company = unescapeOne(escapedResults)
+	req.company = await Companies.findOne({ slug: slug })
 	next()
 })
 
@@ -40,7 +37,8 @@ router.route('/:slug')
 						msg: ''
 					},
 					errors: {},
-					user: username
+					user: username,
+					unescapeString: unescapeString
 				})
 			}
 		})
@@ -81,7 +79,8 @@ router.route('/:slug')
 							isSuccess: false,
 							msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
 						},
-						user: username
+						user: username,
+						unescapeString: unescapeString
 					})
 				}
 				else {
