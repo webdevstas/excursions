@@ -19,7 +19,7 @@ const excursionsSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Tickets'
     }],
-    informationPhone: String,
+    informationPhone: Number,
     createdAt: String,
     updatedAt: String,
 }, {

@@ -10,6 +10,7 @@ block content
                 each err in Object.values(errors)
                     - errPoints.push(err.param)
                         li= err.msg
+    .error-points.hidden= errPoints
     form(method="post" action="#{action}").register-form.with-shadow
         div.input-block
             label(for="fullName") Полное наименование компании:
@@ -34,10 +35,10 @@ block content
             textarea(type="text" name="head").form-control= data.head ? unescapeString(data.head) : ''
         div.input-block
             label(for="phoneNumber") Номер телефона организации:
-            input(type="tel" name="phoneNumber" value="#{data.phoneNumber ? data.phoneNumber : ''}").form-control
+            input(type="number" name="phoneNumber" value="#{data.phoneNumber ? data.phoneNumber : ''}").form-control
         div.input-block
             label(for="faxNumber") Факс:
-            input(type="tel" name="faxNumber" value="#{data.faxNumber ? data.faxNumber : ''}").form-control
+            input(type="number" name="faxNumber" value="#{data.faxNumber ? data.faxNumber : ''}").form-control
         div.input-block
             label(for="email") Электронная почта: *
             input(type="email" name="email" value="#{data.email ? data.email : ''}").form-control
@@ -68,19 +69,4 @@ block content
                 button(type="submit").btn.btn-light Сохранить
                 button(type="reset" title="Работает для вновь введённых данных").btn.btn-light Очистить
                 button(type="button").cancelBtn.btn.btn-light Отмена
-    script.
-        const inputs = document.querySelectorAll('input')
-        let points = '#{errPoints}'
-        const cancelBtn = document.querySelectorAll('.cancelBtn')
-
-        inputs.forEach((input) => {
-            if (points.includes(input.name)) {
-                input.classList.add('error')
-            }
-        })
-
-        cancelBtn.forEach( (btn) => {
-            btn.addEventListener('click', () => {
-                window.location.replace('/companies-list')
-            })
-        })
+        script(src="/javascripts/companiesForm.js") 

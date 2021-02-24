@@ -31,6 +31,10 @@ header {
     position: relative;
 }
 
+.hidden {
+    display: none;
+}
+
 .top-header {
     display: grid;
     background-color: #2a3b4c;

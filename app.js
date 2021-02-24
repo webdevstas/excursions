@@ -36,6 +36,20 @@ db.on('error', console.error.bind(console, 'CONNECTION ERROR'))
 
 const app = express()
 
+// Helmet
+app.use(helmet())
+app.use(
+    helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+        imgSrc: ["'self'", 'data:']
+      },
+    })
+  );
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'jade')

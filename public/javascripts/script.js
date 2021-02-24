@@ -4,6 +4,25 @@ const shadowBg = document.querySelector('#shadow-bg')
 
 
 window.onload = function () {
+
+    /**
+     * Выделяем текущую страницу в меню
+     */
+    const menuItems = document.querySelectorAll('.menu-item')
+    const title = document.querySelector('h1').innerText
+
+    makeItemSelected(menuItems, title)
+
+    function makeItemSelected(itemsArr, name) {
+        itemsArr.forEach(item => {
+            if (name === item.innerText) {
+                item.classList.add('menu-item_active')
+            }
+        })
+    }
+    /**
+     * Оперируем классами меню
+     */
     if (document.documentElement.clientWidth < 993) {
         sideMenu.classList.add('side')
     }
@@ -19,7 +38,9 @@ window.onload = function () {
             })
         }
     })
-
+    /**
+     * Анимируем кнопку меню
+     */
     openBtn.addEventListener('click', function () {
         gsap.to(openBtn, {
             x: 1000,
@@ -36,7 +57,9 @@ window.onload = function () {
             delay: 0.2
         })
     })
-
+    /**
+     * Анимируем подложку контента
+     */
     shadowBg.addEventListener('click', function () {
         gsap.to(openBtn, {
             x: 0,

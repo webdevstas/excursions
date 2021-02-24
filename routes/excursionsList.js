@@ -120,7 +120,7 @@ router.route('/:slug')
         body('description').trim().escape().notEmpty().withMessage('Описание обязательно к заполнению'),
         body('isApproved').toBoolean(),
         // body('tickets').trim().escape().notEmpty().withMessage('Добавьте по крайней мере один билет'),
-        body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению'),
+        body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению').isNumeric().withMessage('Введите числовое значение номера телефона'),
 
         function (req, res) {
             let username = req.user ? req.user.username : 'guest'

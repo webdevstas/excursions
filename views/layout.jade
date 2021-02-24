@@ -29,16 +29,4 @@ html
         #shadow-bg
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js")
         script(src="/javascripts/script.js")
-        script.
-            const menuItems = document.querySelectorAll('.menu-item')
-            const title = '#{title}'
-
-            makeItemSelected(menuItems, title)
             
-            function makeItemSelected(itemsArr, name) {
-                itemsArr.forEach(item => {
-                    if (name === item.innerText) {
-                        item.classList.add('menu-item_active')
-                    }
-                })
-            }
