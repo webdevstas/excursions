@@ -11,7 +11,7 @@ html
             header
                 .top-header
                     img(src="/images/logo.png" alt="" height='40').top-header__logo
-                    h1= title
+                    h1= unescapeString ? unescapeString(title) : title
                 img(src="/images/menu.svg" alt="")#open-menu
                 menu
                     .top-menu
