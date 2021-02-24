@@ -44,7 +44,6 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"],
         objectSrc: ["'none'"],
-        upgradeInsecureRequests: [],
         imgSrc: ["'self'", 'data:']
       },
     })
@@ -59,7 +58,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
-app.disable('x-powered-by')
 
 // session
 const sessionStore = new MongoStore({
