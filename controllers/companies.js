@@ -2,6 +2,11 @@ const { Companies } = require('../models/companies')
 const { slugify } = require('transliteration')
 const { unescapeString } = require('../lib/helpers')
 
+/**
+ * Сохраняет в БД нового оператора 
+ * @param {Object} req Объект запроса
+ * @param {Object} res Объект ответа
+ */
 async function addCompany(req, res) {
     let company = req.body
     await Companies.countDocuments({ shortName: company.shortName }, (err, count) => {
@@ -22,6 +27,11 @@ async function addCompany(req, res) {
     })
 }
 
+/**
+ * Обновляет и сохраняет данные оператора 
+ * @param {Object} req Объект запроса
+ * @param {Object} res Объект ответа
+ */
 async function updateCompany(req, res) {
     const company = req.body
     
@@ -38,6 +48,11 @@ async function updateCompany(req, res) {
     })
 }
 
+/**
+ * Удаляет оператора оператора 
+ * @param {Object} req Объект запроса
+ * @param {Object} res Объект ответа
+ */
 async function deleteCompany(req, res) {
     if (req.body.delete) {
         await Companies.deleteOne({ slug: req.company.slug }, function (err, result) {
@@ -49,6 +64,11 @@ async function deleteCompany(req, res) {
     }
 }
 
+/**
+ * Подсчитывает количество операторов
+ * @param {Object} req Объект запроса
+ * @param {Object} res Объект ответа
+ */
 async function countCompanies() {
     let countAll = 0,
         countApproved = 0

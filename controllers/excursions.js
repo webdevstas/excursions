@@ -6,7 +6,11 @@ const { Tickets } = require('../models/tickets')
 const { Companies } = require('../models/companies')
 const { unescapeOne, unescapeMany, unescapeString } = require('../lib/helpers')
 
-
+/**
+ * Сохраняет в БД новую экскурсию 
+ * @param {Object} req Объект запроса
+ * @param {Object} res Объект ответа
+ */
 async function addExcursion(req, res) {
     let company = await Companies.findOne({ _id: req.body.company }).select({ _id: 1 })
     // Сохраняем данные из формы
@@ -65,6 +69,11 @@ async function addExcursion(req, res) {
     })
 }
 
+/**
+ * Сохраняет данные экскурсии 
+ * @param {Object} req Объект запроса
+ * @param {Object} res Объект ответа
+ */
 async function updateExcursion(req, res) {
     // Сохраняем данные из формы
     let excursion = req.body
@@ -125,7 +134,11 @@ async function updateExcursion(req, res) {
     })
 }
 
-// Удаление экскурсии
+/**
+ * Удаляет экскурсию 
+ * @param {Object} req Объект запроса
+ * @param {Object} res Объект ответа
+ */
 async function deleteExcursion(req, res) {
     Excursions.deleteOne({ _id: req.excursion._id }, function (err, result) {
         if (err) throw err
@@ -136,7 +149,11 @@ async function deleteExcursion(req, res) {
     })
 }
 
-// Удаление изображения
+/**
+ * Удаляет изображение определённой экскурсии 
+ * @param {Number} index Порядковый номер картинки в БД
+ * @param {String} slug Алиас экскурсии
+ */
 async function deletePicture(index, slug) {
 
     let pictFromBase = await Excursions.findOne({ slug: slug }).select({ picturesURLs: 1 })
@@ -157,6 +174,10 @@ async function deletePicture(index, slug) {
     return { success: true, error: {} }
 }
 
+/**
+ * Удаляет изображение определённой экскурсии 
+ * @param {Number} id Id билета
+ */
 async function deleteTicket(id) {
     await Tickets.deleteOne({ _id: id }, (err) => {
         if (err) throw err
@@ -165,6 +186,11 @@ async function deleteTicket(id) {
     return { success: true, error: {} }
 }
 
+/**
+ * Подсчитывает количество экскурсий
+ * @param {Object} req Объект запроса
+ * @param {Object} res Объект ответа
+ */
 async function countExcursions() {
     let countAll = 0,
         countApproved = 0,
