@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const { body, validationResult, check } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 const { addExcursion } = require('../controllers/excursions')
 const { Companies } = require('../models/companies')
-const { Tickets } = require('../models/tickets')
 const multer = require('multer')
-const mongoose = require('mongoose')
+const { unescapeString } = require('../lib/helpers')
+
+/**
+ * Создаём хранилище для загруженных изображений
+ */
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './public/images/upload')
@@ -15,12 +18,14 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage, limits: { fileSize: 5242880 } })
-const { unescapeString } = require('../lib/helpers')
 
 let companies = {}
 
+/**
+ * Рендерим форму, если юзер авторизован, иначе редирект на страницу входа
+ */
 router.get('/', async function (req, res) {
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated()) { 
         companies = await Companies.find().select({ shortName: 1, _id: 1 })
         let username = req.user ? req.user.username : 'guest'
         res.render('excursionsForm', {
@@ -41,8 +46,15 @@ router.get('/', async function (req, res) {
     }
 })
 
+/**
+ * POST роут для получения данных формы
+ */
 router.post('/',
-    upload.array('pictures'),
+    upload.array('pictures'), // Загружаем изображения
+
+    /**
+     * Валидация входных данных
+     */
     body('title').trim().escape().notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
     body('description').trim().escape().notEmpty().withMessage('Описание экскурсиии обязательно к заполнению'),
     body('isApproved').toBoolean(),
@@ -58,6 +70,10 @@ router.post('/',
             req.files.forEach(picture => {
                 arrPictures.push(picture.filename)
             })
+
+            /**
+             * Если есть ошибки валидации - возвращаем форму со списком ошибок
+             */
             if (!errors.isEmpty()) {
                 res.render('excursionsForm', {
                     action: '/new-excursion',
@@ -73,7 +89,12 @@ router.post('/',
                 return
             }
             else {
-                // addExcursion(req, res)
+                /**
+                 * Иначе сохраняем экскурсию и редирект на список
+                 */
+                addExcursion(req, res).catch(err => {
+                    console.log('Add excursion error: ', err);
+                })
                 res.redirect('/excursions-list')
             }
             return

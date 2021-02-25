@@ -5,7 +5,9 @@ const { addCompany } = require('../controllers/companies')
 const { unescapeString } = require('../lib/helpers')
 
 router.get('/', function (req, res) {
-
+    /**
+     * Если юзер авторизован - отдаём форму добавления компании
+     */
     if (req.isAuthenticated()) {
         let username = req.user ? req.user.username : 'guest'
         res.render('companiesForm', {
@@ -22,12 +24,17 @@ router.get('/', function (req, res) {
         })
     }
     else {
+        /**
+         * Иначе редирект на форму авторизации
+         */
         res.redirect('/login')
     }
 })
 
 router.post('/',
-
+    /**
+     * Валидации входных данных
+     */
     body('fullName').trim().escape(),
     body('shortName').trim().escape().notEmpty().withMessage('Краткое наименование компании обязательно к заполнению'),
     body('formOfOwnership').trim().escape(),
@@ -49,6 +56,10 @@ router.post('/',
     function (req, res) {
         const errors = validationResult(req)
         let username = req.user ? req.user.username : 'guest'
+
+        /**
+         * Если есть ошибки валидации - рендерим форму с указанием ошибок
+         */
         if (!errors.isEmpty()) {
             res.render('companiesForm', {
                 action: '/register-company',
@@ -65,10 +76,13 @@ router.post('/',
             return
         }
         else {
-            // addCompany(req, res)
-
+            /**
+             *  Иначе сохраняем компанию и редирект на список
+             */
+            addCompany(req, res).catch(err => {
+                console.log('Add company error: ', err);
+            })
             res.redirect('/companies-list')
-
         }
         return
     })

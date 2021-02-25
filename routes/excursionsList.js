@@ -19,7 +19,9 @@ const { unescapeString } = require('../lib/helpers')
 
 let companies = {}
 
-// Ответ на запрос списка экскурсий
+/**
+ * GET роут для вывода списка экскурсий с проверкой авторизации пользователя
+ */
 router.get('/',
     async function (req, res) {
         let username = req.user ? req.user.username : 'guest'
@@ -28,12 +30,12 @@ router.get('/',
             let excursionsList = await Excursions.find().select({ title: 1 }),
                 filteredExcursionsList = [],
                 excursions = await Excursions.find().select({ title: 1, slug: 1, company: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate('company')
-                excursionsList.forEach(item => {
+            excursionsList.forEach(item => {
                 if (!filteredExcursionsList.includes(item.title, 0)) {
                     filteredExcursionsList.push(item.title)
                 }
             })
-            // Вывод
+            // Рендер списка
             res.render('excursionsList', {
                 title: 'Список экскурсий',
                 data: { companies: companies, excursionsFilterList: filteredExcursionsList, excursions: excursions },
@@ -46,12 +48,16 @@ router.get('/',
         }
     });
 
-// Фильтры
+/**
+ * Роут для фильтрации по оператору и/или названию экскурсии.
+ * Запрос с фронта приходит асинхронно методом fetch()
+ * В ответ отправляем json с данными
+ */
 router.get('/filter', async function (req, res) {
     if (req.isAuthenticated()) {
         let excursions = {}
         if (req.query.companyFilter || req.query.excursionFilter) {
-            let match = {}
+            let match = {} // В этот объект собираем строки из полей фильтров
             if (req.query.companyFilter) {
                 match.company = req.query.companyFilter
             }
@@ -68,20 +74,17 @@ router.get('/filter', async function (req, res) {
     }
 })
 
-// Установим алиас для каждой экскурсии
+/** 
+* Получаем алиас экскурсии, ищем в БД и сохраняем результат в объект запроса req
+*/
 router.param('slug', async function (req, res, next, slug) {
     req.excursion = await Excursions.findOne({ slug: slug }).populate('tickets').populate('company')
-    // Проверка наличия билетов
-    if (req.excursion.tickets.length > 0) {
-        req.excursion.hasTickets = '1'
-    }
-    else {
-        req.excursion.hasTickets = ''
-    }
     next()
 })
 
-// GET роут для отдачи формы редактирования экскурсии
+/**
+ * GET роут для вывода формы редактирования экскурсии
+ */
 router.route('/:slug')
     .get(async function (req, res) {
         let username = req.user ? req.user.username : 'guest'
@@ -113,13 +116,14 @@ router.route('/:slug')
         }
     })
 
-// POST роут для получения обновлённых данных с валидаторами
+/**
+ * Получаем отредактированные данные, валидируем, сохраняем
+ */
 router.route('/:slug')
     .post(upload.array('pictures'),
         body('title').trim().escape().notEmpty().withMessage('Название экскурсии обязательно к заполнению'),
         body('description').trim().escape().notEmpty().withMessage('Описание обязательно к заполнению'),
         body('isApproved').toBoolean(),
-        // body('tickets').trim().escape().notEmpty().withMessage('Добавьте по крайней мере один билет'),
         body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению').isNumeric().withMessage('Введите числовое значение номера телефона'),
 
         function (req, res) {
@@ -141,12 +145,9 @@ router.route('/:slug')
                     })
                 }
                 else {
-                    try {
-                        updateExcursion(req, res)
-                    }
-                    catch (err) {
-                        console.error(err)
-                    }
+                    updateExcursion(req, res).catch(err => {
+                        console.log('Update excursion error: ', err);
+                    })
                     res.redirect('/excursions-list')
                 }
             }
@@ -155,17 +156,16 @@ router.route('/:slug')
             }
         })
 
-// Удаление экскурсии
+/**
+ * Удаление экскурсии
+ */
 router.route('/:slug/delete')
     .post(function (req, res) {
 
         if (req.isAuthenticated()) {
-            try {
-                deleteExcursion(req, res)
-            }
-            catch (err) {
-                console.error(err)
-            }
+            deleteExcursion(req, res).catch(err => {
+                console.log('Delete excursion error: ', err);
+            })
         }
         else {
             res.redirect('/login')
@@ -182,7 +182,9 @@ router.route('/:slug')
             // Удаления изображения
             if (req.body.action === 'deleteImg') {
                 try {
-                    result = await deletePicture(req.body.index, req.excursion.slug)
+                    result = await deletePicture(req.body.index, req.excursion.slug).catch(err => {
+                        console.log('Delete picture error: ', err);
+                    })
                 }
                 catch (err) {
                     console.error(err)
@@ -195,9 +197,13 @@ router.route('/:slug')
                     res.status(200).json({ success: false, error: result.error })
                 }
             }
+
+            // Удаление билета
             if (req.body.action === 'deleteTicket') {
                 try {
-                    result = await deleteTicket(req.body.id)
+                    result = await deleteTicket(req.body.id).catch(err => {
+                        console.log('Delete error: ', err);
+                    })
                 }
                 catch (err) {
                     console.error(err)

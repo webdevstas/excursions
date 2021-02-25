@@ -8,7 +8,7 @@ const { unescapeOne, unescapeMany, unescapeString } = require('../lib/helpers')
 
 
 async function addExcursion(req, res) {
-    let company = await Companies.findOne({_id: req.body.company}).select({_id: 1})
+    let company = await Companies.findOne({ _id: req.body.company }).select({ _id: 1 })
     // Сохраняем данные из формы
     let excursion = {
         company: company._id,
@@ -77,7 +77,20 @@ async function updateExcursion(req, res) {
 
     if (req.excursion.title !== excursion.title) {
         excursion.slug = slugify(unescapeString(excursion.title))
-    }
+
+        // Проверяем дубли алиасов
+        Excursions.countDocuments({ title: excursion.title }, (err, count) => {
+
+            if (err) throw err
+
+            if (count > 0) {
+                excursion.slug = slugify(unescapeString(excursion.title) + '-' + (count + 1))
+            }
+            else {
+                excursion.slug = slugify(unescapeString(excursion.title))
+            }
+        })
+    } 
 
     // Добавляем загруженные изображения к существующим в базе
     let arrPictures = []
@@ -148,6 +161,7 @@ async function deleteTicket(id) {
     await Tickets.deleteOne({ _id: id }, (err) => {
         if (err) throw err
     })
+    
     return { success: true, error: {} }
 }
 

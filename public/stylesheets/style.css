@@ -601,7 +601,7 @@ h2.success, h2.error {
 
 .counts {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
 }
 

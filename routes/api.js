@@ -12,16 +12,16 @@ const cors = require('cors')
  * Authentication
  */
 router.post('/auth', cors(), (req, res) => {
-    Users.findOne({ username: req.body.username })
+    Users.findOne({ username: req.body.username }) // Ищем юзера в БД
         .then(user => {
             if (!user) {
                 res.status(401).json({ success: false, msg: 'Пользователь не найден' })
             }
 
-            const isValid = utils.validPassword(req.body.password, user.hash, user.salt)
+            const isValid = utils.validPassword(req.body.password, user.hash, user.salt) // Проверяем пароль
 
             if (isValid) {
-                const tokenObject = utils.issueJWT(user)
+                const tokenObject = utils.issueJWT(user) // Генерируем токен
 
                 res.status(200).json({ success: true, token: tokenObject.token, expires: tokenObject.expires })
             }
@@ -38,30 +38,30 @@ router.post('/auth', cors(), (req, res) => {
 router.get('/companies', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
     let companies = []
     if (req.query.status === 'approved') {
-        companies = await Companies.find({ isApproved: true }).select('-__v')
+        companies = await Companies.find({ isApproved: true }).select('-__v') // Запрос одобренных операторов
     }
     else if (req.query.status === 'rejected') {
-        companies = await Companies.find({ isApproved: false }).select('-__v')
+        companies = await Companies.find({ isApproved: false }).select('-__v') // Запрос неодобренных операторов
     }
     else if (req.query.updatedAt) {
         let query = req.query.updatedAt
-        companies = await Companies.find({ updatedAt: { $regex: query, $options: 'i' } })
+        companies = await Companies.find({ updatedAt: { $regex: query, $options: 'i' } }) // Фильтр по дате обновления
         res.json(companies)
     }
     else {
-        companies = await Companies.find().select('-__v')
+        companies = await Companies.find().select('-__v') // Запрос всех операторов
         res.json(companies)
     }
 })
 
 
 router.param('id', async function (req, res, next, id) {
-    req.company = await Companies.findOne({ _id: id }).select('-__v')
+    req.company = await Companies.findOne({ _id: id }).select('-__v') // Запрос одного опертора по id
     next()
 })
 
 router.get('/companies/:id', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
-    res.json(req.company)
+    res.json(req.company) // Отдаём результат
 })
 
 
@@ -71,31 +71,31 @@ router.get('/companies/:id', cors(), passport.authenticate('jwt', { session: fal
 router.get('/excursions', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
     let excursions = []
     if (req.query.company) {
-        excursions = await Excursions.find({ company: req.query.company }).populate('tickets').select('-__v')
+        excursions = await Excursions.find({ company: req.query.company }).populate('tickets').select('-__v') // Фильтр по оператору
     }
     else if (req.query.status === 'approved') {
-        excursions = await Excursions.find({ isApproved: true }).populate('tickets').select('-__v')
+        excursions = await Excursions.find({ isApproved: true }).populate('tickets').select('-__v') // Запрос одобренных экскурсий
     }
     else if (req.query.status === 'rejected') {
-        excursions = await Excursions.find({ isApproved: false }).populate('tickets').select('-__v')
+        excursions = await Excursions.find({ isApproved: false }).populate('tickets').select('-__v') // Запрос неодобренных экскурсий
     }
     else if (req.query.updatedAt) {
         let query = req.query.updatedAt
-        excursions = await Excursions.find({ updatedAt: { $regex: query, $options: 'i' } })
+        excursions = await Excursions.find({ updatedAt: { $regex: query, $options: 'i' } }) // Фильтр по дате обновления
     }
     else {
-        excursions = await Excursions.find().populate('tickets').select('-__v')
+        excursions = await Excursions.find().populate('tickets').select('-__v') // Запрос всех экскурсий
     }
     res.json(excursions)
 })
 
 router.param('id', async function (req, res, next, id) {
-    req.excursion = await Excursions.findOne({ _id: id }).populate('tickets').select('-__v')
+    req.excursion = await Excursions.findOne({ _id: id }).populate('tickets').select('-__v') // Запрос одной экскурсии по id
     next()
 })
 
 router.get('/excursions/:id', cors(), passport.authenticate('jwt', { session: false }), async (req, res) => {
-    res.json(req.excursion)
+    res.json(req.excursion) // Отдаём результат
 })
 
 
