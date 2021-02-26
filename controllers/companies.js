@@ -49,7 +49,7 @@ async function updateCompany(req, res) {
 }
 
 /**
- * Удаляет оператора оператора 
+ * Удаляет оператора 
  * @param {Object} req Объект запроса
  * @param {Object} res Объект ответа
  */
