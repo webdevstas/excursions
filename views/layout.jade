@@ -12,13 +12,24 @@ html(lang="ru")
                 .top-header
                     img(src="/images/logo.png" alt="" height='40').top-header__logo
                     h1= unescapeString ? unescapeString(title) : title
+                    #user-menu
+                        span.user-plank= 'Пользователь: ' + user
+                        ul#dropdown-menu
+                            if user === 'guest'
+                                li
+                                    a(href="/login") Войти
+                            else
+                                li 
+                                    a(href="") Список пользователей
+                                li
+                                    a(href="/logout") Выйти
                 img(src="/images/menu.svg" alt="")#open-menu
                 menu
                     .top-menu
                         a(href="/").menu-item Главная
                         a(href="/companies-list").menu-item Список операторов
                         a(href="/excursions-list").menu-item Список экскурсий
-                    .bottom-menu
+                    .bottom-menu 
                         span.menu__user= 'Пользователь: ' + user
                         if user === 'guest'
                             a(href="/login").menu-item Войти

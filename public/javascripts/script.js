@@ -92,7 +92,21 @@ window.onload = function () {
         })
     })
 
+    /**
+     * Dropdown menu
+     */
 
+    const plank = document.querySelector('#user-menu'),
+        menu = document.querySelector('#dropdown-menu')
+
+
+    plank.addEventListener('mouseover', () => {
+        menu.style.display = 'flex'
+    })
+
+    menu.addEventListener('mouseout', () => {
+        menu.style.display = 'none'
+    })
 }
 
 
