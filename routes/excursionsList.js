@@ -64,11 +64,11 @@ router.get('/filter', async function (req, res) {
             if (req.query.excursionFilter) {
                 match.title = req.query.excursionFilter
             }
-            excursions = await Excursions.find(match).select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate('company')
+            excursions = await Excursions.find(match).select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate({path: 'company', select: {_id: 1, shortName: 1}})
             res.status(200).json(excursions)
         }
         else {
-            excursions = await Excursions.find().select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate('company')
+            excursions = await Excursions.find().select({ title: 1, company: 1, slug: 1, isApproved: 1, isPublished: 1 }).sort({ title: 'asc' }).populate({path: 'company', select: {_id: 1, shortName: 1}})
             res.status(200).json(excursions)
         }
     }
