@@ -17,11 +17,11 @@ const excursionsListRouter = require('./routes/excursionsList')
 const loginRouter = require('./routes/login')
 const logoutRouter = require('./routes/logout')
 const apiRouter = require('./routes/api')
+const registerRouter = require('./routes/register')
 
 const mongoose = require('mongoose')
 const passport = require('passport')
-const { Users } = require('./models/users')
-const { genPassword } = require('./lib/passportUtils')
+
 
 if (process.env.NODE_ENV == 'production') {
     mongoose.connect(process.env.PROD_DB_STRING, { useNewUrlParser: true, useUnifiedTopology: true, user: process.env.PROD_DB_USER, pass: process.env.PROD_DB_PWD }) //production
@@ -91,6 +91,7 @@ app.use('/new-excursion', excurionsFormRouter)
 app.use('/companies-list', companiesListRouter)
 app.use('/excursions-list', excursionsListRouter)
 app.use('/api', apiRouter)
+app.use('/register', registerRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

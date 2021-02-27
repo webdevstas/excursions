@@ -1,0 +1,26 @@
+extends layout
+block content
+    if Object.values(errors) != 0
+        .errors-block
+            ul
+                - var errPoints = []
+                each err in Object.values(errors)
+                    - errPoints.push(err.param)
+                        li= err.msg
+    .error-points.hidden= errPoints
+    form(action="/register", method="post").register-form.with-shadow.user-register__form
+        .input-block
+            label(for="email") Ведите ваш e-mail:
+            input.form-control(name="email" type="email" value="#{data.body.email ? data.body.email : ''}")
+        .input-block 
+            label(for="username") Введите имя пользователя:
+            input.form-control(type="text" name="username" value="#{data.body.username ? data.body.username : ''}")
+        .input-block    
+            label(for="pass") Введите пароль:
+            input.form-control(type="password" name="pass")
+        .input-block    
+            label(for="confirmPass") Повторите пароль:
+            input.form-control(type="password" name="confirmPass")
+        .input-block
+            button.btn.btn-light(type="submit") Зарегистрировать
+            button.btn.btn-light(type="reset") Сбросить

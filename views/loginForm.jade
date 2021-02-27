@@ -3,6 +3,6 @@ block content
     form(action="/login", method="post").login-form
         div.login-form__title= title
         div.error= msg
-        input(type="text" name="username" placeholder="Имя пользователя").form-control
+        input(type="email" name="email" placeholder="Email").form-control
         input(type="password" name="password" placeholder="Пароль").form-control
         button(type="submit").btn.btn-primary Войти
