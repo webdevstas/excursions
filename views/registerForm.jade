@@ -8,7 +8,7 @@ block content
                     - errPoints.push(err.param)
                         li= err.msg
     .error-points.hidden= errPoints
-    form(action="/register", method="post").register-form.with-shadow.user-register__form
+    form(action="/users/register", method="post").register-form.with-shadow.user-register__form
         .input-block
             label(for="email") Ведите ваш e-mail:
             input.form-control(name="email" type="email" value="#{data.body.email ? data.body.email : ''}")
@@ -22,5 +22,8 @@ block content
             label(for="confirmPass") Повторите пароль:
             input.form-control(type="password" name="confirmPass")
         .input-block
-            button.btn.btn-light(type="submit") Зарегистрировать
-            button.btn.btn-light(type="reset") Сбросить
+            div
+            .btn-group
+                button.btn.btn-light(type="submit") Сохранить
+                button.btn.btn-light(type="reset") Сбросить
+    script(src="/javascripts/registerForm.js") 

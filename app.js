@@ -17,7 +17,7 @@ const excursionsListRouter = require('./routes/excursionsList')
 const loginRouter = require('./routes/login')
 const logoutRouter = require('./routes/logout')
 const apiRouter = require('./routes/api')
-const registerRouter = require('./routes/register')
+const usersRouter = require('./routes/users')
 
 const mongoose = require('mongoose')
 const passport = require('passport')
@@ -91,7 +91,7 @@ app.use('/new-excursion', excurionsFormRouter)
 app.use('/companies-list', companiesListRouter)
 app.use('/excursions-list', excursionsListRouter)
 app.use('/api', apiRouter)
-app.use('/register', registerRouter)
+app.use('/users', usersRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

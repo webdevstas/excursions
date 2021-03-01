@@ -215,7 +215,8 @@ menu {
 
 #dropdown-menu {
     position: absolute;
-    top: 50px;
+    top: 0;
+    left: 0;
     margin: 0;
     background-color: #2a3b4c;
     list-style: none;
@@ -224,6 +225,11 @@ menu {
     flex-direction: column;
     border-radius: 0.25rem;
     width: 90%;
+    border: 1px solid var(--main-bg-color);
+}
+
+#user-menu:hover #dropdown-menu {
+    display: flex;
 }
 
 #dropdown-menu li{
@@ -239,10 +245,19 @@ menu {
 .error {
     border: red 1px solid !important;
     color: red;
+    margin-bottom: 10px;
+    background-color: var(--main-bg-color);
+    padding: 5px;
+    border-radius: 0.25rem;
 }
 
 .success {
+    border: green 1px solid !important;
     color: green;
+    margin-bottom: 10px;
+    background-color: var(--main-bg-color);
+    padding: 5px;
+    border-radius: 0.25rem;
 }
 
 h2.success, h2.error {
@@ -739,6 +754,37 @@ h2.success, h2.error {
     #shadow-bg {
         backdrop-filter: blur(10px)
     }
+}
+
+.users-block {
+    background-color: var(--main-bg-color);
+    border-radius: 0.25rem;
+    padding: 20px;
+    width: 30%;
+    margin-top: 20px;
+}
+
+.users-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.users-list__item {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.25rem;
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.users-list__item:last-child {
+    margin: 0;
 }
 
 @media (max-width: 1024px) {

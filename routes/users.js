@@ -2,25 +2,50 @@ const express = require('express')
 const router = express.Router()
 const { body, validationResult } = require('express-validator')
 const { genPassword } = require('../lib/passportUtils')
-const { checkUserExists, addUser } = require('../controllers/users')
+const { checkUserExists, addUser, getUsers, deleteUser } = require('../controllers/users')
 
-router.route('/').get((req, res) => {
+/**
+ * Список пользователей
+ */
+router.get('/', async (req, res) => {
+    if (req.isAuthenticated()) {
+        let username = req.user ? req.user.username : 'guest',
+            allUsers = await getUsers()
+
+        res.render('users', {
+            user: username,
+            title: 'Список пользователей',
+            data: { users: allUsers }
+        })
+    }
+    else {
+        res.redirect('/login')
+    }
+})
+
+/**
+ * Форма регистрации
+ */
+router.route('/register').get((req, res) => {
     if (req.isAuthenticated()) {
         let username = req.user ? req.user.username : 'guest'
         res.render('registerForm', {
             errors: {},
             data: { body: {} },
             user: username,
+            title: 'Регистрация пользователя'
         })
     }
     else {
-        // res.redirect('/login')
-        res.end(req)
+        res.redirect('/login')
     }
 })
 
-router.route('/').post(
-    body('email').trim().escape().notEmpty().withMessage('Электронная почта обязательны для заполнения').isEmail().withMessage('Введите корректный email'),
+/**
+ * Получение данных из формы и сохранение нового пользователя
+ */
+router.route('/register').post(
+    body('email').trim().escape().notEmpty().withMessage('Электронная почта обязательна для заполнения').isEmail().withMessage('Введите корректный email'),
     body('pass').trim().notEmpty().withMessage('Пароль обязателен к заполнению').isLength({ min: 6, max: 12 }).withMessage('Введите пароль длиной от 6 до 12 символов'),
     (req, res, next) => {
         if (req.isAuthenticated()) {
@@ -31,6 +56,7 @@ router.route('/').post(
                     errors: errors.array(),
                     data: { body: req.body },
                     user: username,
+                    title: 'Регистрация пользователя'
                 })
             }
             else {
@@ -48,6 +74,7 @@ router.route('/').post(
                                 errors: [error],
                                 data: { body: {} },
                                 user: username,
+                                title: 'Регистрация пользователя'
                             })
                         }
                         else {
@@ -58,8 +85,10 @@ router.route('/').post(
                                 salt: passData.salt,
                                 hash: passData.hash
                             }
-                            addUser(user)
-                            res.redirect('/')
+                            addUser(user).catch(err => {
+                                console.log('Ошибка сохранения нового пользователя', err);
+                            })
+                            res.redirect('/users')
                         }
                     })
 
@@ -70,5 +99,19 @@ router.route('/').post(
         }
     })
 
+/**
+ * Удаление пользователя
+ */
+router.delete('/', (req, res) => {
+    if (req.isAuthenticated()) {
+        deleteUser(req.body.user)
+        .then(() => {
+            res.json({ success: true, msg: 'Пользователь успешно удалён' })
+        })
+        .catch(err => {
+            res.json({ success: false, msg: err.message })
+        })
+    }
+})
 
 module.exports = router
