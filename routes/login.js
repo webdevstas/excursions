@@ -5,7 +5,7 @@ const passport = require('passport')
 router.route('/')
     .get(function (req, res) {
         let message = req.flash().error;
-        res.render('loginForm', { username: '', password: '', title: 'Авторизация', msg: message})
+        res.render('loginForm', { email: '', password: '', title: 'Авторизация', msg: message})
     })
 
 router.route('/')

@@ -77,22 +77,20 @@ window.onload = function () {
     /**
      * Функционал подсветки соседнего с input lable для форм
      */
-    const inputBlocks = document.querySelectorAll('.input-block')
+    // const inputBlocks = document.querySelectorAll('.input-block')
 
-    inputBlocks.forEach(item => {
-        let input = item.lastChild
-        let label = item.firstChild
+    // inputBlocks.forEach(item => {
+    //     let input = item.lastChild
+    //     let label = item.firstChild
 
-        input.addEventListener('focusin', e => {
-            label.classList.add('focused')
-        })
+    //     input.addEventListener('focusin', e => {
+    //         label.classList.add('focused')
+    //     })
 
-        input.addEventListener('focusout', e => {
-            label.classList.remove('focused')
-        })
-    })
-
-
+    //     input.addEventListener('focusout', e => {
+    //         label.classList.remove('focused')
+    //     })
+    // })
 }
 
 
