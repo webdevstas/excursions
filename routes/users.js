@@ -8,7 +8,7 @@ const { checkUserExists, addUser, getUsers, deleteUser } = require('../controlle
  * Список пользователей
  */
 router.get('/', async (req, res) => {
-    // if (req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
         let username = req.user ? req.user.username : 'guest',
             allUsers = await getUsers()
 
@@ -17,17 +17,17 @@ router.get('/', async (req, res) => {
             title: 'Список пользователей',
             data: { users: allUsers }
         })
-    // }
-    // else {
-    //     res.redirect('/login')
-    // }
+    }
+    else {
+        res.redirect('/login')
+    }
 })
 
 /**
  * Форма регистрации
  */
 router.route('/register').get((req, res) => {
-    // if (req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
         let username = req.user ? req.user.username : 'guest'
         res.render('registerForm', {
             errors: {},
@@ -35,10 +35,10 @@ router.route('/register').get((req, res) => {
             user: username,
             title: 'Регистрация пользователя'
         })
-    // }
-    // else {
-    //     res.redirect('/login')
-    // }
+    }
+    else {
+        res.redirect('/login')
+    }
 })
 
 /**
@@ -46,9 +46,9 @@ router.route('/register').get((req, res) => {
  */
 router.route('/register').post(
     body('email').trim().escape().notEmpty().withMessage('Электронная почта обязательна для заполнения').isEmail().withMessage('Введите корректный email'),
-    body('pass').trim().notEmpty().withMessage('Пароль обязателен к заполнению').isLength({ min: 6, max: 12 }).withMessage('Введите пароль длиной от 6 до 12 символов'),
+    body('pass').trim().notEmpty().withMessage('Пароль обязателен к заполнению').isLength({ min: 6, max: 20 }).withMessage('Введите пароль длиной от 6 до 20 символов'),
     (req, res, next) => {
-        // if (req.isAuthenticated()) {
+        if (req.isAuthenticated()) {
             const errors = validationResult(req)
             let username = req.user ? req.user.username : 'guest'
             if (!errors.isEmpty()) {
@@ -93,17 +93,17 @@ router.route('/register').post(
                     })
 
             }
-        // }
-        // else {
-        //     res.redirect('/login')
-        // }
+        }
+        else {
+            res.redirect('/login')
+        }
     })
 
 /**
  * Удаление пользователя
  */
 router.delete('/', (req, res) => {
-    // if (req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
         deleteUser(req.body.user)
         .then(() => {
             res.json({ success: true, msg: 'Пользователь успешно удалён' })
@@ -111,7 +111,7 @@ router.delete('/', (req, res) => {
         .catch(err => {
             res.json({ success: false, msg: err.message })
         })
-    // }
+    }
 })
 
 module.exports = router
