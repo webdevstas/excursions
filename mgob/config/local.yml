@@ -1,0 +1,35 @@
+scheduler:
+  # run every day at 6:00 and 18:00 UTC
+  cron: "0 3,6 */1 * *"
+  # number of backups to keep locally
+  retention: 14
+  # backup operation timeout in minutes
+  timeout: 60
+target:
+  # mongod IP or host name
+  host: "mongodb"
+  # mongodb port
+  port: 27017
+  # mongodb database name, leave blank to backup all databases
+  database: "excursions"
+  # leave blank if auth is not enabled
+  username: "moderator"
+  password: "kd12dsd54Ssd"
+  # add custom params to mongodump (eg. Auth or SSL support), leave blank if not needed
+  params: "--authenticationDatabase excursions"
+# GCloud upload (optional)
+# gcloud:
+#   bucket: "backup"
+#   keyFilePath: /path/to/service-account.json
+
+# SFTP upload (optional)
+# sftp:
+#   host: sftp.company.com
+#   port: 2022
+#   username: user
+#   password: secret
+#   # you can also specify path to a private key and a passphrase
+#   private_key: /etc/ssh/ssh_host_rsa_key
+#   passphrase: secretpassphrase
+#   # dir must exist on the SFTP server
+#   dir: backup
