@@ -761,7 +761,7 @@ h2.success, h2.error {
     background-color: var(--main-bg-color);
     border-radius: 0.25rem;
     padding: 20px;
-    width: 30%;
+    width: 700px;
     margin-top: 20px;
 }
 
@@ -773,8 +773,8 @@ h2.success, h2.error {
 
 .users-list__item {
     height: 40px;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     justify-content: space-between;
     align-items: center;
     border-radius: 0.25rem;
@@ -786,6 +786,13 @@ h2.success, h2.error {
 
 .users-list__item:last-child {
     margin: 0;
+}
+.users-list__item__head {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 1024px) {
@@ -856,6 +863,9 @@ h2.success, h2.error {
     .filter-form__wrap {
         width: auto;
     }
+    .user-plank {
+        display: none;
+    }
 }
 
 @media (max-width: 768px) {
@@ -864,6 +874,9 @@ h2.success, h2.error {
     }
     label.focused {
         background-color: transparent;
+    }
+    .users-block {
+        width: auto;
     }
 }
 
@@ -903,6 +916,14 @@ h2.success, h2.error {
     }
     .status-description {
         width: auto;
+    }
+    .users-list__item {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 10px;
+    }
+    .users-list__item__head {
+        display: none;
     }
 }
 

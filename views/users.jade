@@ -4,6 +4,10 @@ block content
         button.btn.btn-primary.with-shadow Добавить
     .users-block.with-shadow
         ul.users-list
+            li.users-list__item__head
+                span Имя:
+                span Почта:
+                span
             each user in data.users
                 li.users-list__item.with-shadow
                     span= user.username

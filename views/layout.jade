@@ -19,7 +19,7 @@ html(lang="ru")
                                     li
                                         a(href="/login") Войти
                                 else
-                                    li 
+                                    li
                                         a(href="/users") Список пользователей
                                     li
                                         a(href="/logout") Выйти
@@ -29,8 +29,8 @@ html(lang="ru")
                         a(href="/").menu-item Главная
                         a(href="/companies-list").menu-item Список операторов
                         a(href="/excursions-list").menu-item Список экскурсий
-                    .bottom-menu 
-                        span.menu__user= 'Пользователь: ' + user
+                    .bottom-menu
+                        a(href="/users").menu-item Список пользователей
                         if user === 'guest'
                             a(href="/login").menu-item Войти
                         else
@@ -40,4 +40,3 @@ html(lang="ru")
         #shadow-bg
         script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js")
         script(src="/javascripts/script.js")
-            
