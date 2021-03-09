@@ -16,32 +16,30 @@ services:
       - PM2_SECRET_KEY=${PM2_SECRET_KEY}
     ports:
       - 80:3000
-    volumes: 
+    volumes:
       - .:/usr/src/app:z
-    links: 
+    links:
       - mongodb
-    depends_on: 
+    depends_on:
       - mongodb
   mongodb:
     image: mongo:latest
     command: [--auth]
-    ports: 
+    ports:
       - 27017:27017
-    volumes: 
+    volumes:
       - ../mongo/data:/data/db
       - ../dump:/dump
       - ../backup.sh:/usr/src/backup.sh
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
-# volumes: 
-#   data:
   mgob:
     image: stefanprodan/mgob:latest
-    ports: 
+    ports:
       - 8090:8090
-    volumes: 
-      - ../mgob/config:/config
-      - ../mgob/storage:/storage
-      - ../mgob/tmp:/tmp
-      - ../mgob/data:/data
+    volumes:
+      - ./mgob/config:/config
+      - ./mgob/storage:/storage
+      - ./mgob/tmp:/tmp
+      - ./mgob/data:/data
