@@ -84,7 +84,8 @@ router.post('/',
                         isSuccess: false,
                         msg: 'Ошибка сохранения, проверьте правильность заполнения формы'
                     },
-                    user: username
+                    user: username,
+                    unescapeString: unescapeString
                 })
                 return
             }

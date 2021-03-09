@@ -10,9 +10,12 @@ const passport = require('passport'),
     PUB_KEY = fs.readFileSync(pathToKey, 'utf-8')
 
 //local strategy
-passport.use(new LocalStrategy(
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+},
     function (username, password, done) {
-        Users.findOne({ username: username }, function (err, user) {
+        Users.findOne({ email: username }, function (err, user) {
             let isValid = false
             if (user) {
                 isValid = validPassword(password, user.hash, user.salt)

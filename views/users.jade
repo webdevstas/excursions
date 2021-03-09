@@ -1,0 +1,12 @@
+extends layout
+block content
+    a(href="/users/register")
+        button.btn.btn-primary.with-shadow Добавить
+    .users-block.with-shadow
+        ul.users-list
+            each user in data.users
+                li.users-list__item.with-shadow
+                    span= user.username
+                    span= user.email
+                    button.btn.btn-light.delete-btn Удалить
+    script(src="/javascripts/usersList.js")

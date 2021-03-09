@@ -41,7 +41,7 @@ header {
     grid-column-start: 1;
     grid-column-end: 3;
     z-index: 1000;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 200px 1fr 200px;
     align-items: center;
     padding: 10px 0;
     position: fixed;
@@ -61,6 +61,7 @@ input, select, textarea {
     max-width: 100%;
     border: none;
     outline: none;
+    width: fit-content;
 }
 
 label {
@@ -98,6 +99,10 @@ input[type="checkbox"] {
     border-radius: 0.25rem;
     width: 60%;
     margin: auto;
+}
+
+.user-register__form {
+    width: 50%;
 }
 
 .tags {
@@ -158,7 +163,7 @@ menu {
 }
 
 .bottom-menu {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: flex-start;
@@ -190,23 +195,69 @@ menu {
     color: var(--alt-text-color);
 }
 
-.menu__user {
+#user-menu {
+    justify-self: start;
+    width: 400px;
+    position: relative;
+    width: max-content;
+}
+
+.user-plank {
     display: block;
     color: var(--alt-text-color);
     font-size: 16px;
     border: 1px solid var(--alt-text-color);
     border-radius: 0.25rem;
     padding: 10px;
-    margin: 10px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+#dropdown-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    background-color: #2a3b4c;
+    list-style: none;
+    padding: 5px 10px;
+    display: none;
+    flex-direction: column;
+    border-radius: 0.25rem;
+    width: 90%;
+    border: 1px solid var(--main-bg-color);
+}
+
+#user-menu:hover #dropdown-menu {
+    display: flex;
+}
+
+#dropdown-menu li{
+    margin-bottom: 10px;
+}
+
+#dropdown-menu a{
+    font-size: 14px;
+    color: var(--alt-text-color);
+    text-decoration: none;
 }
 
 .error {
     border: red 1px solid !important;
     color: red;
+    margin-bottom: 10px;
+    background-color: var(--main-bg-color);
+    padding: 5px;
+    border-radius: 0.25rem;
 }
 
 .success {
+    border: green 1px solid !important;
     color: green;
+    margin-bottom: 10px;
+    background-color: var(--main-bg-color);
+    padding: 5px;
+    border-radius: 0.25rem;
 }
 
 h2.success, h2.error {
@@ -705,6 +756,37 @@ h2.success, h2.error {
     }
 }
 
+.users-block {
+    background-color: var(--main-bg-color);
+    border-radius: 0.25rem;
+    padding: 20px;
+    width: 30%;
+    margin-top: 20px;
+}
+
+.users-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.users-list__item {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.25rem;
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.users-list__item:last-child {
+    margin: 0;
+}
+
 @media (max-width: 1024px) {
     .register-form {
         grid-template-columns: repeat(1, 1fr);
@@ -728,6 +810,14 @@ h2.success, h2.error {
     #open-menu {
         display: block;
         cursor: pointer;
+    }
+
+    .bottom-menu {
+        display: flex;
+    }
+
+    .user-menu {
+        display: none;
     }
 
     .excursions {
