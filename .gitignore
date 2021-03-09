@@ -5,3 +5,4 @@ id_rsa_pub.pem
 *.log
 /public/images/upload
 /encryption
+.idea

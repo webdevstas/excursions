@@ -41,7 +41,7 @@ header {
     grid-column-start: 1;
     grid-column-end: 3;
     z-index: 1000;
-    grid-template-columns: 200px 1fr 200px;
+    grid-template-columns: 200px 1fr 350px;
     align-items: center;
     padding: 10px 0;
     position: fixed;
@@ -140,7 +140,7 @@ input[type="checkbox"] {
 
 menu {
     left: 0;
-    top: 60px; 
+    top: 60px;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -211,6 +211,7 @@ menu {
     padding: 10px;
     cursor: pointer;
     transition: .2s;
+    width: 100%;
 }
 
 #dropdown-menu {
@@ -224,7 +225,7 @@ menu {
     display: none;
     flex-direction: column;
     border-radius: 0.25rem;
-    width: 90%;
+    width: 100%;
     border: 1px solid var(--main-bg-color);
 }
 
@@ -909,5 +910,5 @@ h2.success, h2.error {
     .tags {
         grid-template-columns: 1fr;
     }
-    
+
 }
