@@ -35,7 +35,7 @@ services:
   mgob:
     image: stefanprodan/mgob:latest
     ports:
-      - 8090:8090
+      - 8095:8090
     volumes:
       - ./mgob/config:/config
       - ./mgob/storage:/storage
