@@ -1,18 +1,18 @@
-const { Excursions } = require('../models/excursions')
-const { slugify } = require('transliteration')
+const {Excursions} = require('../models/excursions')
+const {slugify} = require('transliteration')
 const fs = require('fs')
 const path = require('path')
-const { Tickets } = require('../models/tickets')
-const { Companies } = require('../models/companies')
-const { unescapeOne, unescapeMany, unescapeString } = require('../lib/helpers')
+const {Tickets} = require('../models/tickets')
+const {Companies} = require('../models/companies')
+const {unescapeOne, unescapeMany, unescapeString} = require('../lib/helpers')
 
 /**
- * Сохраняет в БД новую экскурсию 
+ * Сохраняет в БД новую экскурсию
  * @param {Object} req Объект запроса
  * @param {Object} res Объект ответа
  */
 async function addExcursion(req, res) {
-    let company = await Companies.findOne({ _id: req.body.company }).select({ _id: 1 })
+    let company = await Companies.findOne({_id: req.body.company}).select({_id: 1})
     // Сохраняем данные из формы
     let excursion = {
         company: company._id,
@@ -39,14 +39,13 @@ async function addExcursion(req, res) {
     excursion.isPublished = false
 
     // Проверяем дубли алиасов
-    await Excursions.countDocuments({ title: excursion.title }, (err, count) => {
+    await Excursions.countDocuments({title: excursion.title}, (err, count) => {
 
         if (err) throw err
 
         if (count > 0) {
             excursion.slug = slugify(unescapeString(excursion.title) + '-' + (count + 1))
-        }
-        else {
+        } else {
             excursion.slug = slugify(unescapeString(excursion.title))
         }
     })
@@ -63,14 +62,14 @@ async function addExcursion(req, res) {
         Excursions.create(excursion, function (err, data) {
             if (err) throw err
             if (!data.slug) {
-                Excursions.updateOne({ _id: data._id }, { slug: data._id })
+                Excursions.updateOne({_id: data._id}, {slug: data._id})
             }
         })
     })
 }
 
 /**
- * Сохраняет данные экскурсии 
+ * Сохраняет данные экскурсии
  * @param {Object} req Объект запроса
  * @param {Object} res Объект ответа
  */
@@ -88,18 +87,17 @@ async function updateExcursion(req, res) {
         excursion.slug = slugify(unescapeString(excursion.title))
 
         // Проверяем дубли алиасов
-        Excursions.countDocuments({ title: excursion.title }, (err, count) => {
+        Excursions.countDocuments({title: excursion.title}, (err, count) => {
 
             if (err) throw err
 
             if (count > 0) {
                 excursion.slug = slugify(unescapeString(excursion.title) + '-' + (count + 1))
-            }
-            else {
+            } else {
                 excursion.slug = slugify(unescapeString(excursion.title))
             }
         })
-    } 
+    }
 
     // Добавляем загруженные изображения к существующим в базе
     let arrPictures = []
@@ -111,8 +109,7 @@ async function updateExcursion(req, res) {
 
     if (pictFromBase) {
         excursion.picturesURLs = arrPictures.concat(pictFromBase)
-    }
-    else {
+    } else {
         excursion.picturesURLs = arrPictures
     }
 
@@ -126,7 +123,7 @@ async function updateExcursion(req, res) {
         }
         excursion.tickets = ids
         // Обновляем данные в базе
-        Excursions.updateOne({ _id: req.excursion._id }, excursion, function (err) {
+        Excursions.updateOne({_id: req.excursion._id}, excursion, function (err) {
 
             if (err) throw err
 
@@ -135,12 +132,12 @@ async function updateExcursion(req, res) {
 }
 
 /**
- * Удаляет экскурсию 
+ * Удаляет экскурсию
  * @param {Object} req Объект запроса
  * @param {Object} res Объект ответа
  */
 async function deleteExcursion(req, res) {
-    Excursions.deleteOne({ _id: req.excursion._id }, function (err, result) {
+    Excursions.deleteOne({_id: req.excursion._id}, function (err, result) {
         if (err) throw err
 
         if (result.ok) {
@@ -150,19 +147,19 @@ async function deleteExcursion(req, res) {
 }
 
 /**
- * Удаляет изображение определённой экскурсии 
+ * Удаляет изображение определённой экскурсии
  * @param {Number} index Порядковый номер картинки в БД
  * @param {String} slug Алиас экскурсии
  */
 async function deletePicture(index, slug) {
 
-    let pictFromBase = await Excursions.findOne({ slug: slug }).select({ picturesURLs: 1 })
+    let pictFromBase = await Excursions.findOne({slug: slug}).select({picturesURLs: 1})
 
     let newPictArr = pictFromBase.picturesURLs.filter((el, i) => {
         return i !== index
     })
 
-    await Excursions.updateOne({ slug: slug }, { picturesURLs: newPictArr })
+    await Excursions.updateOne({slug: slug}, {picturesURLs: newPictArr})
 
     let filePath = ''
 
@@ -171,43 +168,49 @@ async function deletePicture(index, slug) {
     await fs.unlink(filePath, err => {
         if (err) throw err
     })
-    return { success: true, error: {} }
+    return {success: true, error: {}}
 }
 
 /**
- * Удаляет изображение определённой экскурсии 
+ * Удаляет изображение определённой экскурсии
  * @param {Number} id Id билета
  */
 async function deleteTicket(id) {
-    await Tickets.deleteOne({ _id: id }, (err) => {
+    await Tickets.deleteOne({_id: id}, (err) => {
         if (err) throw err
     })
-    
-    return { success: true, error: {} }
+
+    return {success: true, error: {}}
 }
 
 /**
  * Подсчитывает количество экскурсий
- * @param {Object} req Объект запроса
- * @param {Object} res Объект ответа
  */
-async function countExcursions() {
+function countExcursions() {
     let countAll = 0,
         countApproved = 0,
         countPublished = 0
-    await Excursions.countDocuments((err, count) => {
-        if (err) throw err
-        countAll = count
+    // eslint-disable-next-line no-async-promise-executor
+    const countPromise = new Promise(async (resolve, reject) => {
+        await Excursions.countDocuments((err, count) => {
+            if (err) throw err
+            countAll = count
+        })
+            .then(async () => {
+                await Excursions.countDocuments({isApproved: true}, (err, count) => {
+                    if (err) throw err
+                    countApproved = count
+                })
+                    .then(async () => {
+                        await Excursions.countDocuments({isPublished: true}, (err, count) => {
+                            if (err) throw err
+                            countPublished = count
+                            resolve({all: countAll, approved: countApproved, published: countPublished})
+                        })
+                    })
+            })
     })
-    await Excursions.countDocuments({ isApproved: true }, (err, count) => {
-        if (err) throw err
-        countApproved = count
-    })
-    await Excursions.countDocuments({ isPublished: true }, (err, count) => {
-        if (err) throw err
-        countPublished = count
-    })
-    return { all: countAll, approved: countApproved, published: countPublished }
+    return countPromise
 }
 
-module.exports = { addExcursion, updateExcursion, deleteExcursion, deletePicture, countExcursions, deleteTicket }
+module.exports = {addExcursion, updateExcursion, deleteExcursion, deletePicture, countExcursions, deleteTicket}
