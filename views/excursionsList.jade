@@ -15,8 +15,8 @@ block content
                 option(value="") Все
                 each excursion in data.excursionsFilterList
                     option(value="#{excursion}")= unescapeString(excursion)
-        div 
-            label(for="search") Поиск по экскурсиям:  
+        div
+            label(for="search") Поиск по экскурсиям:
             input(type="text").form-control#search
     .excursions.with-shadow
         if data.excursions
@@ -32,7 +32,7 @@ block content
                 .excursions__col
                     span.excursions__title= unescapeString(excursion.title)
                 .excursions__col
-                    span.excursions__company= unescapeString(excursion.company.shortName)
+                    span.excursions__company= excursion.company ? unescapeString(excursion.company.shortName) : 'Удалён'
                 .excursions__col.status
                     .badge-block
                         if excursion.isApproved
@@ -44,7 +44,7 @@ block content
                         else
                             .badge.bg-danger Не опубликовано
                 .excursions__col
-                    a(href="/excursions-list/#{excursion.slug}") 
+                    a(href="/excursions-list/#{excursion.slug}")
                         button.btn.btn-light Редактировать
                     form(action="/excursions-list/#{excursion.slug}/delete" method="post")
                         button.deleteBtn.btn.btn-light Удалить
@@ -54,9 +54,8 @@ block content
         .status-description__item
             .badge.bg-success Одобрено
             p Этот статус присваивается при создании или редактировании экскурсии, если экскурсия одобрена - она будет опубликована на терминалах во время ближайшего обновления.
-                
+
         .status-description__item
             .badge.bg-info.text-dark Опубликовано
             p Этот статус указывает на то, что экскурсия в данный момент показывается на терминалах.
-    script(src="/javascripts/excursionsList.js") 
-        
+    script(src="/javascripts/excursionsList.js")

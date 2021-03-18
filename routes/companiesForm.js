@@ -53,7 +53,7 @@ router.post('/',
     body('bankInformation').trim().escape(),
     body('isApproved').toBoolean(),
 
-    function (req, res) {
+    function (req, res, next) {
         const errors = validationResult(req)
         let username = req.user ? req.user.username : 'guest'
 
@@ -80,7 +80,7 @@ router.post('/',
              *  Иначе сохраняем компанию и редирект на список
              */
             addCompany(req, res).catch(err => {
-                console.log('Add company error: ', err);
+                next(err)
             })
             res.redirect('/companies-list')
         }

@@ -6,13 +6,15 @@ const { updateCompany, deleteCompany } = require('../controllers/companies')
 const { Companies } = require('../models/companies')
 const { unescapeString } = require('../lib/helpers')
 
-/**  
- * Ответ на запрос списка компаний 
+/**
+ * Ответ на запрос списка компаний
  */
-router.get('/', async function (req, res) {
+router.get('/', async function (req, res, next) {
     if (req.isAuthenticated()) {
         let username = req.user ? req.user.username : 'guest'
-        const companies = await Companies.find().select({ shortName: 1, slug: 1, isApproved: 1 })
+        const companies = await Companies.find().select({ shortName: 1, slug: 1, isApproved: 1 }).catch(err => {
+            next(err, req, res)
+        })
         res.render('companiesList', { title: 'Список операторов', companies: companies, user: username, unescapeString: unescapeString });
     }
     else {
@@ -20,11 +22,13 @@ router.get('/', async function (req, res) {
     }
 });
 
-/** 
+/**
 * Получим алиас компании
 */
 router.param('slug', async function (req, res, next, slug) {
-    req.company = await Companies.findOne({ slug: slug }) // Сохраняем компанию в объект запроса
+    req.company = await Companies.findOne({ slug: slug }).catch(err => {
+        next(err, req, res)
+    }) // Сохраняем компанию в объект запроса
     next()
 })
 
@@ -75,7 +79,7 @@ router.route('/:slug')
         body('bankInformation').trim().escape(),
         body('isApproved').toBoolean(),
 
-        function (req, res) {
+        function (req, res, next) {
             if (req.isAuthenticated()) {
                 const errors = validationResult(req)
 
@@ -102,7 +106,7 @@ router.route('/:slug')
                     *  Иначе сохраняем компанию и редирект на список
                     */
                     updateCompany(req, res).catch(err => {
-                        console.log('Update company error: ', err);
+                        next(err, req, res)
                     })
                 }
             }
@@ -113,10 +117,10 @@ router.route('/:slug')
  */
 router.route('/:slug/delete')
     .post(body('delete').toBoolean(),
-        function (req, res) {
+        function (req, res, next) {
             if (req.isAuthenticated()) {
                 deleteCompany(req, res).catch(err => {
-                    console.log('Delete company error: ', err);
+                    next(err, req, res)
                 })
             }
         })

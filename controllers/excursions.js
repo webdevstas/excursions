@@ -115,7 +115,10 @@ async function updateExcursion(req, res) {
 
     // Сохраняем билеты
     await Tickets.insertMany(tickets, async (err, data) => {
+        if (err) throw err
+
         let ids = req.excursion.tickets
+
         if (data) {
             data.forEach(item => {
                 ids.push(item._id)
@@ -213,4 +216,41 @@ function countExcursions() {
     return countPromise
 }
 
-module.exports = {addExcursion, updateExcursion, deleteExcursion, deletePicture, countExcursions, deleteTicket}
+async function apiUpdateExcursion(req, res) {
+    const excursion = req.body
+
+    if (excursion.slug) {
+        excursion.slug = req.excursion.slug
+    }
+    if (!excursion.title) {
+        excursion.slug = req.excursion.slug
+    } else if (unescapeString(req.excursion.title) !== unescapeString(excursion.title)) {
+        excursion.slug = slugify(unescapeString(excursion.title))
+    }
+
+    if (excursion.picturesURLs) {
+        excursion.picturesURLs = req.excursion.picturesURLs
+    }
+
+    if (excursion.tickets) {
+        excursion.tickets = req.excursion.tickets
+    }
+
+    await Excursions.updateOne({_id: req.excursion._id}, excursion, {}, err => {
+        if (err) {
+            res.json({success: false, msg: err})
+        } else {
+            res.json({success: true})
+        }
+    })
+}
+
+module.exports = {
+    addExcursion,
+    updateExcursion,
+    deleteExcursion,
+    deletePicture,
+    countExcursions,
+    deleteTicket,
+    apiUpdateExcursion
+}

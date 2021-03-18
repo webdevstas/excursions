@@ -24,9 +24,11 @@ let companies = {}
 /**
  * Рендерим форму, если юзер авторизован, иначе редирект на страницу входа
  */
-router.get('/', async function (req, res) {
-    if (req.isAuthenticated()) { 
-        companies = await Companies.find().select({ shortName: 1, _id: 1 })
+router.get('/', async function (req, res, next) {
+    if (req.isAuthenticated()) {
+        companies = await Companies.find().select({ shortName: 1, _id: 1 }).catch(err => {
+            next(err, req, res)
+        })
         let username = req.user ? req.user.username : 'guest'
         res.render('excursionsForm', {
             action: '/new-excursion',
@@ -61,9 +63,11 @@ router.post('/',
     body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению').isNumeric().withMessage('Введите числовое значение номера телефона'),
     // body('tickets').trim().escape().notEmpty().withMessage('Добавьте по крайней мере один билет'),
 
-    async function (req, res) {
+    async function (req, res, next) {
         if (req.isAuthenticated()) {
-            companies = await Companies.find().select({ shortName: 1 })
+            companies = await Companies.find().select({ shortName: 1 }).catch(err => {
+                next(err, req, res)
+            })
             let username = req.user ? req.user.username : 'guest'
             const errors = validationResult(req)
             let arrPictures = []
@@ -94,7 +98,7 @@ router.post('/',
                  * Иначе сохраняем экскурсию и редирект на список
                  */
                 addExcursion(req, res).catch(err => {
-                    console.log('Add excursion error: ', err);
+                    next(err, req, res)
                 })
                 res.redirect('/excursions-list')
             }

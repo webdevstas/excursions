@@ -10,6 +10,8 @@ router.get('/', async function (req, res, next) {
     countExcursions().then(countExc => {
         countCompanies().then(countComp => {
             res.render('index', {title: 'Главная', user: username, countCompanies: countComp, countExcursions: countExc});
+        }).catch(err => {
+            next(err, req, res)
         })
     })
 });

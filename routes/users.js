@@ -86,7 +86,7 @@ router.route('/register').post(
                                 hash: passData.hash
                             }
                             addUser(user).catch(err => {
-                                console.log('Ошибка сохранения нового пользователя', err);
+                                next(err, req, res)
                             })
                             res.redirect('/users')
                         }
@@ -102,7 +102,7 @@ router.route('/register').post(
 /**
  * Удаление пользователя
  */
-router.delete('/', (req, res) => {
+router.delete('/', (req, res, next) => {
     if (req.isAuthenticated()) {
         deleteUser(req.body.user)
         .then(() => {
@@ -110,6 +110,7 @@ router.delete('/', (req, res) => {
         })
         .catch(err => {
             res.json({ success: false, msg: err.message })
+            next(err, req, res)
         })
     }
 })

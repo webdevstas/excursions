@@ -6,7 +6,8 @@ const utils = require('../lib/passportUtils')
 const {Excursions} = require('../models/excursions')
 const {Companies} = require('../models/companies')
 const cors = require('cors')
-
+const {updateCompany} = require("../controllers/companies")
+const {apiUpdateExcursion} = require("../controllers/excursions")
 
 /**
  * Authentication
@@ -34,25 +35,35 @@ router.post('/auth', cors(), (req, res) => {
 /**
  * Companies
  */
-router.get('/companies', cors(), passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.get('/companies', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     let companies = []
     if (req.query.status === 'approved') {
-        companies = await Companies.find({isApproved: true}).select('-__v') // Запрос одобренных операторов
+        companies = await Companies.find({isApproved: true}).select('-__v').catch(err => {
+            next(err, req, res)
+        }) // Запрос одобренных операторов
     } else if (req.query.status === 'rejected') {
-        companies = await Companies.find({isApproved: false}).select('-__v') // Запрос неодобренных операторов
+        companies = await Companies.find({isApproved: false}).select('-__v').catch(err => {
+            next(err, req, res)
+        }) // Запрос неодобренных операторов
     } else if (req.query.updatedAt) {
         let query = req.query.updatedAt
-        companies = await Companies.find({updatedAt: {$regex: query, $options: 'i'}}) // Фильтр по дате обновления
+        companies = await Companies.find({updatedAt: {$regex: query, $options: 'i'}}).catch(err => {
+            next(err, req, res)
+        }) // Фильтр по дате обновления
         res.json(companies)
     } else {
-        companies = await Companies.find().select('-__v') // Запрос всех операторов
+        companies = await Companies.find().select('-__v').catch(err => {
+            next(err, req, res)
+        }) // Запрос всех операторов
         res.json(companies)
     }
 })
 
 
 router.param('id', async function (req, res, next, id) {
-    req.company = await Companies.findOne({_id: id}).select('-__v') // Запрос одного опертора по id
+    req.company = await Companies.findOne({_id: id}).select('-__v').catch(err => {
+        next(err, req, res)
+    }) // Запрос одного опертора по id
     next()
 })
 
@@ -60,29 +71,47 @@ router.get('/companies/:id', cors(), passport.authenticate('jwt', {session: fals
     res.json(req.company) // Отдаём результат
 })
 
+router.post('/companies/:id', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
+    await updateCompany(req, res).catch(err => {
+        next(err, req, res)
+    })
+})
+
 
 /**
  * Excursions
  */
-router.get('/excursions', cors(), passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.get('/excursions', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     let excursions = []
     if (req.query.company) {
-        excursions = await Excursions.find({company: req.query.company}).populate('tickets').select('-__v') // Фильтр по оператору
+        excursions = await Excursions.find({company: req.query.company}).populate('tickets').select('-__v').catch(err => {
+            next(err, req, res)
+        }) // Фильтр по оператору
     } else if (req.query.status === 'approved') {
-        excursions = await Excursions.find({isApproved: true}).populate('tickets').select('-__v') // Запрос одобренных экскурсий
+        excursions = await Excursions.find({isApproved: true}).populate('tickets').select('-__v').catch(err => {
+            next(err, req, res)
+        }) // Запрос одобренных экскурсий
     } else if (req.query.status === 'rejected') {
-        excursions = await Excursions.find({isApproved: false}).populate('tickets').select('-__v') // Запрос неодобренных экскурсий
+        excursions = await Excursions.find({isApproved: false}).populate('tickets').select('-__v').catch(err => {
+            next(err, req, res)
+        }) // Запрос неодобренных экскурсий
     } else if (req.query.updatedAt) {
         let query = req.query.updatedAt
-        excursions = await Excursions.find({updatedAt: {$regex: query, $options: 'i'}}) // Фильтр по дате обновления
+        excursions = await Excursions.find({updatedAt: {$regex: query, $options: 'i'}}).catch(err => {
+            next(err, req, res)
+        }) // Фильтр по дате обновления
     } else {
-        excursions = await Excursions.find().populate('tickets').select('-__v') // Запрос всех экскурсий
+        excursions = await Excursions.find().populate('tickets').select('-__v').catch(err => {
+            next(err, req, res)
+        }) // Запрос всех экскурсий
     }
     res.json(excursions)
 })
 
 router.param('id', async function (req, res, next, id) {
-    req.excursion = await Excursions.findOne({_id: id}).populate('tickets').select('-__v') // Запрос одной экскурсии по id
+    req.excursion = await Excursions.findOne({_id: id}).populate('tickets').select('-__v').catch(err => {
+        next(err, req, res)
+    }) // Запрос одной экскурсии по id
     next()
 })
 
@@ -90,6 +119,11 @@ router.get('/excursions/:id', cors(), passport.authenticate('jwt', {session: fal
     res.json(req.excursion) // Отдаём результат
 })
 
+router.post('/excursions/:id', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
+    apiUpdateExcursion(req, res).catch(err => {
+        next(err, req, res)
+    })
+})
 
 /**
  * Exports
