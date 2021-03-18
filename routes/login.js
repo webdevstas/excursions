@@ -16,7 +16,6 @@ router.route('/')
                 failureRedirect: '/login',
                 failureFlash: 'Неверное имя пользователя или пароль'
             }
-        )),
-
+        ))
 
         module.exports = router

@@ -34,16 +34,28 @@ async function addCompany(req, res) {
 async function updateCompany(req, res) {
     const company = req.body
 
-    if (unescapeString(req.company).shortName !== unescapeString(company.shortName)) {
+    if (company.slug) {
+        company.slug = req.company.slug
+    }
+
+    if (!company.shortName) {
+        company.slug = req.company.slug
+    } else if (unescapeString(req.company.shortName) !== unescapeString(company.shortName)) {
         company.slug = slugify(unescapeString(company.shortName))
     }
 
     await Companies.updateOne({slug: req.company.slug}, company, {}, function (err) {
 
-        if (err) throw err
+        if (err) {
+            res.json({success: false, msg: err})
+            throw err
+        }
 
-        res.redirect('/companies-list')
-
+        if (req.baseUrl === '/api') {
+            res.json({success: true})
+        } else {
+            res.redirect('/companies-list')
+        }
     })
 }
 
@@ -65,8 +77,6 @@ async function deleteCompany(req, res) {
 
 /**
  * Подсчитывает количество операторов
- * @param {Object} req Объект запроса
- * @param {Object} res Объект ответа
  */
 function countCompanies() {
     let countAll = 0,
