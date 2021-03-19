@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const {Tickets} = require('../models/tickets')
 const {Companies} = require('../models/companies')
-const {unescapeOne, unescapeMany, unescapeString} = require('../lib/helpers')
+const {unescapeString} = require('../lib/helpers')
 
 /**
  * Сохраняет в БД новую экскурсию
@@ -196,7 +196,7 @@ function countExcursions() {
     // eslint-disable-next-line no-async-promise-executor
     const countPromise = new Promise(async (resolve, reject) => {
         await Excursions.countDocuments((err, count) => {
-            if (err) throw err
+            if (err) reject(err)
             countAll = count
         })
             .then(async () => {
@@ -219,13 +219,17 @@ function countExcursions() {
 async function apiUpdateExcursion(req, res) {
     const excursion = req.body
 
-    if (excursion.slug) {
-        excursion.slug = req.excursion.slug
-    }
-    if (!excursion.title) {
-        excursion.slug = req.excursion.slug
-    } else if (unescapeString(req.excursion.title) !== unescapeString(excursion.title)) {
-        excursion.slug = slugify(unescapeString(excursion.title))
+    try {
+        if (excursion.slug) {
+            excursion.slug = req.excursion.slug
+        }
+        if (!excursion.title) {
+            excursion.slug = req.excursion.slug
+        } else if (unescapeString(req.excursion.title) !== unescapeString(excursion.title)) {
+            excursion.slug = slugify(unescapeString(excursion.title))
+        }
+    } catch (err) {
+        throw new Error('Excursion not found')
     }
 
     if (excursion.picturesURLs) {
@@ -238,10 +242,9 @@ async function apiUpdateExcursion(req, res) {
 
     await Excursions.updateOne({_id: req.excursion._id}, excursion, {}, err => {
         if (err) {
-            res.json({success: false, msg: err})
-        } else {
-            res.json({success: true})
+            throw err
         }
+        res.json({success: true})
     })
 }
 

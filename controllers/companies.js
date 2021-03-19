@@ -20,9 +20,7 @@ async function addCompany(req, res) {
     })
 
     await Companies.create(company, function (err) {
-
         if (err) throw err
-
     })
 }
 
@@ -39,7 +37,11 @@ async function updateCompany(req, res) {
     }
 
     if (!company.shortName) {
-        company.slug = req.company.slug
+        try {
+            company.slug = req.company.slug
+        } catch (err) {
+            throw new Error('Company not found')
+        }
     } else if (unescapeString(req.company.shortName) !== unescapeString(company.shortName)) {
         company.slug = slugify(unescapeString(company.shortName))
     }
@@ -47,7 +49,6 @@ async function updateCompany(req, res) {
     await Companies.updateOne({slug: req.company.slug}, company, {}, function (err) {
 
         if (err) {
-            res.json({success: false, msg: err})
             throw err
         }
 

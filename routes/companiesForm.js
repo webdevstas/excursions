@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { body, validationResult, check } = require('express-validator');
-const { addCompany } = require('../controllers/companies')
-const { unescapeString } = require('../lib/helpers')
+const {body, validationResult, check} = require('express-validator');
+const {addCompany} = require('../controllers/companies')
+const {unescapeString} = require('../lib/helpers')
 
 router.get('/', function (req, res) {
     /**
@@ -22,8 +22,7 @@ router.get('/', function (req, res) {
             user: username,
             unescapeString: unescapeString
         })
-    }
-    else {
+    } else {
         /**
          * Иначе редирект на форму авторизации
          */
@@ -42,8 +41,14 @@ router.post('/',
     body('legalAddress').trim().escape(),
     body('actualAddress').trim().escape(),
     body('head').trim().escape(),
-    body('phoneNumber').trim().escape().optional({ nullabale: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение номера телефона'),
-    body('faxNumber').trim().escape().optional({ nullabale: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение номера факса'),
+    body('phoneNumber').trim().escape().optional({
+        nullabale: true,
+        checkFalsy: true
+    }).isNumeric().withMessage('Введите числовое значение номера телефона'),
+    body('faxNumber').trim().escape().optional({
+        nullabale: true,
+        checkFalsy: true
+    }).isNumeric().withMessage('Введите числовое значение номера факса'),
     body('email').trim().escape().notEmpty().withMessage('Электронная почта обязательна к заполнению').isEmail().withMessage('Введите корректный email'),
     check('inn').escape().notEmpty().withMessage('Инн обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ИНН'),
     check('ogrn').escape().notEmpty().withMessage('ОГРН обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ОГРН'),
@@ -73,18 +78,15 @@ router.post('/',
                 user: username,
                 unescapeString: unescapeString
             })
-            return
-        }
-        else {
+        } else {
             /**
              *  Иначе сохраняем компанию и редирект на список
              */
-            addCompany(req, res).catch(err => {
+            addCompany(req, res, next).catch(err => {
                 next(err)
             })
             res.redirect('/companies-list')
         }
-        return
     })
 
 module.exports = router

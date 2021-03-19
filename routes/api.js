@@ -8,6 +8,7 @@ const {Companies} = require('../models/companies')
 const cors = require('cors')
 const {updateCompany} = require("../controllers/companies")
 const {apiUpdateExcursion} = require("../controllers/excursions")
+const {handleApiError} = require("../lib/apiErrorHandler")
 
 /**
  * Authentication
@@ -39,21 +40,21 @@ router.get('/companies', cors(), passport.authenticate('jwt', {session: false}),
     let companies = []
     if (req.query.status === 'approved') {
         companies = await Companies.find({isApproved: true}).select('-__v').catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Запрос одобренных операторов
     } else if (req.query.status === 'rejected') {
         companies = await Companies.find({isApproved: false}).select('-__v').catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Запрос неодобренных операторов
     } else if (req.query.updatedAt) {
         let query = req.query.updatedAt
         companies = await Companies.find({updatedAt: {$regex: query, $options: 'i'}}).catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Фильтр по дате обновления
         res.json(companies)
     } else {
         companies = await Companies.find().select('-__v').catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Запрос всех операторов
         res.json(companies)
     }
@@ -62,7 +63,7 @@ router.get('/companies', cors(), passport.authenticate('jwt', {session: false}),
 
 router.param('id', async function (req, res, next, id) {
     req.company = await Companies.findOne({_id: id}).select('-__v').catch(err => {
-        next(err, req, res)
+        handleApiError(err, req, res)
     }) // Запрос одного опертора по id
     next()
 })
@@ -73,7 +74,7 @@ router.get('/companies/:id', cors(), passport.authenticate('jwt', {session: fals
 
 router.post('/companies/:id', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     await updateCompany(req, res).catch(err => {
-        next(err, req, res)
+        handleApiError(err, req, res)
     })
 })
 
@@ -85,24 +86,24 @@ router.get('/excursions', cors(), passport.authenticate('jwt', {session: false})
     let excursions = []
     if (req.query.company) {
         excursions = await Excursions.find({company: req.query.company}).populate('tickets').select('-__v').catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Фильтр по оператору
     } else if (req.query.status === 'approved') {
         excursions = await Excursions.find({isApproved: true}).populate('tickets').select('-__v').catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Запрос одобренных экскурсий
     } else if (req.query.status === 'rejected') {
         excursions = await Excursions.find({isApproved: false}).populate('tickets').select('-__v').catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Запрос неодобренных экскурсий
     } else if (req.query.updatedAt) {
         let query = req.query.updatedAt
         excursions = await Excursions.find({updatedAt: {$regex: query, $options: 'i'}}).catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Фильтр по дате обновления
     } else {
         excursions = await Excursions.find().populate('tickets').select('-__v').catch(err => {
-            next(err, req, res)
+            handleApiError(err, req, res)
         }) // Запрос всех экскурсий
     }
     res.json(excursions)
@@ -110,7 +111,7 @@ router.get('/excursions', cors(), passport.authenticate('jwt', {session: false})
 
 router.param('id', async function (req, res, next, id) {
     req.excursion = await Excursions.findOne({_id: id}).populate('tickets').select('-__v').catch(err => {
-        next(err, req, res)
+        handleApiError(err, req, res)
     }) // Запрос одной экскурсии по id
     next()
 })
@@ -121,7 +122,7 @@ router.get('/excursions/:id', cors(), passport.authenticate('jwt', {session: fal
 
 router.post('/excursions/:id', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     apiUpdateExcursion(req, res).catch(err => {
-        next(err, req, res)
+        handleApiError(err, req, res)
     })
 })
 
