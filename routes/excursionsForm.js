@@ -18,18 +18,21 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage, limits: { fileSize: 5242880 } })
-
 let companies = {}
 
 /**
  * Рендерим форму, если юзер авторизован, иначе редирект на страницу входа
  */
 router.get('/', async function (req, res, next) {
+
     if (req.isAuthenticated()) {
+
         companies = await Companies.find().select({ shortName: 1, _id: 1 }).catch(err => {
             next(err, req, res)
         })
+
         let username = req.user ? req.user.username : 'guest'
+
         res.render('excursionsForm', {
             action: '/new-excursion',
             title: 'Форма добавления экскурсии',
@@ -61,13 +64,15 @@ router.post('/',
     body('description').trim().escape().notEmpty().withMessage('Описание экскурсиии обязательно к заполнению'),
     body('isApproved').toBoolean(),
     body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению').isNumeric().withMessage('Введите числовое значение номера телефона'),
-    // body('tickets').trim().escape().notEmpty().withMessage('Добавьте по крайней мере один билет'),
 
     async function (req, res, next) {
+
         if (req.isAuthenticated()) {
+
             companies = await Companies.find().select({ shortName: 1 }).catch(err => {
                 next(err, req, res)
             })
+
             let username = req.user ? req.user.username : 'guest'
             const errors = validationResult(req)
             let arrPictures = []
@@ -91,7 +96,6 @@ router.post('/',
                     user: username,
                     unescapeString: unescapeString
                 })
-                return
             }
             else {
                 /**
@@ -102,7 +106,6 @@ router.post('/',
                 })
                 res.redirect('/excursions-list')
             }
-            return
         }
         else {
             res.redirect('/login')

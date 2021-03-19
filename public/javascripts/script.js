@@ -20,6 +20,7 @@ window.onload = function () {
             }
         })
     }
+
     /**
      * Оперируем классами меню
      */
@@ -30,8 +31,7 @@ window.onload = function () {
     window.addEventListener('resize', function () {
         if (document.documentElement.clientWidth < 993) {
             sideMenu.classList.add('side')
-        }
-        else {
+        } else {
             sideMenu.classList.remove('side')
             gsap.to([sideMenu, openBtn], {
                 x: 0
@@ -57,6 +57,7 @@ window.onload = function () {
             delay: 0.2
         })
     })
+
     /**
      * Анимируем подложку контента
      */

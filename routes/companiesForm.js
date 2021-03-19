@@ -6,7 +6,7 @@ const {unescapeString} = require('../lib/helpers')
 
 router.get('/', function (req, res) {
     /**
-     * Если юзер авторизован - отдаём форму добавления компании
+     * Если пользователь авторизован - отдаём форму добавления компании
      */
     if (req.isAuthenticated()) {
         let username = req.user ? req.user.username : 'guest'
@@ -32,7 +32,7 @@ router.get('/', function (req, res) {
 
 router.post('/',
     /**
-     * Валидации входных данных
+     * Валидация входных данных
      */
     body('fullName').trim().escape(),
     body('shortName').trim().escape().notEmpty().withMessage('Краткое наименование компании обязательно к заполнению'),

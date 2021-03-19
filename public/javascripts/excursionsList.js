@@ -2,11 +2,11 @@ const filterSelect = document.querySelectorAll('.filter-select'),
     excursionsNode = document.querySelector('.excursions')
 let deleteBtn = document.querySelectorAll('.deleteBtn')
 
-deleteBtn.forEach( (btn)=> {
+deleteBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         e.preventDefault()
         let result = confirm('Подтвердите удаление')
-        if(result) {
+        if (result) {
             e.target.nextSibling.value = true
             e.target.form.submit()
         }

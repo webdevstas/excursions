@@ -31,14 +31,12 @@ deletBtns.forEach(btn => {
                     usersNode.prepend(messageNode)
                     btn.parentNode.style.display = 'none'
                 }
-            }
-            else {
+            } else {
                 if (!document.querySelector('.error')) {
                     messageNode.classList.add('error')
                     usersNode.prepend(messageNode)
                 }
             }
-
         }
     })
 })

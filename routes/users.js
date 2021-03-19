@@ -61,11 +61,9 @@ router.route('/register').post(
             }
             else {
                 let body = req.body
-
                 checkUserExists(body.email)
                     .then(result => {
                         if (!result) {
-                            console.log(checkUserExists(body.email));
                             let error = {
                                 param: 'Duplicate user',
                                 msg: 'Пользователь с таким email уже существует, войдите или зарегистрируйте нового'
@@ -110,7 +108,6 @@ router.delete('/', (req, res, next) => {
         })
         .catch(err => {
             res.json({ success: false, msg: err.message })
-            next(err, req, res)
         })
     }
 })

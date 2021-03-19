@@ -50,7 +50,7 @@ router.get('/',
             // Рендер списка
             res.render('excursionsList', {
                 title: 'Список экскурсий',
-                data: {companies: companies, excursionsFilterList: filteredExcursionsList, excursions: excursions},
+                data: {companies, excursionsFilterList: filteredExcursionsList, excursions: excursions},
                 user: username,
                 unescapeString: unescapeString
             })
@@ -67,14 +67,18 @@ router.get('/',
 router.get('/filter', async function (req, res, next) {
     if (req.isAuthenticated()) {
         let excursions = {}
+
         if (req.query.companyFilter || req.query.excursionFilter) {
             let match = {} // В этот объект собираем строки из полей фильтров
+
             if (req.query.companyFilter) {
                 match.company = req.query.companyFilter
             }
+
             if (req.query.excursionFilter) {
                 match.title = req.query.excursionFilter
             }
+
             excursions = await Excursions.find(match).select({
                 title: 1,
                 company: 1,
@@ -117,6 +121,7 @@ router.param('slug', async function (req, res, next, slug) {
  */
 router.route('/:slug')
     .get(async function (req, res, next) {
+
         let username = req.user ? req.user.username : 'guest'
 
         if (req.isAuthenticated()) {
@@ -160,7 +165,9 @@ router.route('/:slug')
         body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению').isNumeric().withMessage('Введите числовое значение номера телефона'),
 
         function (req, res, next) {
+
             let username = req.user ? req.user.username : 'guest'
+
             if (req.isAuthenticated()) {
                 const errors = validationResult(req)
 

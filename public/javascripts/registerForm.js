@@ -7,8 +7,7 @@ form.addEventListener('submit', e => {
 
     if (passInp.value === confirmPassInp.value) {
         form.submit()
-    }
-    else {
+    } else {
         if (!document.querySelector('.error')) {
             let errNode = document.createElement('div')
             errNode.classList.add('error')
