@@ -18,6 +18,7 @@ services:
       - 80:3000
     volumes:
       - .:/usr/src/app:z
+      - ./logs:usr/src/app/logs
     links:
       - mongodb
     depends_on:
