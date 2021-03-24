@@ -100,7 +100,7 @@ router.route('/register').post(
 /**
  * Удаление пользователя
  */
-router.delete('/', (req, res, next) => {
+router.delete('/', (req, res) => {
     if (req.isAuthenticated()) {
         deleteUser(req.body.user)
         .then(() => {
