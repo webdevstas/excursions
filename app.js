@@ -32,6 +32,7 @@ else {
 const db = mongoose.connection
 const MongoStore = require('connect-mongo')(session)
 
+
 db.on('error', console.error.bind(console, 'CONNECTION ERROR'))
 
 const app = express()
@@ -110,3 +111,5 @@ app.use(function (err, req, res) {
 });
 
 module.exports = app
+
+
