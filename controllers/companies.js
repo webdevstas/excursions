@@ -4,75 +4,53 @@ const {unescapeString} = require('../lib/helpers')
 
 /**
  * Сохраняет в БД нового оператора
- * @param {Object} req Объект запроса
- * @param {Object} res Объект ответа
+ * @param {Object} bodyCompany Данные компании полученные из формы
  */
-async function addCompany(req, res) {
-    let company = req.body
-    await Companies.countDocuments({shortName: company.shortName}, (err, count) => {
+async function addCompany(bodyCompany) {
+    await Companies.countDocuments({shortName: bodyCompany.shortName}, (err, count) => {
         if (err) throw err
 
         if (count > 0) {
-            company.slug = slugify(unescapeString(company.shortName) + '-' + count)
+            bodyCompany.slug = slugify(unescapeString(bodyCompany.shortName) + '-' + count)
         } else {
-            company.slug = slugify(unescapeString(company.shortName))
+            bodyCompany.slug = slugify(unescapeString(bodyCompany.shortName))
         }
     })
-
-    await Companies.create(company, function (err) {
-        if (err) throw err
-    })
+    return Companies.create(bodyCompany)
 }
 
 /**
  * Обновляет и сохраняет данные оператора
- * @param {Object} req Объект запроса
- * @param {Object} res Объект ответа
+ * @param {Object} bodyCompany Данные из фориы
+ * @param reqCompany {Object} reqCompany Данные компании из объекта запроса
  */
-async function updateCompany(req, res) {
-    const company = req.body
+async function updateCompany(bodyCompany, reqCompany) {
+    let newData = bodyCompany
 
-    if (company.slug) {
-        company.slug = req.company.slug
+    if (newData.slug) {
+        newData.slug = reqCompany.slug
     }
 
-    if (!company.shortName) {
+    if (!newData.shortName) {
         try {
-            company.slug = req.company.slug
+            newData.slug = reqCompany.slug
         } catch (err) {
-            throw new Error('Company not found')
+            throw new Error(`Company not found! ${err.message}: ${err.stack}`)
         }
-    } else if (unescapeString(req.company.shortName) !== unescapeString(company.shortName)) {
-        company.slug = slugify(unescapeString(company.shortName))
+    } else if (unescapeString(reqCompany.shortName) !== unescapeString(newData.shortName)) {
+        newData.slug = slugify(unescapeString(newData.shortName))
     }
-
-    await Companies.updateOne({slug: req.company.slug}, company, {}, function (err) {
-
-        if (err) {
-            throw err
-        }
-
-        if (req.baseUrl === '/api') {
-            res.json({success: true})
-        } else {
-            res.redirect('/companies-list')
-        }
-    })
+    return Companies.updateOne({slug: reqCompany.slug}, newData)
 }
 
 /**
  * Удаляет оператора
- * @param {Object} req Объект запроса
- * @param {Object} res Объект ответа
+ * @param {Object} body Объект запроса
+ * @param {String} slug Алиас
  */
-async function deleteCompany(req, res) {
-    if (req.body.delete) {
-        await Companies.deleteOne({slug: req.company.slug}, function (err, result) {
-            if (err) throw err
-            if (result.ok) {
-                res.redirect('/companies-list')
-            }
-        })
+function deleteCompany(body, slug) {
+    if (body.delete) {
+        return Companies.deleteOne({slug: slug})
     }
 }
 
@@ -99,4 +77,8 @@ function countCompanies() {
     return countPromise
 }
 
-module.exports = {addCompany, updateCompany, deleteCompany, countCompanies}
+function apiUpdateCompany() {
+    //TODO:implement
+}
+
+module.exports = {addCompany, updateCompany, deleteCompany, countCompanies, apiUpdateCompany}

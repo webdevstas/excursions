@@ -63,7 +63,7 @@ router.route('/register').post(
                 let body = req.body
                 checkUserExists(body.email)
                     .then(result => {
-                        if (!result) {
+                        if (result) {
                             let error = {
                                 param: 'Duplicate user',
                                 msg: 'Пользователь с таким email уже существует, войдите или зарегистрируйте нового'

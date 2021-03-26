@@ -73,7 +73,7 @@ router.get('/companies/:id', cors(), passport.authenticate('jwt', {session: fals
 })
 
 router.post('/companies/:id', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
-    await updateCompany(req, res).catch(err => {
+    await updateCompany(req.body, req.company).catch(err => {
         handleApiError(err, req, res)
     })
 })

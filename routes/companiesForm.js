@@ -58,7 +58,7 @@ router.post('/',
     body('bankInformation').trim().escape(),
     body('isApproved').toBoolean(),
 
-    function (req, res, next) {
+    async function (req, res, next) {
         const errors = validationResult(req)
         let username = req.user ? req.user.username : 'guest'
 
@@ -68,7 +68,7 @@ router.post('/',
         if (!errors.isEmpty()) {
             res.render('companiesForm', {
                 action: '/register-company',
-                title: 'Форма добавления опреатора',
+                title: 'Форма добавления оператора',
                 data: req.body,
                 errors: errors.array(),
                 success: {
@@ -82,7 +82,7 @@ router.post('/',
             /**
              *  Иначе сохраняем компанию и редирект на список
              */
-            addCompany(req, res, next).catch(err => {
+            await addCompany(req.body).catch(err => {
                 next(err)
             })
             res.redirect('/companies-list')
