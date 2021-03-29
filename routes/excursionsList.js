@@ -164,7 +164,7 @@ router.route('/:slug')
         body('isApproved').toBoolean(),
         body('informationPhone').trim().escape().notEmpty().withMessage('Телефон для справок обязателен к заполнению').isNumeric().withMessage('Введите числовое значение номера телефона'),
 
-        function (req, res, next) {
+        async function (req, res, next) {
 
             let username = req.user ? req.user.username : 'guest'
 
@@ -190,7 +190,7 @@ router.route('/:slug')
                         user: username
                     })
                 } else {
-                    updateExcursion(req, res).catch(err => {
+                    await updateExcursion(req.body, req.excursion, req.files).catch(err => {
                         next(err, req, res)
                     })
                     res.redirect('/excursions-list')
@@ -204,10 +204,10 @@ router.route('/:slug')
  * Удаление экскурсии
  */
 router.route('/:slug/delete')
-    .post(function (req, res, next) {
+    .post(async function (req, res, next) {
 
         if (req.isAuthenticated()) {
-            deleteExcursion(req, res).catch(err => {
+            let resulst = await deleteExcursion(req.excursion._id).catch(err => {
                 next(err, req, res)
             })
         } else {
