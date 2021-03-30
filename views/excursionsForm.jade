@@ -25,7 +25,7 @@ block content
                     each company in data.companies
                         - var isSelected = data.selected == unescapeString(company.shortName)
                         option(value="#{company._id}" selected=isSelected)= unescapeString(company.shortName)
-                        
+
             .input-block
                 label(for="title") Название экскурсии: *
                 input(type="text" name="title" value="#{unescapeString(data.body.title) ? unescapeString(data.body.title) : ''}").form-control
@@ -44,87 +44,87 @@ block content
             .input-block
                 label(for="tags") Выберите подходящие теги:
                 .tags
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='обзорные экскурсии')
                         label(for="") обзорные экскурсии
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='автобусные туры')
                         label(for="") автобусные туры
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='автомобильные туры')
                         label(for="") автомобильные туры
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='пешие туры')
                         label(for="") пешие туры
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='джиппинг')
                         label(for="") джиппинг
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='квадроциклы')
                         label(for="") квадроциклы
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='мотоциклы')
                         label(for="") мотоциклы
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='велосипедные')
                         label(for="") велосипедные
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='конные прогулки')
                         label(for="") конные прогулки
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='морские прогулки')
                         label(for="") морские прогулки
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='дайвинг')
                         label(for="") дайвинг
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='рафтинг')
                         label(for="") рафтинг
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='парки в Сочи')
                         label(for="") парки в Сочи
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='музеи Сочи')
                         label(for="") музеи Сочи
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='квесты')
                         label(for="") квесты
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='полеты на парапланах')
-                        label(for="") полеты на парапланах   
-                    .tag-item 
+                        label(for="") полеты на парапланах
+                    .tag-item
                         input(type="checkbox" name="tags" value='Олимпийский парк')
                         label(for="") Олимпийский парк
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='Красная поляна')
                         label(for="") Красная поляна
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='Сочи')
                         label(for="") Сочи
-                    .tag-item 
+                    .tag-item
                         input(type="checkbox" name="tags" value='Адлер')
                         label(for="") Адлер
         .tab-pane#tickets
             .input-block
                 label(for="ticket-title") Наименование: *
-                input(type="text" name="ticket-title").form-control
+                input(type="text" id="ticket-title").form-control
             .input-block
                 label(for="ticket-description") Описание: *
-                textarea(name="ticket-description" rows="1").form-control
+                textarea(id="ticket-description" rows="1").form-control
             .input-block
                 label(for="ticket-price") Стоимость: *
-                input(type="number" name="ticket-price").form-control
+                input(type="number" id="ticket-price").form-control
             .input-block
                 div
                 button#add-ticket.btn.btn-light Добавить
                 input(name="tickets" type="hidden")#tickets-input
             ul#tickets-list
-                li.tickets-list__item 
-                    span Наименование: 
+                li.tickets-list__item
+                    span Наименование:
                     span Стоимость:
                     span Удалить:
                 if data.tickets
-                    each ticket in data.tickets 
+                    each ticket in data.tickets
                         li.tickets-list__item
                             span= ticket.title
                             span #{ticket.price} руб.
@@ -143,4 +143,3 @@ block content
                     button.delete-img.btn.btn-light Удалить
     #tags.hidden= data.tags
     script(src="/javascripts/excursionsForm.js")
-        

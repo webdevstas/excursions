@@ -101,7 +101,7 @@ router.post('/',
                 /**
                  * Иначе сохраняем экскурсию и редирект на список
                  */
-                addExcursion(req, res).catch(err => {
+                addExcursion(req.body, req.files).catch(err => {
                     next(err, req, res)
                 })
                 res.redirect('/excursions-list')

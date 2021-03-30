@@ -97,9 +97,9 @@ function changeTabContent(el) {
  *  Добавление билета
  */
 const addBtn = document.querySelector('#add-ticket'),
-    titleInp = document.querySelector('input[name="ticket-title"]'),
-    descriptionInp = document.querySelector('textarea[name="ticket-description"]'),
-    priceInp = document.querySelector('input[name="ticket-price"]'),
+    titleInp = document.querySelector("#ticket-title"),
+    descriptionInp = document.querySelector("#ticket-description"),
+    priceInp = document.querySelector("#ticket-price"),
     ticketsArr = [],
     ticketsListEl = document.querySelector('#tickets-list'),
     ticketsInput = document.querySelector('#tickets-input')

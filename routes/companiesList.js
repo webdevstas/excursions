@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { body, validationResult, check } = require('express-validator');
-const { render } = require('jade');
-const { updateCompany, deleteCompany } = require('../controllers/companies')
-const { Companies } = require('../models/companies')
-const { unescapeString } = require('../lib/helpers')
+const {body, validationResult, check} = require('express-validator');
+const {updateCompany, deleteCompany} = require('../controllers/companies')
+const {Companies} = require('../models/companies')
+const {unescapeString} = require('../lib/helpers')
 
 /**
  * Ответ на запрос списка компаний
@@ -12,21 +11,25 @@ const { unescapeString } = require('../lib/helpers')
 router.get('/', async function (req, res, next) {
     if (req.isAuthenticated()) {
         let username = req.user ? req.user.username : 'guest'
-        const companies = await Companies.find().select({ shortName: 1, slug: 1, isApproved: 1 }).catch(err => {
+        const companies = await Companies.find().select({shortName: 1, slug: 1, isApproved: 1}).catch(err => {
             next(err, req, res)
         })
-        res.render('companiesList', { title: 'Список операторов', companies: companies, user: username, unescapeString: unescapeString });
-    }
-    else {
+        res.render('companiesList', {
+            title: 'Список операторов',
+            companies: companies,
+            user: username,
+            unescapeString: unescapeString
+        });
+    } else {
         res.redirect('/login')
     }
 });
 
 /**
-* Получим алиас компании
-*/
+ * Получим алиас компании
+ */
 router.param('slug', async function (req, res, next, slug) {
-    req.company = await Companies.findOne({ slug: slug }).catch(err => {
+    req.company = await Companies.findOne({slug: slug}).catch(err => {
         next(err, req, res)
     }) // Сохраняем компанию в объект запроса
     next()
@@ -68,8 +71,14 @@ router.route('/:slug')
         body('legalAddress').trim().escape(),
         body('actualAddress').trim().escape(),
         body('head').trim().escape(),
-        body('phoneNumber').trim().escape().optional({ nullabale: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение номера телефона'),
-        body('faxNumber').trim().escape().optional({ nullabale: true, checkFalsy: true }).isNumeric().withMessage('Введите числовое значение номера факса'),
+        body('phoneNumber').trim().escape().optional({
+            nullabale: true,
+            checkFalsy: true
+        }).isNumeric().withMessage('Введите числовое значение номера телефона'),
+        body('faxNumber').trim().escape().optional({
+            nullabale: true,
+            checkFalsy: true
+        }).isNumeric().withMessage('Введите числовое значение номера факса'),
         body('email').trim().escape().notEmpty().withMessage('Электронная почта обязательна к заполнению').isEmail().withMessage('Введите корректный email'),
         check('inn').escape().notEmpty().withMessage('Инн обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ИНН'),
         check('ogrn').escape().notEmpty().withMessage('ОГРН обязятелен к заполнению').isNumeric().withMessage('Введите числовое значение ОГРН'),
@@ -79,13 +88,13 @@ router.route('/:slug')
         body('bankInformation').trim().escape(),
         body('isApproved').toBoolean(),
 
-        function (req, res, next) {
+        async function (req, res, next) {
             if (req.isAuthenticated()) {
                 const errors = validationResult(req)
 
                 /**
-                * Если есть ошибки валидации - рендерим форму с указанием ошибок
-                */
+                 * Если есть ошибки валидации - рендерим форму с указанием ошибок
+                 */
                 if (!errors.isEmpty()) {
                     let username = req.user ? req.user.username : 'guest'
                     res.render('companiesForm', {
@@ -100,14 +109,19 @@ router.route('/:slug')
                         user: username,
                         unescapeString: unescapeString
                     })
-                }
-                else {
+                } else {
                     /**
-                    *  Иначе сохраняем компанию и редирект на список
-                    */
-                    updateCompany(req, res).catch(err => {
+                     *  Иначе сохраняем компанию и редирект на список
+                     */
+                    let result = await updateCompany(req.body, req.company).catch(err => {
                         next(err, req, res)
                     })
+
+                    if (result.ok === 1) {
+                        res.redirect('/companies-list')
+                    } else {
+                        next('Error. Unable to update company.', req, res)
+                    }
                 }
             }
         })
@@ -117,11 +131,16 @@ router.route('/:slug')
  */
 router.route('/:slug/delete')
     .post(body('delete').toBoolean(),
-        function (req, res, next) {
+        async function (req, res, next) {
             if (req.isAuthenticated()) {
-                deleteCompany(req, res).catch(err => {
+                let result = await deleteCompany(req.body, req.company.slug).catch(err => {
                     next(err, req, res)
                 })
+                if (result.deletedCount === 1) {
+                    res.redirect('/companies-list')
+                } else {
+                    next('Delete failed', req, res)
+                }
             }
         })
 
