@@ -5,5 +5,5 @@ COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm install --production --silent && mv node_modules ../
 COPY . .
 EXPOSE 3000
-CMD ["npm", "install", "-g", "pm2"]
+ONBUILD RUN ["npm", "install", "-g", "pm2"]
 CMD ["npm", "start"]
