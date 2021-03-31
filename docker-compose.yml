@@ -2,7 +2,9 @@ version: '3.4'
 
 services:
   app:
-    environment: sprutdobro/excursions
+    image: sprutdobro/excursions
+
+    environment:
       - NODE_ENV=production
       - PROD_DB_STRING=${PROD_DB_STRING}
       - PROD_DB_USER=${PROD_DB_USER}
