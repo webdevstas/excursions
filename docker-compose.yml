@@ -2,8 +2,7 @@ version: '3.4'
 
 services:
   app:
-    image: sprutdobro/excursions
-
+    image: sprutdobro/excursions:latest
     environment:
       - NODE_ENV=production
       - PROD_DB_STRING=${PROD_DB_STRING}
@@ -29,6 +28,7 @@ services:
       - 27017:27017
     volumes:
       - data:/data/db
+      - ./mgob/storage:/storage
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
