@@ -15,7 +15,9 @@ services:
     ports:
       - 80:3000
     volumes:
-      - .:/usr/src/app:z
+      - ./.env:/usr/src/app/.env
+      - ./id_rsa_priv.pem:/usr/src/app/id_rsa_priv.pem
+      - ./id_rsa_pub.pem:/usr/src/app/id_rsa_pub.pem
     links:
       - mongodb
     depends_on:
