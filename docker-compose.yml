@@ -2,11 +2,7 @@ version: '3.4'
 
 services:
   app:
-    image: app
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    environment:
+    environment: sprutdobro/excursions
       - NODE_ENV=production
       - PROD_DB_STRING=${PROD_DB_STRING}
       - PROD_DB_USER=${PROD_DB_USER}
