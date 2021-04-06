@@ -56,7 +56,6 @@ describe('Test excursions controller', () => {
 
     it('should delete excursion', async () => {
         let result = await deleteExcursion(addedExc._id)
-        console.log(result)
         expect(result.deletedCount).toEqual(1)
     })
 
