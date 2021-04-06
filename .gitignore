@@ -7,3 +7,4 @@ id_rsa_pub.pem
 /encryption
 .idea
 mgob
+/docker-entrypoint-initdb.d

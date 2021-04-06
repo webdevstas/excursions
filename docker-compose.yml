@@ -29,6 +29,7 @@ services:
     volumes:
       - data:/data/db
       - ./mgob/storage:/storage
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}

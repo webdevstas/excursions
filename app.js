@@ -7,7 +7,6 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const helmet = require('helmet')
 
-
 require('dotenv').config()
 const indexRouter = require('./routes/index')
 const companiesFormRouter = require('./routes/companiesForm')
