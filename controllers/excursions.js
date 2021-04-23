@@ -222,12 +222,7 @@ async function apiUpdateExcursion(req, res) {
         excursion.tickets = req.excursion.tickets
     }
 
-    await Excursions.updateOne({_id: req.excursion._id}, excursion, {}, err => {
-        if (err) {
-            throw err
-        }
-        res.json({success: true})
-    })
+    return  Excursions.updateOne({_id: req.excursion._id}, excursion)
 }
 
 module.exports = {
