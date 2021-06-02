@@ -12,7 +12,7 @@ services:
       - PM2_PUBLIC_KEY=${PM2_PUBLIC_KEY}
       - PM2_SECRET_KEY=${PM2_SECRET_KEY}
     ports:
-      - 80:3000
+      - 3000:3000
     volumes:
       - ./.env:/usr/src/app/.env
       - ./id_rsa_priv.pem:/usr/src/app/id_rsa_priv.pem
@@ -29,10 +29,11 @@ services:
     volumes:
       - data:/data/db
       - ./mgob/storage:/storage
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=admin
   mgob:
     image: stefanprodan/mgob:latest
     ports:
